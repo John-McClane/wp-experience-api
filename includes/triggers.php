@@ -7,14 +7,18 @@
  * Click Link tracking
  **/
 
+/** $user = get_current_user_id(); **/
+/** $wpxapi_uid = wp_get_current_user();
+ * $wpxapi_uid = base64_encode( $wpxapi_uid->ID ); **/
+/** 	if( is_user_logged_in() ) { **/
+/** } **/
+/** else { **/
+/** $wpxapi_uid = '0'; **/
+/** } **/
+
 function wpxapi_enqueue_script( $hook ) {
-	if( is_user_logged_in() ) {
-		$wpxapi_uid = wp_get_current_user();
-		$wpxapi_uid = base64_encode( $wpxapi_uid->ID );
-	}
-	else {
-		$wpxapi_uid = '';
-	}
+	$wpxapi_uid = get_current_user_id();
+	$wpxapi_uid = base64_encode( $wpxapi_uid );
 	$wpxapi_blogid = get_current_blog_id();
 	$wpxapi_blogid = base64_encode( $wpxapi_blogid );
 	wp_enqueue_script( 'wpxapi_ajax_script', plugins_url( '/js/wpxapi_link_click_log.js', dirname(__FILE__) ), array('jquery') );
@@ -23,10 +27,11 @@ function wpxapi_enqueue_script( $hook ) {
 
 add_action( 'wp_enqueue_scripts', 'wpxapi_enqueue_script' );
 add_action( 'wp_ajax_xapiclicklog_action', 'xapiclicklog_action' );
-/** add_action( 'wp_ajax_nopriv_xapiclicklog_action', 'xapiclicklog_action' ); **/
+add_action( 'wp_ajax_nopriv_xapiclicklog_action', 'xapiclicklog_action' );
 
 function xapiclicklog_action() {
 	do_action( 'xapiclicklog_action_fire' );
+	wp_die();
 }
 
 WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
@@ -48,8 +53,8 @@ WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
 		$wpxapi_blogid = base64_decode( $_POST['wpxapi_blogid'] );
 		$wpxapi_blogid = intval( $wpxapi_blogid );
 		if ( ! $wpxapi_blogid ) {
-                        $wpxapi_blogid = '';
-                }
+			$wpxapi_blogid = '';
+        }
 
 		$request_site_url = get_site_url( $wpxapi_blogid );
 
@@ -83,16 +88,18 @@ WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
 						'timestamp_raw' => date( 'c' )
 				);
 
-		$user_obj = get_user_by( 'ID', $wpxapi_uid );
-		$user = $user_obj->ID;
-		// $user = get_current_user_id();
+		/** $user_obj = get_user_by( 'ID', $wpxapi_uid );
+		 * $user = $user_obj->ID; **/
+		$user = get_current_user_id();
 		if ( empty( $user ) ) {
 			if ( 1 == $options['wpxapi_guest'] ) {
 				$user = array(
 					'objectType' => 'Agent',
-					'name' => 'Guest ' . $_SERVER['REMOTE_ADDR'],
-					'mbox' => 'mailto:guest-' . $_SERVER['REMOTE_ADDR'] . '@ntua-guest.com',
-					/* 'mbox' => 'mailto:guest-' . $_SERVER['REMOTE_ADDR'] . '@' . preg_replace( '/http(s)?:\/\//', '', get_bloginfo( 'url' ) ), */
+					'name' => 'Guest.' . $_SERVER['REMOTE_ADDR'],
+					'mbox' => 'mailto:guest.' . $_SERVER['REMOTE_ADDR'] . '@ntua-guest.com',
+					/** 'name' => 'Guest ' . $_SERVER['REMOTE_ADDR'], **/
+					/** 'mbox' => 'mailto:guest-' . $_SERVER['REMOTE_ADDR'] . '@ntua-guest.com', **/
+					/** 'mbox' => 'mailto:guest-' . $_SERVER['REMOTE_ADDR'] . '@' . preg_replace( '/http(s)?:\/\//', '', get_bloginfo( 'url' ) ), **/
 				);
 				  $statement = array_merge( $statement, array( 'actor_raw' => $user ) );
 			 } else {
@@ -103,6 +110,7 @@ WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
 		  }
 
 		return $statement;
+		echo $statement;
 	  }
 ));
 
@@ -180,9 +188,11 @@ WP_Experience_API::register( 'page_views', array(
 			if ( 1 == $options['wpxapi_guest'] ) {
 				$user = array(
 					'objectType' => 'Agent',
-					'name' => 'Guest ' . $_SERVER['REMOTE_ADDR'],
-					'mbox' => 'mailto:guest-' . $_SERVER['REMOTE_ADDR'] . '@ntua-guest.com',
-					/* 'mbox' => 'mailto:guest-' . $_SERVER['REMOTE_ADDR'] . '@' . preg_replace( '/http(s)?:\/\//', '', get_bloginfo( 'url' ) ), */
+					'name' => 'Guest.' . $_SERVER['REMOTE_ADDR'],
+					'mbox' => 'mailto:guest.' . $_SERVER['REMOTE_ADDR'] . '@ntua-guest.com',
+					/** 'name' => 'Guest ' . $_SERVER['REMOTE_ADDR'], **/
+					/** 'mbox' => 'mailto:guest-' . $_SERVER['REMOTE_ADDR'] . '@ntua-guest.com', **/
+					/** 'mbox' => 'mailto:guest-' . $_SERVER['REMOTE_ADDR'] . '@' . preg_replace( '/http(s)?:\/\//', '', get_bloginfo( 'url' ) ), **/
 				);
 				$statement = array_merge( $statement, array( 'actor_raw' => $user ) );
 			} else {
