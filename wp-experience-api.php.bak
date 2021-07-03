@@ -5,7 +5,7 @@
  * Description: This plugin generates and sends various xAPI statements to the specified LRS
  * Tags: xAPI
  * Author: P@ntaJim, BigLebo, CTLT, Devindra Payment, loongchan
- * Version: 1.1.2
+ * Version: 1.1.0
  * Author URI: https://github.com/ubc
  * License: GNU AGPLv3
  * License URI: http://www.gnu.org/licenses/agpl-3.0.html
@@ -35,11 +35,11 @@ class WP_Experience_API {
 	private static $register_locked = false;
 	private static $options;
 	private static $site_options;   //to be used if multisite and network activated
-	/* public static $dependencies = array(
+	public static $dependencies = array(
 		'BadgeOS' => 'http://wordpress.org/plugins/badgeos/',
 		'JSON_API' => 'http://wordpress.org/plugins/json-api/',
 		'BadgeOS_Open_Badges_Issuer_AddOn' => 'https://github.com/ubc/open-badges-issuer-addon',
-	); */
+	);
 	//constants for managing creation of LRSes, cause we can't store password/username in DB.
 	const WPXAPI_NETWORK_LRS = 1;
 	const WPXAPI_SITE_LRS = 2;
@@ -269,7 +269,7 @@ class WP_Experience_API {
 			error_log( 'The Network Administrator chose to stop allowing statements to be sent to the Network level LRS.' );
 			return;
 		}
-		error_log("checkin '".__FUNCTION__."', filter: '".current_filter()."'; args: ".print_r(func_get_args(), true));
+		//error_log("checkin '".__FUNCTION__."', filter: '".current_filter()."'; args: ".print_r(func_get_args(), true));
 		$data = $trigger['process']( current_filter(), $args );
 
 		if ( false == $data ) {
@@ -288,17 +288,9 @@ class WP_Experience_API {
 		$attachments = WP_Experience_API::create_attachments( $data );
 		$timestamp = WP_Experience_API::create_timestamp( $data );
 
-		/* //sanity check as actor/verb/object is required.  the rest is recommended.
+		//sanity check as actor/verb/object is required.  the rest is recommended.
 		if ( empty( $actor ) || empty( $verb ) || empty( $object ) ) {
 			return false;
-		} */
-
-		if ( empty( $verb ) || empty( $object ) ) {
-			return false;
-		}
-
-		if ( empty( $actor ) ) {
-			$statement['actor'] = 'Guest';
 		}
 
 		$statement = array(
@@ -388,7 +380,7 @@ class WP_Experience_API {
 							'mbox' => 'mailto:' . $user_data->user_email,
 						]
 					);
-				} elseif ( ! empty( WP_Experience_API::$site_options['wpxapi_network_lrs_user_setting'] ) && 1 == WP_Experience_API::$site_options['wpxapi_network_lrs_user_setting'] ) {
+				} else {
 					//if account
 					$unique_id = apply_filters( 'wpxapi_actor_account_name', get_user_meta( $user_data->ID, WP_XAPI_DEFAULT_ACTOR_ACCOUNT_NAME, true ) );
 
@@ -408,28 +400,7 @@ class WP_Experience_API {
 							],
 						]
 					);
-				} else {
-					//if Guest
-					$unique_id = 'Guest';
-
-					if ( empty( $unique_id ) ) {
-						//we give this error message BECAUSE I was caught debugging this > 3 times!
-						error_log( 'Please ensure that the constants in wp-experience-api-configs.php file is set properly!' );
-						return;
-					}
-
-					$actor = new TinCan\Agent(
-						[
-							'objectType' => 'Agent',
-							'name' => 'Guest',
-							'account' => [
-								'homePage' => apply_filters( 'wpxapi_actor_account_homepage', WP_XAPI_DEFAULT_ACTOR_ACCOUNT_HOMEPAGE ),
-								'name' => $unique_id,
-							],
-						]
-					);
 				}
-
 			}
 		}
 

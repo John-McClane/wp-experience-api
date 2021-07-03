@@ -97,13 +97,11 @@ class WP_Experience_API_Admin {
 			if ( in_array( $user->user_login, $usernames ) ) {
 				$show_admin_page = true;
 			}
-		} elseif ( $this->site_options['wpxapi_network_lrs_admin_level'] == '2' ) {
-			$show_admin_page = true;
-		} else {
+		} else if ( $this->site_options['wpxapi_network_lrs_admin_level'] == '2' ) {
 			$show_admin_page = true;
 		}
 
-		return ( $show_admin_page || is_admin() );
+		return ( $show_admin_page || is_super_admin() );
 	}
 	/**
 	 * adds new wp xapi plugin page
@@ -139,7 +137,7 @@ class WP_Experience_API_Admin {
 		);
 
 		//since this is triggering running of the queue, ONLY admins/Superadmins should see this option.
-		if ( is_admin() ) {
+		if ( is_super_admin() ) {
 			add_settings_field(
 				'wpxapi_run_queue',
 				__( 'Run xAPI Queue', 'wpxapi' ),
@@ -214,7 +212,7 @@ class WP_Experience_API_Admin {
 		if ( isset( $this->site_options['wpxapi_network_lrs_admin'] ) ) {
 			$usernames = array_map( 'trim', explode( ',', $this->site_options['wpxapi_network_lrs_admin'] ) );
 			$user = wp_get_current_user();
-			if ( in_array( $user->user_login, $usernames ) || is_admin() ) {
+			if ( in_array( $user->user_login, $usernames ) || is_super_admin() ) {
 				add_settings_section(
 					'wpxapi_settings_section_lrs',
 					__( 'WP xAPI LRS Settings', 'wpxapi' ),
@@ -1067,7 +1065,7 @@ class WP_Experience_API_Network_Admin {
 	}
 
 	/**
-	 * function to setup options, initialize and save / or pull from options table
+	 * function to setup opitons, initialize and save / or pull from options table
 	 */
 	public function setup_options() {
 		$this->options = get_site_option( 'wpxapi_network_settings' );

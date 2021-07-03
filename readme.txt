@@ -1,9 +1,9 @@
 === WP Experience API ===
-Contributors: Devindra Payment, loongchan, ctlt-dev
+Contributors: P@ntaJim, BigLebo, Devindra Payment, loongchan, ctlt-dev
 Tags:  xAPI, BadgeOS, Tincan, LRS, Experience API, Tin Can API
 Requires at least: WordPress 3.5
-Tested up to: 4.8.1
-Stable tag: 1.0.7
+Tested up to: 5.3.2
+Stable tag: 1.1.2
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -12,11 +12,10 @@ Adds the ability for WordPress to send preset xAPI statements to a Learning Reco
 == Description ==
 
 Sends xAPI statements to LRS (tested against LearningLocker and cloud.scorm.com).  Some features are enabled
-ONLY if the dependent plugins have also been installed.  The plugin can be used as a MU plugin as well. 
+ONLY if the dependent plugins have also been installed.  The plugin can be used as a MU plugin as well.
 
 It has been partially tested with:
 
-* [SCORM Cloud](https://cloud.scorm.com)
 * [Learning Locker](http://learninglocker.net/)
 
 Statements that can be sent are:
@@ -24,18 +23,8 @@ Statements that can be sent are:
 * page views
 * post status changes
 * commenting
-* earning badges(1)
-* voting(2)
 
-(1) requires
-
-* [JSON API](https://wordpress.org/plugins/json-api/)
-* [BadgeOS](https://wordpress.org/plugins/badgeos/)
-* <https://github.com/ubc/open-badges-issuer-addon>
-
-(2) currently only works with PulsePress theme (https://wordpress.org/themes/pulsepress/) when voting or starring
-
-This plugin was developed at the UBC Centre for Teaching, Learning and Technology.
+This plugin was developed at the NTUA NetMode.
 
 == Installation ==
 
@@ -52,7 +41,7 @@ If you want to install in wp-content/mu-plugins folder, the plugin uses a proxy 
 3. it should be installed!  Enjoy!
 
 = EXTRA EXTRA NOTES: =
-* now that the plugin uses the TinCanPHP library (http://rusticisoftware.github.io/TinCanPHP/), please make sure that it is updated regularly as well!  current version is 0.11.4
+* now that the plugin uses the TinCanPHP library (https://github.com/RusticiSoftware/TinCanPHP/), please make sure that it is updated regularly as well!  current version is 1.1.1
 
 == Frequently Asked Questions ==
 
@@ -75,12 +64,21 @@ Nothing yet.
 
 == Changelog ==
 
+= 1.1.2 =
+* P@ntaJim, BigLebo version.
+
+= 1.1.1 =
+* P@ntaJim, BigLebo version.
+
+= 1.1.0 =
+* P@ntaJim, BigLebo version.
+
 = 1.0.6 =
 * tweaked syntax to fit with wordpress better (got codesniffer to work on my ide again!)
-* fixed bug where posts with empty body makes invalid statements. 
+* fixed bug where posts with empty body makes invalid statements.
 
 = 1.0.5 =
-* tweaked the queueing system so that you click on a button on the admin pages to run the queue instead of trying to use wp-cron. 
+* tweaked the queueing system so that you click on a button on the admin pages to run the queue instead of trying to use wp-cron.
 * bug fixes (made timestamp follow iso8601 more strictly and fixed typo)
 
 = 1.0.4 =
@@ -92,7 +90,7 @@ Nothing yet.
 = 1.0.2 =
 * changed verb for commented statements from created to commented
 
-= 1.0.1 = 
+= 1.0.1 =
 * fixed bug found where statements are invalid if site tagline is left blank.  Now it will dispay 'n/a' for empty website taglines.
 * updated readme formatting
 
