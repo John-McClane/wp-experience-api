@@ -4,8 +4,8 @@
  * Plugin URI: http://ctlt.ubc.ca
  * Description: This plugin generates and sends various xAPI statements to the specified LRS
  * Tags: xAPI
- * Author: P@ntaJim, BigLebo, CTLT, Devindra Payment, loongchan
- * Version: 1.1.0
+ * Author: CTLT, Devindra Payment, loongchan
+ * Version: 1.0.3
  * Author URI: https://github.com/ubc
  * License: GNU AGPLv3
  * License URI: http://www.gnu.org/licenses/agpl-3.0.html
@@ -23,10 +23,12 @@ use TinCan\Activity;
 if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
-
-require_once( 'wp-experience-api-configs.php' );
-require_once( 'includes/TinCanPHP/autoload.php' );
-require_once( 'wp-experience-api-queue-obj.php' );
+if ( ! defined( 'WPXAPI_PLUGIN_DIR' ) ) {
+	define( 'WPXAPI_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+}
+require_once( WPXAPI_PLUGIN_DIR . 'wp-experience-api-configs.php' );
+require_once( WPXAPI_PLUGIN_DIR . 'includes/TinCanPHP/autoload.php' );
+require_once( WPXAPI_PLUGIN_DIR . 'wp-experience-api-queue-obj.php' );
 
 class WP_Experience_API {
 
@@ -107,7 +109,7 @@ class WP_Experience_API {
 				self::$lrs1 = self::setup_lrs( WP_Experience_API::WPXAPI_NETWORK_LRS );
 			} else {
 				add_action( 'admin_notices', array( 'WP_Experience_API', 'config_unset_notice' ) );
-				error_log( 'Please tell Network Administrator to set the default username/password/URL of the LRS (for plugin: WP Experience API)' );
+				error_log( 'Please tell Network Administrator to set the default username/password/URL of the LRS (for plugin: WP ExperienceA API)' );
 			}
 		} else {
 			if ( ! is_multisite() &&
@@ -115,7 +117,7 @@ class WP_Experience_API {
 					   empty( WP_Experience_API::$options['wpxapi_lrs_username'] ) ||
 					   empty( WP_Experience_API::$options['wpxapi_lrs_password'] ) ) ) {
 				add_action( 'admin_notices', array( 'WP_Experience_API', 'config_unset_local_notice' ) );
-				error_log( 'Please tell the Site Administrator to set the username/password/URL of the LRS (for plugin: WP Experience API)' );
+				error_log( 'Please tell the Site Administrator to set the username/password/URL of the LRS (for plugin: WP ExperienceA API)' );
 			}
 		}
 
@@ -148,11 +150,20 @@ class WP_Experience_API {
 	 * @return void
 	 */
 	public static function wpxapi_on_activate() {
+
+		// We only want to check for this if an option hasn't been set
+		$current_version 	= get_site_option( 'wpxapi_db_installed' );
+		$plugin_ver 		= esc_html( WP_XAPI_PLUGIN_VERSION );
+
+		if ( $plugin_ver >= $current_version ) {
+			return;
+		}
+
 		global $wpdb;
 
 		//use base_prefix so it will be on global regardless of mu or single site
 		$table_name = WP_Experience_Queue_Object::get_queue_table_name();
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) != $table_name ) {
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) !== $table_name ) {
 			if ( ! empty( $wpdb->charset ) ) {
 				$charset_collate = "DEFAULT CHARACTER SET {$wpdb->charset}";
 			}
@@ -171,6 +182,8 @@ class WP_Experience_API {
 
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
+			$plugin_ver = esc_html( WP_XAPI_PLUGIN_VERSION );
+			update_site_option( 'wpxapi_db_installed', $plugin_ver );
 		}
 
 		/**
@@ -288,7 +301,7 @@ class WP_Experience_API {
 		$attachments = WP_Experience_API::create_attachments( $data );
 		$timestamp = WP_Experience_API::create_timestamp( $data );
 
-		//sanity check as actor/verb/object is required.  the rest is recommended.
+		//sanity check as actor/verb/object is required.  the rest os recommended.
 		if ( empty( $actor ) || empty( $verb ) || empty( $object ) ) {
 			return false;
 		}
@@ -531,19 +544,19 @@ class WP_Experience_API {
 	 *
 	 * @return boolean
 	 */
-	/* public static function is_badgeos_activated() {
+	public static function is_badgeos_activated() {
 		return class_exists( 'BadgeOS' ) && function_exists( 'badgeos_get_user_earned_achievement_types' );
-	} */
+	}
 
 	/**
 	 * Helper function that checks if PulsePress theme is the current theme
 	 *
 	 * @return B doolean
 	 */
-	/* public static function is_using_pulsepress_theme() {
+	public static function is_using_pulsepress_theme() {
 		$current_theme = wp_get_theme();
 		return $current_theme->get( 'Name' ) == 'PulsePress';
-	} */
+	}
 
 	/**
 	 * Helper function to see if it can meet OpenBadges dependencies
@@ -552,7 +565,7 @@ class WP_Experience_API {
 	 *
 	 * @return Boolean
 	 */
-	/* public static function meets_badgeos_dependencies() {
+	public static function meets_badgeos_dependencies() {
 		$return = true;
 		foreach ( WP_Experience_API::$dependencies as $class => $url ) {
 			if ( ! class_exists( $class ) ) {
@@ -561,7 +574,7 @@ class WP_Experience_API {
 			}
 		}
 		return $return;
-	} */
+	}
 
 	/**
 	 * Checks if the required plugin is installed.
@@ -571,7 +584,7 @@ class WP_Experience_API {
 	 * PROPS: https://github.com/ubc/open-badges-issuer-addon/blob/master/badgeos-open-badges.php
 	 * NOTE: not currently used as it will force users to have other plugins installed.
 	 */
-	/* public static function meets_requirements() {
+	public static function meets_requirements() {
 		$return = WP_Experience_API::meets_badgeOS_dependencies();
 
 		//we only want to show this in admin panels and only for folks that can do something about it, aka admins and above
@@ -587,7 +600,7 @@ class WP_Experience_API {
 			// Deactivate our plugin, unless of course it's in the mu_plugins folder!
 			deactivate_plugins( plugin_basename( __FILE__ ) );
 		}
-	} */
+	}
 
 	/**
 	 * Displays message saying installation doesn't meet minimum PHP requirement
@@ -614,7 +627,7 @@ class WP_Experience_API {
 	 * Displays message saying that related required plugins for Mozilla Open Badges Protocol not installed
 	 * @return [type] [description]
 	 */
-	/* public static function dependencies_disable_notice() {
+	public static function dependencies_disable_notice() {
 		echo "<div class='error'>";
 		foreach ( WP_Experience_API::$dependencies as $class => $url ) {
 			if ( ! class_exists( $class ) ) {
@@ -627,7 +640,7 @@ class WP_Experience_API {
 			}
 		}
 		echo '</div>';
-	} */
+	}
 
 	/**
 	 * Displays message saying that LRS settings at the network level is NOT set
@@ -635,7 +648,7 @@ class WP_Experience_API {
 	public static function config_unset_notice() {
 		?>
 		<div class="error">
-			<p><?php esc_html_e( 'Please tell Network Administrator to set the default username/password/URL of the LRS (for plugin: WP Experience API)', 'wpxapi' ); ?></p>
+			<p><?php esc_html_e( 'Please tell Network Administrator to set the default username/password/URL of the LRS (for plugin: WP ExperienceA API)', 'wpxapi' ); ?></p>
 		</div>
 		<?php
 	}
@@ -656,7 +669,7 @@ class WP_Experience_API {
 	public static function config_unset_local_notice() {
 		?>
 		<div class="error">
-			<p><?php esc_html_e( 'Please tell the Site Administrator to set the username/password/URL of the LRS (for plugin: WP Experience API)' ); ?></p>
+			<p><?php esc_html_e( 'Please tell the Site Administrator to set the username/password/URL of the LRS (for plugin: WP ExperienceA API)' ); ?></p>
 		</div>
 		<?php
 	}
@@ -681,7 +694,7 @@ class WP_Experience_API {
 
 		$page_url .= '://';
 
-		if ( '80' != $_SERVER['SERVER_PORT'] ) {
+		if (  isset( $_SERVER['SERVER_PORT'] ) && '443'  !== $_SERVER['SERVER_PORT'] && ''  !== $_SERVER['SERVER_PORT'] && '80' !== $_SERVER['SERVER_PORT']  ) {
 			$page_url .= $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . $_SERVER['REQUEST_URI'];
 		} else {
 			$page_url .= $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
@@ -706,6 +719,7 @@ class WP_Experience_API {
 			if ( null === WP_Experience_API::$options ) {
 				static::$options = self::wpxapi_get_blog_option( 'wpxapi_settings' );
 			}
+
 			return WP_Experience_API::$options;
 		}
 	}
@@ -749,7 +763,6 @@ class WP_Experience_API {
 
 			$count = WP_Experience_API::wpxapi_queue_is_not_empty( true );
 			$i = 0; //counter
-
 			//sanity check JUST to make sure it can/will end the loop
 			if ( 0 >= $count ) {
 				return false;
@@ -780,7 +793,6 @@ class WP_Experience_API {
 					//not time to try yet, so skip trying.  next time cron runs, it should check this again.
 					continue;
 				}
-
 				//try sending the statement!
 				$lrs = self::setup_lrs( $queue_obj->lrs_info );
 				$response = $lrs->saveStatement( $queue_obj->statement );

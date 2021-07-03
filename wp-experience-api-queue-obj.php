@@ -34,6 +34,7 @@ class WP_Experience_Queue_Object {
 
 		//hardcoded tablename for security......  :-(
 		$table_name = $wpdb->base_prefix . esc_sql( WP_XAPI_TABLE_NAME );
+
 		return $table_name;
 	}
 
@@ -81,6 +82,7 @@ class WP_Experience_Queue_Object {
 
 		//query to get row!
 		$query = "SELECT * FROM {$table_name} ORDER BY id ASC limit 1";
+
 		$row = $wpdb->get_row( $query );
 
 		//check to see it returned something!

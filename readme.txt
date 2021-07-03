@@ -3,7 +3,7 @@ Contributors: P@ntaJim, BigLebo, Devindra Payment, loongchan, ctlt-dev
 Tags:  xAPI, BadgeOS, Tincan, LRS, Experience API, Tin Can API
 Requires at least: WordPress 3.5
 Tested up to: 5.3.2
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -11,7 +11,7 @@ Adds the ability for WordPress to send preset xAPI statements to a Learning Reco
 
 == Description ==
 
-Sends xAPI statements to LRS (tested against LearningLocker and cloud.scorm.com).  Some features are enabled
+Sends xAPI statements to LRS (tested against LearningLocker).  Some features are enabled
 ONLY if the dependent plugins have also been installed.  The plugin can be used as a MU plugin as well.
 
 It has been partially tested with:
@@ -63,6 +63,9 @@ Nothing yet.
 2. Site level administration page for users autorized to set the LRS at the site level.
 
 == Changelog ==
+
+= 1.1.3 =
+* P@ntaJim, BigLebo version.
 
 = 1.1.2 =
 * P@ntaJim, BigLebo version.

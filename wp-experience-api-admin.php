@@ -19,24 +19,24 @@ class WP_Experience_API_Admin {
 		'wpxapi_network_lrs_username' => '',
 		'wpxapi_network_lrs_password' => '',
 		'wpxapi_network_lrs_admin' => '',
-		'wpxapi_network_lrs_admin_level' => '1',
-		'wpxapi_network_lrs_guest' => '1',
+		'wpxapi_network_lrs_admin_level' => '1',		// Default '2'
+		'wpxapi_network_lrs_guest' => '1',				// Default ''
 		'wpxapi_network_lrs_whitelist' => '',
 		'wpxapi_network_lrs_user_setting' => '2',
 		//***** site level defaults ****//
-		'wpxapi_network_lrs_site_page_views' => 1,
-		'wpxapi_network_lrs_site_posts' => 1,
-		'wpxapi_network_lrs_site_guest' => 1,
+		'wpxapi_network_lrs_site_page_views' => 1,		// Default '3'
+		'wpxapi_network_lrs_site_posts' => 1,			// Default '5'
+		'wpxapi_network_lrs_site_guest' => 1,			// Default '0'
 		'wpxapi_network_lrs_site_comments' => 0,
-		//'wpxapi_network_lrs_site_earn_badges' => 0,
-		//'wpxapi_network_lrs_site_pulsepress' => 0,
+		//'wpxapi_network_lrs_site_earn_badges' => 0,	// No Badges
+		//'wpxapi_network_lrs_site_pulsepress' => 4,
 	);
 
 	//need this for sanitization, cause default is to not save checkbox value if not checked!  I want it to be 0 of not checked.
 	private static $checkbox_options = array(
 		'wpxapi_comments',
-		/* 'wpxapi_badges', */
 		'wpxapi_guest',
+		//'wpxapi_badges',								// No Badges
 	);
 
 	//options for what kind of pages to track
@@ -55,8 +55,8 @@ class WP_Experience_API_Admin {
 		'5' => 'Do not track any posts status changes',
 	);
 
-	//options for what kind of pulsepress things to track
-	/* 	public static $pulsepress_options = array(
+	//options for what kind of pulsepress things to track	// No badges
+	/* public static $pulsepress_options = array(
 		'1' => 'track all votes and favoriting',
 		'2' => 'track only votes',
 		'3' => 'track only favoriting',
@@ -89,21 +89,19 @@ class WP_Experience_API_Admin {
 	 * @return boolean tells whether we should show the page or not
 	 */
 	private function wp_xapi_check_if_can_view() {
-		//setup site admin level stuff whether to show site level lrs settings page or not
-		$show_admin_page = true;
+		//setup site admin level stuff whether to show site level LRS settings page or not
+		$show_admin_page = false;
 		if ( $this->site_options['wpxapi_network_lrs_admin_level'] == '1' ) {
 			$usernames = array_map( 'trim', explode( ',', $this->site_options['wpxapi_network_lrs_admin'] ) );
 			$user = wp_get_current_user();
 			if ( in_array( $user->user_login, $usernames ) ) {
 				$show_admin_page = true;
 			}
-		} elseif ( $this->site_options['wpxapi_network_lrs_admin_level'] == '2' ) {
-			$show_admin_page = true;
-		} else {
+		} else if ( $this->site_options['wpxapi_network_lrs_admin_level'] == '2' ) {
 			$show_admin_page = true;
 		}
 
-		return ( $show_admin_page || is_admin() );
+		return ( $show_admin_page || is_super_admin() );
 	}
 	/**
 	 * adds new wp xapi plugin page
@@ -139,7 +137,7 @@ class WP_Experience_API_Admin {
 		);
 
 		//since this is triggering running of the queue, ONLY admins/Superadmins should see this option.
-		if ( is_admin() ) {
+		if ( is_super_admin() ) {
 			add_settings_field(
 				'wpxapi_run_queue',
 				__( 'Run xAPI Queue', 'wpxapi' ),
@@ -178,7 +176,7 @@ class WP_Experience_API_Admin {
 				);
 			} else {
 				//ok, since we DON'T want to allow the site to record guests, we will turn it off
-				$this->options['wpxapi_guest'] = 1;
+				$this->options['wpxapi_guest'] = 1;					// Default 0
 				update_option( 'wpxapi_settings', $this->options );
 			}
 		}
@@ -191,7 +189,7 @@ class WP_Experience_API_Admin {
 			'wpxapi_settings_section'
 		);
 
-		/*	if ( WP_Experience_API::meets_badgeOS_dependencies() ) {
+		/* if ( WP_Experience_API::meets_badgeOS_dependencies() ) {		// No Badges
 			add_settings_field(
 				'wpxapi_badges',
 				__( 'Record Earning Badges?', 'wpxapi' ),
@@ -214,7 +212,7 @@ class WP_Experience_API_Admin {
 		if ( isset( $this->site_options['wpxapi_network_lrs_admin'] ) ) {
 			$usernames = array_map( 'trim', explode( ',', $this->site_options['wpxapi_network_lrs_admin'] ) );
 			$user = wp_get_current_user();
-			if ( in_array( $user->user_login, $usernames ) || is_admin() ) {
+			if ( in_array( $user->user_login, $usernames ) || is_super_admin() ) {
 				add_settings_section(
 					'wpxapi_settings_section_lrs',
 					__( 'WP xAPI LRS Settings', 'wpxapi' ),
@@ -224,7 +222,7 @@ class WP_Experience_API_Admin {
 
 				add_settings_field(
 					'wpxapi_lrs_url',
-					__( 'LRS url', 'wpxapi' ),
+					__( 'LRS URL', 'wpxapi' ),
 					array( $this, 'wp_xapi_lrs_url_render' ),
 					'wpxapi',
 					'wpxapi_settings_section_lrs'
@@ -267,7 +265,7 @@ class WP_Experience_API_Admin {
 			} else {
 				?>
 				<div id='message' class='error'>
-					<?php echo esc_html__( 'Please ask the Network Administrator to set the network level options', 'wpxapi' ); ?>
+					<?php echo esc_html__( 'Please ask the Network Administrator to set the Network Level Options', 'wpxapi' ); ?>
 				</div>
 				<?php
 			}
@@ -292,7 +290,7 @@ class WP_Experience_API_Admin {
 		$count = WP_Experience_API::wpxapi_queue_is_not_empty( true );
 		?>
 			<input type='button' class='button button-primary' id='wpxapi_run_queue' value="<?php echo esc_html__( 'Run Queue' );?>"><br>
-			<div class="help-div"><?php echo esc_html__( 'Count of xAPI queue entries: ' , 'wpxapi' ) .'<span id="wpxapi_run_queue_count">' . esc_html( $count ) . '</span>'; ?></div>
+			<div class="help-div"><?php echo esc_html__( 'Count of xAPI Queue Entries: ' , 'wpxapi' ) .'<span id="wpxapi_run_queue_count">' . esc_html( $count ) . '</span>'; ?></div>
 		<?php
 	}
 
@@ -346,7 +344,7 @@ class WP_Experience_API_Admin {
 	 *
 	 * @return void
 	 */
-	/* public function wp_xapi_voting_render() {
+	/* public function wp_xapi_voting_render() {			// No Badges
 		?>
 			<select name='wpxapi_settings[wpxapi_voting]'>
 		<?php
@@ -381,7 +379,7 @@ class WP_Experience_API_Admin {
 	}
 
 	/**
-	 * Outputs setting local LRS url field
+	 * Outputs setting local LRS URL field
 	 *
 	 * @return void
 	 */
@@ -403,7 +401,7 @@ class WP_Experience_API_Admin {
 	}
 
 	/**
-	 * Outputs lrs password field
+	 * Outputs LRS password field
 	 */
 	public function wp_xapi_lrs_password_render() {
 		?>
@@ -415,7 +413,7 @@ class WP_Experience_API_Admin {
 	 * placeholder for callback (in case we want to use it)
 	 */
 	public function wp_xapi_section_callback() {
-		echo __('WP xAPI Settings Section Description', 'wpxapi');
+		//echo __('WP xAPI Settings Section Description', 'wpxapi');
 	}
 
 	/**
@@ -432,23 +430,23 @@ class WP_Experience_API_Admin {
 		$this->options = WP_Experience_API::wpxapi_get_class_option( false );
 		if ( false === $this->options ) {
 			//we want to use network level set stuff if it is set, else use defaults.
-			$pages = isset( $this->site_options['wpxapi_network_lrs_site_page_views'] ) ? $this->site_options['wpxapi_network_lrs_site_page_views'] : 1;
+			$pages = isset( $this->site_options['wpxapi_network_lrs_site_page_views'] ) ? $this->site_options['wpxapi_network_lrs_site_page_views'] : 3;
 			$comments = isset( $this->site_options['wpxapi_network_lrs_site_comments'] ) ? $this->site_options['wpxapi_network_lrs_site_comments'] : 0;
-			/* $badges = isset( $this->site_options['wpxapi_network_lrs_site_earn_badges'] ) ? $this->site_options['wpxapi_network_lrs_site_earn_badges'] : 0; */
-			$guest = isset( $this->site_options['wpxapi_network_lrs_site_guest'] ) ? $this->site_options['wpxapi_network_lrs_site_guest'] : 1;
-			$publish = isset( $this->site_options['wpxapi_network_lrs_site_posts'] ) ? $this->site_options['wpxapi_network_lrs_site_posts'] : 1;
-			/* $voting = isset( $this->site_options['wpxapi_network_lrs_site_pulsepress'] ) ? $this->site_options['wpxapi_network_lrs_site_pulsepress'] : 4; */
+			$guest = isset( $this->site_options['wpxapi_network_lrs_site_guest'] ) ? $this->site_options['wpxapi_network_lrs_site_guest'] : 0;
+			$publish = isset( $this->site_options['wpxapi_network_lrs_site_posts'] ) ? $this->site_options['wpxapi_network_lrs_site_posts'] : 5;
+			/* $badges = isset( $this->site_options['wpxapi_network_lrs_site_earn_badges'] ) ? $this->site_options['wpxapi_network_lrs_site_earn_badges'] : 0;
+			$voting = isset( $this->site_options['wpxapi_network_lrs_site_pulsepress'] ) ? $this->site_options['wpxapi_network_lrs_site_pulsepress'] : 4; */
 
 			$this->options = array(
 				'wpxapi_pages' => $pages,
 				'wpxapi_comments' => $comments,
-				/* 'wpxapi_badges' => $badges, */
 				'wpxapi_guest' => $guest,
 				'wpxapi_publish' => $publish,
-				/* 'wpxapi_voting' => $voting, */
 				'wpxapi_lrs_url' => '',
 				'wpxapi_lrs_username' => '',
 				'wpxapi_lrs_password' => '',
+				/* 'wpxapi_badges' => $badges,			// No Badges
+				'wpxapi_voting' => $voting, */
 			);
 
 			add_option( 'wpxapi_settings', $this->options );
@@ -465,7 +463,7 @@ class WP_Experience_API_Admin {
 	 * @return array
 	 */
 	public static function wp_xapi_sanitize_options( $input ) {
-		//checks to see if lrs endpoint is whitelisted
+		//checks to see if LRS endpoint is whitelisted
 		$site_options = get_site_option( 'wpxapi_network_settings' );
 		$lrs_url = $input['wpxapi_lrs_url'];
 		$lrs_whitelist = preg_split( '/\r\n|\r|\n/', $site_options['wpxapi_network_lrs_whitelist'] );
@@ -506,15 +504,12 @@ class WP_Experience_API_Admin {
 	public static function wp_xapi_check_and_run_queue() {
 		check_ajax_referer( 'wp_ajax_run_queue', 'security' );
 		$finished = WP_Experience_API::wpxapi_run_the_queue();
-		$count = array( 'count' => 0, 'message' => 'The queue had issues and could not run.' );
+		$count = array( 'count' => 0, 'message' => 'The Queue had issues and could not run.' );
 		if ( $finished ) {
 			$count['count'] = WP_Experience_API::wpxapi_queue_is_not_empty( true );
-			$count['message'] = __( 'The queue ran successfully!' );
+			$count['message'] = __( 'The Queue ran successfully!' );
 		}
-		header( 'Content-Type: application/json' );
-		echo wp_json_encode( $count );
-
-		wp_die();
+		wp_send_json( $count );
 	}
 
 	/**
@@ -575,17 +570,17 @@ class WP_Experience_API_Network_Admin {
 		'wpxapi_network_lrs_username' => '',
 		'wpxapi_network_lrs_password' => '',
 		'wpxapi_network_lrs_admin' => '',
-		'wpxapi_network_lrs_admin_level' => '1',
-		'wpxapi_network_lrs_guest' => '1',
+		'wpxapi_network_lrs_admin_level' => '1',			// Default '2'
+		'wpxapi_network_lrs_guest' => '1',					// Default ''
 		'wpxapi_network_lrs_whitelist' => '',
 		'wpxapi_network_lrs_user_setting' => '2',
 		//***** site level defaults ****//
-		'wpxapi_network_lrs_site_page_views' => 1,
-		'wpxapi_network_lrs_site_posts' => 1,
-		'wpxapi_network_lrs_site_guest' => 1,
+		'wpxapi_network_lrs_site_page_views' => 1,			// Default '3'
+		'wpxapi_network_lrs_site_posts' => 1,				// Default '5'
+		'wpxapi_network_lrs_site_guest' => 1,				// Default '0'
 		'wpxapi_network_lrs_site_comments' => 0,
-		//'wpxapi_network_lrs_site_earn_badges' => 0,
-		//'wpxapi_network_lrs_site_pulsepress' => 0,
+		/* 'wpxapi_network_lrs_site_earn_badges' => 0,		// No Badges
+		'wpxapi_network_lrs_site_pulsepress' => 4, */
 	);
 
 	private static $checkbox_fields = array(
@@ -599,7 +594,7 @@ class WP_Experience_API_Network_Admin {
 		'2' => 'Manage only site level LRS settings',
 	);
 
-	//options to determine how to id a user in xAPI statement
+	//options to determine how to ID a user in xAPI statement
 	private static $user_setting_options = array(
 		'1' => 'Account',
 		'2' => 'Email',
@@ -797,21 +792,14 @@ class WP_Experience_API_Network_Admin {
 			'wpxapi_network',
 			'wpxapi_settings_site_section_lrs'
 		);
-		add_settings_field(
-			'wpxapi_network_lrs_guest',
-			__( 'Sites that can Log Anonymous Guests', 'wpxapi' ),
-			array( $this, 'wp_xapi_network_lrs_guest_render' ),
-			'wpxapi_network',
-			'wpxapi_settings_section_lrs'
-		);
-		/* add_settings_field(
+		/* add_settings_field(								// No Badges
 			'wpxapi_network_lrs_site_earn_badges',
 			__( 'Record Earning Badges?', 'wpxapi' ),
 			array( $this, 'wp_xapi_network_lrs_site_earn_badges_render' ),
 			'wpxapi_network',
 			'wpxapi_settings_site_section_lrs'
-		); */
-		/* add_settings_field(
+		);
+		add_settings_field(
 			'wpxapi_network_lrs_site_pulsepress',
 			__( 'Record PulsePress Theme voting?', 'wpxapi' ),
 			array( $this, 'wp_xapi_network_lrs_site_pulsepress_render' ),
@@ -987,7 +975,7 @@ class WP_Experience_API_Network_Admin {
 
 		?>
 			<input type='text' name='wpxapi_network_settings[wpxapi_network_lrs_admin]' value='<?php echo esc_attr( $this->options['wpxapi_network_lrs_admin'] ); ?>'>
-			<div class="help-div">Please enter a comma separated list of wordpress usernames.</div>
+			<div class="help-div">Please enter a comma separated list of WordPress usernames.</div>
 		<?php
 	}
 
@@ -1014,7 +1002,7 @@ class WP_Experience_API_Network_Admin {
 	public function wp_xapi_network_lrs_guest_render() {
 		?>
 			<input type='text' name='wpxapi_network_settings[wpxapi_network_lrs_guest]' value='<?php echo esc_attr( $this->options['wpxapi_network_lrs_guest'] ); ?>'>
-			<div class="help-div">Please enter a comma separated list of site ids of sites that should be able to log anonymous users.</div>
+			<div class="help-div">Please enter a comma separated list of Site IDs of Sites that should be able to log anonymous users.</div>
 		<?php
 	}
 
@@ -1029,8 +1017,8 @@ class WP_Experience_API_Network_Admin {
 	public function wp_xapi_network_lrs_whitelist_render() {
 		?>
 		<textarea name='wpxapi_network_settings[wpxapi_network_lrs_whitelist]'  rows="10" cols="50"><?php echo esc_textarea( $this->options['wpxapi_network_lrs_whitelist'] ); ?></textarea>
-		<div class="help-div">We are checking only if the beginning of the url starts with the url that you provided.  So for example: <em>http://lrs.example.org/</em> would work but <em>http://statements.lrs.example.org/</em> will not work</div>
-		<p><strong>Currently allowed urls:</strong><br />
+		<div class="help-div">We are checking only if the beginning of the URL starts with the URL that you provided.  So for example: <em>http://lrs.example.org/</em> would work but <em>http://statements.lrs.example.org/</em> will not work</div>
+		<p><strong>Currently allowed URLs:</strong><br />
 		<?php
 		if ( ! isset( $this->options['wpxapi_network_lrs_whitelist'] ) || empty( $this->options['wpxapi_network_lrs_whitelist'] ) ) {
 			echo '<em>' . esc_html__( 'No currently whitelisted URLs', 'wpxapi' ) . '</em>';
@@ -1078,4 +1066,4 @@ class WP_Experience_API_Network_Admin {
 	}
 }
 
-//$experienceAPINetwork = new ExperienceAPINetworkAdmin();
+$experienceAPINetwork = new WP_Experience_API_Network_Admin();

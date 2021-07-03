@@ -1,12 +1,12 @@
 <?php
 /**
  * Plugin Name: WP Experience API
- * Plugin URI: http://ctlt.ubc.ca
+ * Plugin URI: http://www.netmode.ntua.gr/main/
  * Description: This plugin generates and sends various xAPI statements to the specified LRS
  * Tags: xAPI
  * Author: P@ntaJim, BigLebo, CTLT, Devindra Payment, loongchan
- * Version: 1.1.2
- * Author URI: https://github.com/ubc
+ * Version: 1.1.3
+ * Author URI: http://www.netmode.ntua.gr/main/
  * License: GNU AGPLv3
  * License URI: http://www.gnu.org/licenses/agpl-3.0.html
  */
@@ -23,10 +23,12 @@ use TinCan\Activity;
 if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
-
-require_once( 'wp-experience-api-configs.php' );
-require_once( 'includes/TinCanPHP/autoload.php' );
-require_once( 'wp-experience-api-queue-obj.php' );
+if ( ! defined( 'WPXAPI_PLUGIN_DIR' ) ) {
+	define( 'WPXAPI_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+}
+require_once( WPXAPI_PLUGIN_DIR . 'wp-experience-api-configs.php' );
+require_once( WPXAPI_PLUGIN_DIR . 'includes/TinCanPHP/autoload.php' );
+require_once( WPXAPI_PLUGIN_DIR . 'wp-experience-api-queue-obj.php' );
 
 class WP_Experience_API {
 
@@ -148,11 +150,20 @@ class WP_Experience_API {
 	 * @return void
 	 */
 	public static function wpxapi_on_activate() {
+
+		// We only want to check for this if an option hasn't been set
+		$current_version 	= get_site_option( 'wpxapi_db_installed' );
+		$plugin_ver 		= esc_html( WP_XAPI_PLUGIN_VERSION );
+
+		/* if ( $plugin_ver >= $current_version ) {
+			return;
+		} */
+
 		global $wpdb;
 
 		//use base_prefix so it will be on global regardless of mu or single site
 		$table_name = WP_Experience_Queue_Object::get_queue_table_name();
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) != $table_name ) {
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) !== $table_name ) {
 			if ( ! empty( $wpdb->charset ) ) {
 				$charset_collate = "DEFAULT CHARACTER SET {$wpdb->charset}";
 			}
@@ -171,6 +182,8 @@ class WP_Experience_API {
 
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
+			$plugin_ver = esc_html( WP_XAPI_PLUGIN_VERSION );
+			update_site_option( 'wpxapi_db_installed', $plugin_ver );
 		}
 
 		/**
@@ -388,7 +401,7 @@ class WP_Experience_API {
 							'mbox' => 'mailto:' . $user_data->user_email,
 						]
 					);
-				} elseif ( ! empty( WP_Experience_API::$site_options['wpxapi_network_lrs_user_setting'] ) && 1 == WP_Experience_API::$site_options['wpxapi_network_lrs_user_setting'] ) {
+				} else {
 					//if account
 					$unique_id = apply_filters( 'wpxapi_actor_account_name', get_user_meta( $user_data->ID, WP_XAPI_DEFAULT_ACTOR_ACCOUNT_NAME, true ) );
 
@@ -408,28 +421,7 @@ class WP_Experience_API {
 							],
 						]
 					);
-				} else {
-					//if Guest
-					$unique_id = 'Guest';
-
-					if ( empty( $unique_id ) ) {
-						//we give this error message BECAUSE I was caught debugging this > 3 times!
-						error_log( 'Please ensure that the constants in wp-experience-api-configs.php file is set properly!' );
-						return;
-					}
-
-					$actor = new TinCan\Agent(
-						[
-							'objectType' => 'Agent',
-							'name' => 'Guest',
-							'account' => [
-								'homePage' => apply_filters( 'wpxapi_actor_account_homepage', WP_XAPI_DEFAULT_ACTOR_ACCOUNT_HOMEPAGE ),
-								'name' => $unique_id,
-							],
-						]
-					);
 				}
-
 			}
 		}
 
@@ -710,7 +702,7 @@ class WP_Experience_API {
 
 		$page_url .= '://';
 
-		if ( '80' != $_SERVER['SERVER_PORT'] ) {
+		if (  isset( $_SERVER['SERVER_PORT'] ) && '443'  !== $_SERVER['SERVER_PORT'] && ''  !== $_SERVER['SERVER_PORT'] && '80' !== $_SERVER['SERVER_PORT']  ) {
 			$page_url .= $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . $_SERVER['REQUEST_URI'];
 		} else {
 			$page_url .= $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
@@ -735,6 +727,7 @@ class WP_Experience_API {
 			if ( null === WP_Experience_API::$options ) {
 				static::$options = self::wpxapi_get_blog_option( 'wpxapi_settings' );
 			}
+
 			return WP_Experience_API::$options;
 		}
 	}
@@ -778,7 +771,6 @@ class WP_Experience_API {
 
 			$count = WP_Experience_API::wpxapi_queue_is_not_empty( true );
 			$i = 0; //counter
-
 			//sanity check JUST to make sure it can/will end the loop
 			if ( 0 >= $count ) {
 				return false;
@@ -809,7 +801,6 @@ class WP_Experience_API {
 					//not time to try yet, so skip trying.  next time cron runs, it should check this again.
 					continue;
 				}
-
 				//try sending the statement!
 				$lrs = self::setup_lrs( $queue_obj->lrs_info );
 				$response = $lrs->saveStatement( $queue_obj->statement );
