@@ -14,6 +14,7 @@ jQuery(document).ready( function($) {
 
 		$.post( wpxapi_ajax_object.ajax_url, data, function( response ) {
 			alert( 'Got this response from the server: ' + response);
+			console.log("Got this response from the server: " + response);
 			die();
 		});
 	});
