@@ -2,10 +2,11 @@
 /**
  * Plugin Name: WP Experience API
  * Plugin URI: http://www.netmode.ntua.gr/main/
+ * Plugin URI: https://github.com/John-McClane/wp-experience-api/
  * Description: This plugin generates and sends various xAPI statements to the specified LRS
  * Tags: xAPI
- * Author: P@ntaJim, BigLebo, CTLT, Devindra Payment, loongchan
- * Version: 1.1.17
+ * Author: P@ntaJim, BigLebo, CTLT, Devindra Payment, loongchan, Robert Plant, Jimmy Page, John Paul Jones, John Bonham, John McClane, Lucy McClane - Gennero.
+ * Version: 1.2.00
  * Author URI: http://www.netmode.ntua.gr/main/
  * License: GNU AGPLv3
  * License URI: http://www.gnu.org/licenses/agpl-3.0.html

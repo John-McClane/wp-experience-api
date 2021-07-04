@@ -1,39 +1,53 @@
-=== WP Experience API ===
-Contributors: P@ntaJim, BigLebo, Devindra Payment, loongchan, ctlt-dev
+### === WP Experience API ===
+
+[![Build Status](https://travis-ci.org/RusticiSoftware/TinCanPHP.png)](https://travis-ci.org/RusticiSoftware/TinCanPHP)
+[![Latest Stable Version](https://poser.pugx.org/rusticisoftware/tincan/v/stable)](https://packagist.org/packages/rusticisoftware/tincan)
+[![License](https://poser.pugx.org/rusticisoftware/tincan/license)](https://packagist.org/packages/rusticisoftware/tincan)
+[![Total Downloads](https://poser.pugx.org/rusticisoftware/tincan/downloads)](https://packagist.org/packages/rusticisoftware/tincan)
+
+[NetMode]http://www.netmode.ntua.gr/main/
+[GitHub]https://github.com/John-McClane/wp-experience-api/
+
+Way to send basic xAPI statements from WordPress for various events.
+
+Contributors: P@ntaJim, BigLebo, CTLT, Devindra Payment, loongchan, Robert Plant, Jimmy Page, John Paul Jones, John Bonham, John McClane, Lucy McClane - Gennero.
 Tags:  xAPI, BadgeOS, Tincan, LRS, Experience API, Tin Can API
 Requires at least: WordPress 3.5
 Tested up to: 5.7.2
-Stable tag: 1.1.17
+Stable tag: 1.2.00
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
 Adds the ability for WordPress to send preset xAPI statements to a Learning Record Store
 
-== Description ==
+### == Description ==
 
 Sends xAPI statements to LRS (tested against LearningLocker).  Some features are enabled
 ONLY if the dependent plugins have also been installed.  The plugin can be used as a MU plugin as well.
 
-It has been partially tested with:
+It has been extensively tested with:
 
 * [Learning Locker](http://learninglocker.net/)
 
 Statements that can be sent are:
 
-* Page Views
-* Page Interactions (clicks)
-* Video Interactions (start, play, pause, seek, complete)
-* Post Status Changes
-* Commenting
+* Page Views.
+* Page Interactions (clicks).
+* Video Interactions (start, play, pause, seek, complete).
+* Post/Page Status Changes.
+* Commenting.
 
-This plugin was developed at the NTUA NetMode.
+This plugin was developed at the NTUA NetMode Laboratory.
+[NetMode]http://www.netmode.ntua.gr/main/
+[GitHub]https://github.com/John-McClane/wp-experience-api/
 
-== Installation ==
+### == Installation ==
 
 Assumes you are using PHP version >= 5.4 (requirement of TinCanPHP Library that the plugin includes)
+and optimally PHP version >= 7.4. Currently being tested with PHP 8.
 
-1. plunk folder into plugins
-2. Activate the plugin "WP Experience API" through the "Plugins" menu in WordPress
+1. Plunk folder into plugins.
+2. Activate the plugin "WP Experience API" through the "Plugins" menu in WordPress.
 
 = EXTRA NOTES FOR MU: =
 If you want to install in wp-content/mu-plugins folder, the plugin uses a proxy loader file.
@@ -65,6 +79,11 @@ Nothing yet.
 2. Site level administration page for users autorized to set the LRS at the site level.
 
 == Changelog ==
+
+= 1.1.17 - 1.2.00 =
+* P@ntaJim, BigLebo version.
+* JWPlayer onPlay and onPause intgration v1.2 on /includes/triggers.php and /js/wpxapi_link_click_log.js, /js/wpxapi_video_interactions_log.js
+* correlating_xapi_events and xapi-youtube integration v1.2
 
 = 1.1.12 - 1.1.17 =
 * P@ntaJim, BigLebo version.
