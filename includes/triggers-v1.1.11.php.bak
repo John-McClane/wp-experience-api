@@ -22,15 +22,9 @@ function wpxapi_enqueue_script( $hook ) {
 add_action( 'wp_enqueue_scripts', 'wpxapi_enqueue_script' );
 add_action( 'wp_ajax_xapiclicklog_action', 'xapiclicklog_action' );
 add_action( 'wp_ajax_nopriv_xapiclicklog_action', 'xapiclicklog_action' );
-add_action( 'wp_ajax_xapivideointeraction_action', 'xapivideointeraction_action' );
-add_action( 'wp_ajax_nopriv_xapivideointeraction_action', 'xapivideointeraction_action' );
 
 function xapiclicklog_action() {
 	do_action( 'xapiclicklog_action_fire' );
-}
-
-function xapivideointeraction_action() {
-	do_action( 'xapivideointeraction_action_fire' );
 }
 
 /**
