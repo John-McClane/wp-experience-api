@@ -5,7 +5,7 @@
  * Description: This plugin generates and sends various xAPI statements to the specified LRS
  * Tags: xAPI
  * Author: P@ntaJim, BigLebo, CTLT, Devindra Payment, loongchan
- * Version: 1.1.7
+ * Version: 1.1.6
  * Author URI: http://www.netmode.ntua.gr/main/
  * License: GNU AGPLv3
  * License URI: http://www.gnu.org/licenses/agpl-3.0.html
