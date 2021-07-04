@@ -6,6 +6,16 @@
 $debug = 2;
 if ($debug > 0) { error_reporting(E_ALL); }
 
+function console_log()
+{
+    $js_code = 'console.log(' . json_encode(func_get_args(), JSON_HEX_TAG) .
+        ');';
+    $js_code = '<script>' . $js_code . '</script>';
+    echo $js_code;
+	// Call it this way:
+	// console_log('Console Debug:', $someRealVar1, $someVar, $someArray, $someObj);
+}
+
 function wpxapi_enqueue_script( $hook ) {
 	// if( is_user_logged_in() ) {
 		$wpxapi_uid = wp_get_current_user();
@@ -36,20 +46,6 @@ function xapiclicklog_action() {
 
 function xapivideointeraction_action() {
 	do_action( 'xapivideointeraction_action_fire' );
-}
-
-// Returns true if $needle is a substring of $haystack
-function contains($needle, $haystack) {
-    return strpos($haystack, $needle) !== false;
-}
-
-// Debug function that outputs to console log
-// Gets called this way: console_log('Console Debug:', $someRealVar1, $someVar, $someArray, $someObj);
-function console_log() {
-    $js_code = 'console.log(' . json_encode(func_get_args(), JSON_HEX_TAG) .
-        ');';
-    $js_code = '<script>' . $js_code . '</script>';
-    echo $js_code;
 }
 
 /**************************************
@@ -103,18 +99,9 @@ WP_Experience_API::register( 'page_views', array(
 		$referrer = urldecode( $referrer );
 		$referrer = sanitize_text_field( $referrer );
 
-		// isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '';
-		isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-		isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
-
 		$current_page_url = WP_Experience_API::current_page_url();
 		$current_page_url = urldecode( $current_page_url );
 		$current_page_url = sanitize_text_field( $current_page_url );
-
-		// Check if $current_page_url is 'wp-cron.php' and omit capturing and sending statement, in order to not capture page "views" of cron events.
-		if ( contains( 'wp-cron.php', $current_page_url ) | $current_page_url == 'http://') {
-			return false;
-		}
 
 		$statement = null;
 		$statement = array(
@@ -125,20 +112,18 @@ WP_Experience_API::register( 'page_views', array(
 			'object' => array(
 				// 'id' => WP_Experience_API::current_page_url(),
 				'id' => $current_page_url,
-				'objectType' => 'Activity',
 				'definition' => array(
 					'name' => array(
 						'en-US' => $page_title,
 					),
 					'description' => array(
-						'en-US' => 'Viewed Page',
+						'en-US' => $page_description,
 					),
 					'type' => 'http://activitystrea.ms/schema/1.0/page',
 				)
 			),
 			'context_raw' => array(
 				'extensions' => array(
-					'http://id.tincanapi.com/extension/target' => $page_description,
 					'http://id.tincanapi.com/extension/browser-info' => array( 'user_agent' => $_SERVER['HTTP_USER_AGENT'] ),
 					'http://id.tincanapi.com/extension/referrer' => $referrer,
 				),
@@ -266,62 +251,76 @@ WP_Experience_API::register( 'wpxapi_video_interactions_log', array(
 	if ( $wpxapi_jw_pausestatement == 1 ) {
 		$statement = array(
 			'verb' => array(
-				'id' => 'https://w3id.org/xapi/video/verbs/played',
+				'id' => 'http://activitystrea.ms/schema/1.0/play',
 				'display' => array(
 					'en-US' => 'played',
 				),
 			),
 
 			'object' => array(
-				'id' => $wpxapi_jw_videourl,
 				'objectType' => 'Activity',
+				'id' => $wpxapi_jw_videourl,
 				'definition' => array(
 					'name' => array(
 						'en-US' => $wpxapi_jw_videotitle,
 					),
-					'description' => array(
-						'en-US' => 'Video Played',
-					),
+					// 'description' => array(
+					// 	'en-US' => $wpxapi_jw_videotitle,
+					// 	'el-GR' => $wpxapi_jw_videourl,
+					// ),
 					'type' => 'http://adlnet.gov/expapi/activities/video',
+					'description' => array(
+						'en-US' => 'Video Played.',
+						'el-GR' => $wpxapi_jw_videotitle,
+						'es-ES' => $wpxapi_jw_videourl,
+						'UK-GB' => $page_title,
+						'ja-JP' => $page_description,
+						// Played' + $wpxapi_jw_videotitle + '(' + $wpxapi_jw_videourl + ') from ' + $wpxapi_jw_playfrom + ' seconds, to ' + $wpxapi_jw_position + ' seconds, full video duration ' + $wpxapi_jw_duration +  ' seconds',
+					),
 				),
 			),
+			// 'result' => array(
+			// 	'extensions' => array(
+			// 		'https://w3id.org/xapi/cmi5/result/extensions/progress' => '0',
+			// 	)
+			// ),
+			// 'context' => array (
+			// 	'contextActivities' => array (
+			// 		'other' => array (
+			// 			'objectType' => 'Activity',
+			// 			'id' => $wpxapi_jw_videourl,
+			// 			'definition' => array(
+			// 				'name' => array( 'en' => $wpxapi_jw_videotitle ),
+			// 				'type' => 'http://activitystrea.ms/schema/1.0/application',
+			// 		  )
+			// 		)
+			// 	),
+			// 	'category' => array (
+			// 		'objectType' => 'Activity',
+			// 		'id' => 'http://tincan-definitions.kaltura.com/products/mediaspace/1',
+			// 		'definition' => array ( 'type' => 'http://id.tincanapi.com/activitytype/source' )
+			// 	),
 
+			// 	'extensions' => array ( 'http://tincan-definitions.kaltura.com/extensions/context/video-mode' => 'VOD' )
+			// ),
+			'version' => '1.0.0',
+
+			// 'result' => array(
+			// 	'extensions' => array(
+			// 		'http://adlnet.gov/expapi/activities/link'=> $wpxapi_jw_videotitle,
+			// 		'http://adlnet.gov/expapi/activities/file'=> $wpxapi_jw_videourl,
+			// 		'http://adlnet.gov/expapi/period_start'=> $wpxapi_jw_playfrom,
+			// 		'http://adlnet.gov/expapi/period_end'=> $wpxapi_jw_position,
+			// 		'http://adlnet.gov/expapi/period_duration'=> $wpxapi_jw_duration,
+			// 		),
+			// 	),
 			'context_raw' => array(
 				'extensions' => array(
-					'http://adlnet.gov/expapi/activities/link'=> $wpxapi_jw_videotitle,
-					'http://adlnet.gov/expapi/activities/file'=> $wpxapi_jw_videourl,
-					'http://adlnet.gov/expapi/period_start'=> $wpxapi_jw_playfrom,
-					'http://adlnet.gov/expapi/period_end'=> $wpxapi_jw_position,
-					'http://adlnet.gov/expapi/period_duration'=> $wpxapi_jw_duration,
-					'http://id.tincanapi.com/extension/target' => $wpxapi_jw_videotitle,
 					'http://id.tincanapi.com/extension/browser-info' => array( 'user_agent' => $_SERVER['HTTP_USER_AGENT'] ),
 					'http://id.tincanapi.com/extension/referrer' => $referrer,
-					// Initialize
-					// 'https://w3id.org/xapi/video/extensions/length' => '194.937',
-					// Play
-					// 'https://w3id.org/xapi/video/extensions/time' => '120.5',
-					// Pause
-					// 'https://w3id.org/xapi/video/extensions/time' => '120.5',
-					// 'https://w3id.org/xapi/video/extensions/progress' => '0.01',
-					// 'https://w3id.org/xapi/video/extensions/played-segments' => '0[.]6.489',
-					// Seek
-					// 'https://w3id.org/xapi/video/extensions/time-from' => '55.579',
-					// 'https://w3id.org/xapi/video/extensions/time-to' => '48.197',
-					// Complete & Terminated (the same except for completion & duration)
-					// 'https://w3id.org/xapi/video/extensions/length' => '194.937',
-					// 'result' => array(
-					// 		'extensions' => array(
-					// 			'https://w3id.org/xapi/video/extensions/time' => '194.937',
-					// 			'https://w3id.org/xapi/video/extensions/progress' => '1',
-					// 			'https://w3id.org/xapi/video/extensions/played-segments' => '0[.]6.489[,]4.526[.]12.492[,]4.526[.]187.913[,]185.886[.]194.937',
-					// 		)
-					// 	)
-					// 'completion' => 'true',
-					// 'duration' => 'PT194.94S',
 					),
 				'platform' => defined( 'CTLT_PLATFORM' ) ? constant( 'CTLT_PLATFORM' ) : 'Unknown'
 				),
-
 			'timestamp_raw' => date( 'c' )
 			);
 		}
@@ -404,7 +403,6 @@ WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
 
 			'object' => array(
 				'id' => $wpxapi_click_url_requested,
-				'objectType' => 'Activity',
 				'definition' => array(
 					'name' => array(
 						'en-US' => $wpxapi_click_url_requested,
@@ -417,7 +415,6 @@ WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
 				),
 			'context_raw' => array(
 				'extensions' => array(
-					'http://id.tincanapi.com/extension/target' => $wpxapi_click_url_requested,
 					'http://id.tincanapi.com/extension/browser-info' => array( 'user_agent' => $_SERVER['HTTP_USER_AGENT'] ),
 					'http://id.tincanapi.com/extension/referrer' => $referrer,
 					),
@@ -573,7 +570,6 @@ WP_Experience_API::register( 'transition_post', array(
 			),
 			'context_raw' => array(
 				'extensions' => array(
-					'http://id.tincanapi.com/extension/target' => (string) $current_post->post_title . ' | ' . get_bloginfo( 'name' ),
 					'http://id.tincanapi.com/extension/browser-info' => array( 'user_agent' => $_SERVER['HTTP_USER_AGENT'] ),
 					'http://id.tincanapi.com/extension/referrer' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '',
 				),
