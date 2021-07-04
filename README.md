@@ -25,9 +25,11 @@ Adds the ability for WordPress to send preset xAPI statements to a Learning Reco
 Sends xAPI statements to LRS (tested against LearningLocker).  Some features are enabled
 ONLY if the dependent plugins have also been installed.  The plugin can be used as a MU plugin as well.
 
-It has been extensively tested with:
+It has been extensively tested and is (or appears to be) working seamlessly with:
 
 * [Learning Locker](http://learninglocker.net/)
+
+well, so far at least, but, as everything with LL, YMMV.
 
 Statements that can be sent are:
 
