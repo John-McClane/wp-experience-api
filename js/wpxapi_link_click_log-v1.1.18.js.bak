@@ -1,5 +1,5 @@
 jQuery(document).ready( function($) {
-	debug = 2;
+	debug = 1;
 
 	$('a').on("click",function() {
 		// Let's disable the inputs for the duration of the Ajax request.
@@ -20,15 +20,15 @@ jQuery(document).ready( function($) {
 				wpxapi_click_referrer_location: wpxapi_click_referrer_location,
 			};
 
-			if (debug > 0) {
-				console.log("Info. Data1 (xapiclicklog_action) to be transmitted: " + data1.toString() + ".");
+			if (debug) {
+				console.log( "Data1 (xapiclicklog_action) to be transmitted: " + data1.toString() );
 			};
 
 			$.post( wpxapi_ajax_object1.ajax_url, data1, function( response1 ) {
-				if (debug > 0) {
+				if (debug) {
 					// alert('Got this response from the server: ' + response1.toString() );
-					console.log("=> Data1 (xapiclicklog_action) transmitted to Server: " + data1.toString() +".");
-					console.log("=> Got this Response1 from the Server: " + response1.toString() + ".");
+					console.log( "Data1 (xapiclicklog_action) transmitted to Server: " + data1.toString() );
+					console.log( "Got this Response1 from the Server: " + response1.toString() );
 				};
 				// die();
 			});
