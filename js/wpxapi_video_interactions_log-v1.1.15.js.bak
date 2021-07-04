@@ -1,5 +1,6 @@
 jQuery(document).ready( function($) {
 	var debug = 1;
+	// var triggers_file = "/wp-content/plugins/wp-experience-api/includes/triggers.php";
 	if (debug) {
 		$(window).ajaxComplete(function () {console.log('Ajax Complete'); });
 		$(window).ajaxError(function (data2, textStatus, jqXHR) {console.log('Ajax Error');
@@ -10,54 +11,27 @@ jQuery(document).ready( function($) {
 		$(window).ajaxStart(function () {console.log('Ajax Start'); });
 		$(window).ajaxStop(function () {console.log('Ajax Stop'); });
 		$(window).ajaxSuccess(function () {console.log('Ajax Success'); });
-		$("a").on({
-			"click": function() {
-				// $( this ).toggleClass( "active" );
-				console.log("On Click");
-			},
-			"mouseenter": function() {
-				// $( this ).addClass( "inside" );
-				console.log("On Mouse Enter");
-			},
-			"mouseleave": function() {
-				// $( this ).removeClass( "inside" );
-				console.log("On Mouse Leave");
-			}
-		});
 	}
 
 	var vid = document.getElementById("myVideo");
-	if (vid) {
-		vid.loadeddata = function() {
-			if (debug){
-				console.log("Browser has loaded the current frame");
-			}
-		};
-	};
+	vid.loadeddata = function() {
+	  alert("Browser has loaded the current frame");
+	// };
 
 	// $('a').ready( function() {
 	// $('a').on("loadedmetadata",function() {
-	// $('a').show(0,'', function() {
-	// $('a').on("click",function() {	// The only one that works reliably, all the above are useless.
-
-	if (typeof jwplayer().onPlay === 'function' && typeof jwplayer().onPause === 'function') {
-		if (debug) {
-			console.log("Detected JWPlayer with => if (typeof jwplayer().onPlay === 'function' && typeof jwplayer().onPause === 'function')");
-		}
-
 		var wpxapi_jw_videourl, wpxapi_jw_videotitle, wpxapi_jw_playcount, wpxapi_jw_playfrom, wpxapi_jw_position, wpxapi_jw_duration, wpxapi_jw_pausestatement = 0;
 		var wpxapi_click_url_requested =  $(this).attr('href');
 		var wpxapi_click_referrer_location = document.location.href;
 		// var wpxapi_jw_videourl = window.location.pathname;
 		// var wpxapi_jw_videotitle = wpxapi_jw_videourl.substring(jw_videourl.lastIndexOf('/')+1, wpxapi_jw_videourl.lastIndexOf('.'));
 
-		jwplayer().onBeforePlay(function(){
-			if (debug) {
-				console.log("Detected JWPlayer onBeforePlay with => jwplayer().onBeforePlay(function()");
-			}
+		if (typeof jwplayer().onPlay === 'function' && typeof jwplayer().onPause === 'function') {
+
 			// Let's disable the inputs for the duration of the Ajax request.
 			// Note: we disable elements AFTER the form data has been serialized.
 			// Disabled form elements will not be serialized.
+			// $inputs.prop("disabled", true);
 			$("input").prop("disabled", true);
 
 			var data2 = {
@@ -66,8 +40,8 @@ jQuery(document).ready( function($) {
 				wpxapi_nonce: wpxapi_ajax_object2.wpxapi_nonce,
 				wpxapi_uid: wpxapi_ajax_object2.wpxapi_uid,
 				wpxapi_blogid: wpxapi_ajax_object2.wpxapi_blogid,
-				// wpxapi_click_url_requested: wpxapi_click_url_requested,
-				// wpxapi_click_referrer_location: wpxapi_click_referrer_location,
+				wpxapi_click_url_requested: wpxapi_click_url_requested,
+				wpxapi_click_referrer_location: wpxapi_click_referrer_location,
 				wpxapi_jw_videourl: wpxapi_ajax_object2.wpxapi_jw_videourl,
 				wpxapi_jw_videotitle: wpxapi_ajax_object2.wpxapi_jw_videotitle,
 				wpxapi_jw_playcount: wpxapi_ajax_object2.wpxapi_jw_playcount,
@@ -144,6 +118,7 @@ jQuery(document).ready( function($) {
 					});
 				});
 			});
-		});
+		};
 	};
+	// });
 });
