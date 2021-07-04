@@ -2,8 +2,8 @@
 Contributors: P@ntaJim, BigLebo, Devindra Payment, loongchan, ctlt-dev
 Tags:  xAPI, BadgeOS, Tincan, LRS, Experience API, Tin Can API
 Requires at least: WordPress 3.5
-Tested up to: 5.7.2
-Stable tag: 1.1.17
+Tested up to: 5.5.3
+Stable tag: 1.1.11
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -20,11 +20,9 @@ It has been partially tested with:
 
 Statements that can be sent are:
 
-* Page Views
-* Page Interactions (clicks)
-* Video Interactions (start, play, pause, seek, complete)
-* Post Status Changes
-* Commenting
+* page views
+* post status changes
+* commenting
 
 This plugin was developed at the NTUA NetMode.
 
@@ -65,11 +63,6 @@ Nothing yet.
 2. Site level administration page for users autorized to set the LRS at the site level.
 
 == Changelog ==
-
-= 1.1.12 - 1.1.17 =
-* P@ntaJim, BigLebo version.
-* JWPlayer onPlay and onPause intgration v1.17 on /includes/triggers.php and /js/wpxapi_link_click_log.js, /js/wpxapi_video_interactions_log.js
-* correlating_xapi_events and xapi-youtube integration v1.17
 
 = 1.1.11 =
 * P@ntaJim, BigLebo version.

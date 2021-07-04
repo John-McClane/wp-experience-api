@@ -130,7 +130,7 @@ jQuery(document).ready( function($) {
 						// Callback handler that will be called on failure
 						request.fail(function (jqXHR, textStatus, errorThrown){
 							// Log the error to the console
-							alert('Error: ', errorThrown);
+							// alert('Error: ', errorThrown);
 							console.error("The following error occurred: "+ textStatus, errorThrown);
 							console.log("Error. Data2: " + data2 + jqXHR);
 						});
