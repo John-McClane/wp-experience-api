@@ -7,7 +7,14 @@
  * Click Link tracking
  **/
 
-$debug = 0;
+/** $user = get_current_user_id(); **/
+/** $wpxapi_uid = wp_get_current_user();
+ * $wpxapi_uid = base64_encode( $wpxapi_uid->ID ); **/
+/** 	if( is_user_logged_in() ) { **/
+/** } **/
+/** else { **/
+/** $wpxapi_uid = '0'; **/
+/** } **/
 
 function wpxapi_enqueue_script( $hook ) {
 	$wpxapi_uid = get_current_user_id();
@@ -15,25 +22,21 @@ function wpxapi_enqueue_script( $hook ) {
 	$wpxapi_blogid = get_current_blog_id();
 	$wpxapi_blogid = base64_encode( $wpxapi_blogid );
 	wp_enqueue_script( 'wpxapi_ajax_script', plugins_url( '/js/wpxapi_link_click_log.js', dirname(__FILE__) ), array('jquery') );
-	$array = array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid );
-	wp_localize_script( 'wpxapi_ajax_script', 'wpxapi_ajax_object', $array );
-}
-
-function xapiclicklog_action() {
-	do_action( 'xapiclicklog_action_fire' );
-	wp_die();
+	wp_localize_script( 'wpxapi_ajax_script', 'wpxapi_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid ) );
 }
 
 add_action( 'wp_enqueue_scripts', 'wpxapi_enqueue_script' );
 add_action( 'wp_ajax_xapiclicklog_action', 'xapiclicklog_action' );
 add_action( 'wp_ajax_nopriv_xapiclicklog_action', 'xapiclicklog_action' );
 
+function xapiclicklog_action() {
+	do_action( 'xapiclicklog_action_fire' );
+	wp_die();
+}
+
 WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
 	    'hooks' => array( 'xapiclicklog_action_fire' ),
 		'process' => function( $hook, $args ) {
-
-		global $debug;
-		if ( $debug ) { error_log("/includes/triggers.php line 36 hook and args"); error_log(print_r($hook,true)); error_log(print_r($args,true)); }
 
 		$wpxapi_click_url_requested = urldecode( $_POST['wpxapi_click_url_requested'] );
 		$wpxapi_click_url_requested = sanitize_text_field( $wpxapi_click_url_requested );
@@ -54,20 +57,6 @@ WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
         }
 
 		$request_site_url = get_site_url( $wpxapi_blogid );
-
-		if ( $debug ) { error_log("/includes/triggers.php line 58 wpxapi_blogid, request_site_url, wpxapi_click_url_requested"); error_log(print_r($wpxapi_blogid,true)); error_log(print_r($request_site_url,true)); error_log(print_r($wpxapi_click_url_requested,true)); }
-		if (strpos($wpxapi_click_url_requested, '#') === 0) {
-			$wpxapi_click_url_requested = (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'selflink').$wpxapi_click_url_requested;
-			$wpxapi_click_url_requested = urldecode( $wpxapi_click_url_requested );
-			$wpxapi_click_url_requested = sanitize_text_field( $wpxapi_click_url_requested );
-			if ( $debug ) { error_log("/includes/triggers.php line 63 wpxapi_blogid, request_site_url, wpxapi_click_url_requested"); error_log(print_r($wpxapi_blogid,true)); error_log(print_r($request_site_url,true)); error_log(print_r($wpxapi_click_url_requested,true)); }
-		}
-
-		$referrer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-		if ( $debug ) { error_log("/includes/triggers.php line 67 referrer"); error_log(print_r($referrer,true)); }
-		$referrer = urldecode( $referrer );
-		$referrer = sanitize_text_field( $referrer );
-		if ( $debug ) { error_log("/includes/triggers.php line 69 referrer"); error_log(print_r($referrer,true)); }
 
 		$statement = null;
 
@@ -90,18 +79,17 @@ WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
 					)
 				),
 			'context_raw' => array(
-				'extensions' => array(
-					'http://id.tincanapi.com/extension/browser-info' => array( 'user_agent' => $_SERVER['HTTP_USER_AGENT'] ),
-					'http://id.tincanapi.com/extension/referrer' => $referrer,
-					),
-				'platform' => defined( 'CTLT_PLATFORM' ) ? constant( 'CTLT_PLATFORM' ) : 'Unknown'
-				),
-			'timestamp_raw' => date( 'c' )
-		);
+						'extensions' => array(
+								'http://id.tincanapi.com/extension/browser-info' => array( 'user_agent' => $_SERVER['HTTP_USER_AGENT'] ),
+								'http://id.tincanapi.com/extension/referrer' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '',
+							),
+							'platform' => defined( 'CTLT_PLATFORM' ) ? constant( 'CTLT_PLATFORM' ) : 'unknown'
+						),
+						'timestamp_raw' => date( 'c' )
+				);
 
 		/** $user_obj = get_user_by( 'ID', $wpxapi_uid );
 		 * $user = $user_obj->ID; **/
-		$options = get_option( 'wpxapi_settings' );
 		$user = get_current_user_id();
 		if ( empty( $user ) ) {
 			if ( 1 == $options['wpxapi_guest'] ) {
@@ -120,8 +108,9 @@ WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
 		  } else {
 			  $statement = array_merge( $statement, array( 'user' => $user ) );
 		  }
-		if ( $debug ) { error_log("/includes/triggers.php line 108 statement"); error_log(print_r($statement,true)); }
+
 		return $statement;
+		echo $statement;
 	  }
 ));
 
@@ -131,9 +120,6 @@ WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
 WP_Experience_API::register( 'page_views', array(
 	'hooks' => array( 'shutdown' ), //yes, kinda broad, but if singular, should be ok. Was 'wp'
 	'process' => function( $hook, $args ) {
-
-		global $debug;
-		if ( $debug ) { error_log("/includes/triggers.php line 121 hook and args"); error_log(print_r($hook,true)); error_log(print_r($args,true)); }
 
 		// By default, we don't track AJAX requests within this hook
 		$process_ajax_loads = apply_filters( 'wpxapi_ajax_page_views', false, $hook, $args );
@@ -165,12 +151,8 @@ WP_Experience_API::register( 'page_views', array(
 		//need to make sure that description is working.
 		$description = get_bloginfo( 'description' );
 		if ( empty( $description ) ) {
-			$description = 'N/A';
+			$description = 'n/a';
 		}
-
-		$referrer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-		$referrer = urldecode( $referrer );
-		$referrer = sanitize_text_field( $referrer );
 
 		$postid    = isset( $post->ID ) ? $post->ID : 0;
 		$statement = null;
@@ -194,9 +176,9 @@ WP_Experience_API::register( 'page_views', array(
 			'context_raw' => array(
 				'extensions' => array(
 					'http://id.tincanapi.com/extension/browser-info' => array( 'user_agent' => $_SERVER['HTTP_USER_AGENT'] ),
-					'http://id.tincanapi.com/extension/referrer' => $referrer,
+					'http://id.tincanapi.com/extension/referrer' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '',
 				),
-				'platform' => defined( 'CTLT_PLATFORM' ) ? constant( 'CTLT_PLATFORM' ) : 'Unknown'
+				'platform' => defined( 'CTLT_PLATFORM' ) ? constant( 'CTLT_PLATFORM' ) : 'unknown'
 			),
 			'timestamp_raw' => date( 'c' )
 		);
@@ -345,7 +327,7 @@ WP_Experience_API::register( 'transition_post', array(
 					'http://id.tincanapi.com/extension/browser-info' => array( 'user_agent' => $_SERVER['HTTP_USER_AGENT'] ),
 					'http://id.tincanapi.com/extension/referrer' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '',
 				),
-				'platform' => defined( 'CTLT_PLATFORM' ) ? constant( 'CTLT_PLATFORM' ) : 'Unknown'
+				'platform' => defined( 'CTLT_PLATFORM' ) ? constant( 'CTLT_PLATFORM' ) : 'unknown'
 			),
 			'timestamp_raw' => date( 'c' )
 		);
