@@ -3,11 +3,7 @@
  * This is where the magic happens!  Just need to call ExperienceAPI::register()
  */
 
-/**
- * Click Link tracking
- **/
-
-$debug = 0;
+$debug = 1;
 
 function wpxapi_enqueue_script( $hook ) {
 	$wpxapi_uid = get_current_user_id();
@@ -15,12 +11,20 @@ function wpxapi_enqueue_script( $hook ) {
 	$wpxapi_blogid = get_current_blog_id();
 	$wpxapi_blogid = base64_encode( $wpxapi_blogid );
 	wp_enqueue_script( 'wpxapi_ajax_script', plugins_url( '/js/wpxapi_link_click_log.js', dirname(__FILE__) ), array('jquery') );
-	wp_enqueue_script( 'videoprofile_script', plugins_url( '/js/videoprofile.js', dirname(__FILE__) ), array('jquery') );
-	wp_enqueue_script( 'xapi-yt-stat_script', plugins_url( '/js/xapi-youtube-statements.js', dirname(__FILE__) ), array('jquery') );
-	wp_enqueue_script( 'xapi_wrapper_script', plugins_url( '/js/xapiwrapper.min.js', dirname(__FILE__) ), array('jquery') );
+	/* wp_enqueue_script( 'cryptojs_script', plugins_url( '/js/cryptojs_v3.1.2.js', dirname(__FILE__) ), array('jquery') );
+	wp_enqueue_script( 'verbs_script', plugins_url( '/js/verbs.js', dirname(__FILE__) ), array('jquery') );
+	wp_enqueue_script( 'xapistatement_script', plugins_url( '/js/xapistatement.js', dirname(__FILE__) ), array('jquery') );
+	wp_enqueue_script( 'xapiwrapper_script', plugins_url( '/js/xapiwrapper.js', dirname(__FILE__) ), array('jquery') );
+	wp_enqueue_script( 'jwplayer_script', plugins_url( '/js/jwplayer6/jwplayer.js', dirname(__FILE__) ), array('jquery') ); */
 	$array = array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid );
+
+	/* $array = array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid, 'wpxapi_click_url_requested' => $wpxapi_click_url_requested, 'wpxapi_click_referrer_location' => $wpxapi_click_referrer_location, 'wpxapi_playcount' => $wpxapi_playcount, 'wpxapi_playfrom' => $wpxapi_playfrom, 'wpxapi_videourl' => $wpxapi_videourl, 'wpxapi_filename' => $wpxapi_filename, 'wpxapi_position' => $wpxapi_position, 'wpxapi_duration' => $wpxapi_duration, 'wpxapi_pausestatement' => $wpxapi_pausestatement ); */
+
 	wp_localize_script( 'wpxapi_ajax_script', 'wpxapi_ajax_object', $array );
 }
+
+/* $array = array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid );
+wp_localize_script( 'wpxapi_ajax_script', 'wpxapi_ajax_object', $array ); */
 
 function xapiclicklog_action() {
 	do_action( 'xapiclicklog_action_fire' );
@@ -31,60 +35,114 @@ add_action( 'wp_enqueue_scripts', 'wpxapi_enqueue_script' );
 add_action( 'wp_ajax_xapiclicklog_action', 'xapiclicklog_action' );
 add_action( 'wp_ajax_nopriv_xapiclicklog_action', 'xapiclicklog_action' );
 
-global $video;
-$video = "tlBbt5niQto"; // Change this to your video ID
+/**
+ * Video Interactions tracking
+ **/
+WP_Experience_API::register( 'wpxapi_jwplayer_video_track', array(
+	'hooks' => array( 'xapiclicklog_action_fire' ),
+	'process' => function( $hook, $args ) {
 
-global $myXAPI;
-$myXAPI = null;
+	global $debug;
+	if ( $debug ) { error_log("/includes/triggers.php line 36 hook and args"); error_log(print_r($hook,true)); error_log(print_r($args,true)); }
 
-/* function ADLlaunch ($err, $launchdata, $xAPIWrapper) {
-    if (!$err) {
-      $ADL.$XAPIWrapper = $xAPIWrapper;
-      $myXAPI.$actor = $launchdata.$actor;
-      if ($launchdata.customData.content) {
-        $myXAPI.context = {contextActivities: {grouping: [{id: launchdata.customData.content}]}};
-      } else {
-        myXAPI.context = {contextActivities: {grouping: [{id: "http://adlnet.gov/event/xapiworkshop/launch/no-customData"}]}};
-      }
-    } else {
-      ADL.XAPIWrapper.changeConfig({
-        "endpoint":"https://lrs.adlnet.gov/xapi/",
-        "user":"xapi-workshop",
-        "password":"password1234"
-      });
-      myXAPI.actor = {account: {homePage:"http://example.com/watch-video", name: "youtube"}};
-      myXAPI.context = {contextActivities: {grouping: [{id: "http://adlnet.gov/event/xapiworkshop/non-launch"}]}};
-    }
+	$wpxapi_click_url_requested = urldecode( $_POST['wpxapi_click_url_requested'] );
+	$wpxapi_click_url_requested = sanitize_text_field( $wpxapi_click_url_requested );
 
-    myXAPI.object = {id: "https://www.youtube.com/watch?v="+video, definition: {name: {"en-US": video}}};
+	$wpxapi_click_referrer_location = urldecode( $_POST['wpxapi_click_referrer_location'] );
+	$wpxapi_click_referrer_location = sanitize_text_field( $wpxapi_click_referrer_location );
 
-    ADL.XAPIYoutubeStatements.changeConfig(myXAPI);
+	$wpxapi_uid = base64_decode( $_POST['wpxapi_uid'] );
+	$wpxapi_uid = intval( $wpxapi_uid );
+	if ( ! $wpxapi_uid ) {
+		  $wpxapi_uid = '';
+	}
 
-  }, true);
+	$wpxapi_blogid = base64_decode( $_POST['wpxapi_blogid'] );
+	$wpxapi_blogid = intval( $wpxapi_blogid );
+	if ( ! $wpxapi_blogid ) {
+		$wpxapi_blogid = '';
+	}
 
-  function initYT() {
-    var tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	$request_site_url = get_site_url( $wpxapi_blogid );
+
+	if ( $debug ) { error_log("/includes/triggers.php line 58 wpxapi_blogid, request_site_url, wpxapi_click_url_requested"); error_log(print_r($wpxapi_blogid,true)); error_log(print_r($request_site_url,true)); error_log(print_r($wpxapi_click_url_requested,true)); }
+	if (strpos($wpxapi_click_url_requested, '#') === 0) {
+		$wpxapi_click_url_requested = (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'selflink').$wpxapi_click_url_requested;
+		$wpxapi_click_url_requested = urldecode( $wpxapi_click_url_requested );
+		$wpxapi_click_url_requested = sanitize_text_field( $wpxapi_click_url_requested );
+		if ( $debug ) { error_log("/includes/triggers.php line 63 wpxapi_blogid, request_site_url, wpxapi_click_url_requested"); error_log(print_r($wpxapi_blogid,true)); error_log(print_r($request_site_url,true)); error_log(print_r($wpxapi_click_url_requested,true)); }
+	}
+
+	$referrer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+	if ( $debug ) { error_log("/includes/triggers.php line 67 referrer"); error_log(print_r($referrer,true)); }
+	$referrer = urldecode( $referrer );
+	$referrer = sanitize_text_field( $referrer );
+	if ( $debug ) { error_log("/includes/triggers.php line 69 referrer"); error_log(print_r($referrer,true)); }
+
+	if ( $wpxapi_pausestatement == 1 ) {
+		$statement = array(
+			'verb' => array(
+				'id' => 'http://adlnet.gov/expapi/verbs/Play',
+				'display' => array( 'en-US' => 'Video Played' ),
+			),
+
+			'object' => array(
+				'id' => $wpxapi_filename,
+				'definition' => array(
+					'name' => array(
+						'en-US' => '$wpxapi_videourl + $wpxapi_filename',
+					),
+					'description' => array(
+						'en-US' => 'Video Paused. Played $wpxapi_videourl $wpxapi_filename from $wpxapi_playfrom seconds, to $wpxapi_position seconds, played for $wpxapi_duration seconds',
+					),
+					'type' => 'http://adlnet.gov/expapi/activities/video',
+					)
+				),
+			'context_raw' => array(
+				'extensions' => array(
+					'http://id.tincanapi.com/extension/browser-info' => array( 'user_agent' => $_SERVER['HTTP_USER_AGENT'] ),
+					'http://id.tincanapi.com/extension/referrer' => $referrer,
+					'http://adlnet.gov/expapi/activities/link'=> $wpxapi_videourl,
+					'http://adlnet.gov/expapi/activities/file'=> $wpxapi_filename,
+					'http://adlnet.gov/expapi/period_start'=> $wpxapi_playfrom,
+					'http://adlnet.gov/expapi/period_end'=> $wpxapi_position,
+					'http://adlnet.gov/expapi/duration'=> $wpxapi_duration,
+					),
+				'platform' => defined( 'CTLT_PLATFORM' ) ? constant( 'CTLT_PLATFORM' ) : 'Unknown'
+				),
+			'timestamp_raw' => date( 'c' )
+			);
+		}
+
+	/** $user_obj = get_user_by( 'ID', $wpxapi_uid );
+	 * $user = $user_obj->ID; **/
+	$options = get_option( 'wpxapi_settings' );
+	$user = get_current_user_id();
+	if ( empty( $user ) ) {
+		if ( 1 == $options['wpxapi_guest'] ) {
+			$user = array(
+				'objectType' => 'Agent',
+				'name' => 'Guest.' . $_SERVER['REMOTE_ADDR'],
+				'mbox' => 'mailto:guest.' . $_SERVER['REMOTE_ADDR'] . '@ntua-guest.com',
+				/** 'name' => 'Guest ' . $_SERVER['REMOTE_ADDR'], **/
+				/** 'mbox' => 'mailto:guest-' . $_SERVER['REMOTE_ADDR'] . '@ntua-guest.com', **/
+				/** 'mbox' => 'mailto:guest-' . $_SERVER['REMOTE_ADDR'] . '@' . preg_replace( '/http(s)?:\/\//', '', get_bloginfo( 'url' ) ), **/
+			);
+			  $statement = array_merge( $statement, array( 'actor_raw' => $user ) );
+		 } else {
+			return false;
+		 }
+	  } else {
+		  $statement = array_merge( $statement, array( 'user' => $user ) );
+	  }
+	if ( $debug ) { error_log("/includes/triggers.php line 108 statement"); error_log(print_r($statement,true)); }
+	return $statement;
   }
+));
 
-  var player;
-  function onYouTubeIframeAPIReady() {
-    player = new YT.Player('player', {
-      height: '390',
-      width: '640',
-      videoId: video,
-      playerVars: { 'autoplay': 0, 'disablekb': 1 },
-      events: {
-        'onReady': ADL.XAPIYoutubeStatements.onPlayerReady,
-        'onStateChange': ADL.XAPIYoutubeStatements.onStateChange
-      }
-    });
-  }
-
-  initYT();
- */
+/**
+ * Click Link tracking
+ **/
 WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
 	    'hooks' => array( 'xapiclicklog_action_fire' ),
 		'process' => function( $hook, $args ) {
