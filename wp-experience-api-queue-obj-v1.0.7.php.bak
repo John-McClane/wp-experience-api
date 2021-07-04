@@ -7,8 +7,6 @@
  * - this class is intimately linked with WP_Experience_API...
  * - need to think through and clean up which class has what responsibility, etc....
  */
-$debug = 1;
-
 class WP_Experience_Queue_Object {
 	const MYSQL_DATETIME_FORMAT = 'Y-m-d H:i:s';
 	const LRS_ENDPOINT = 'endpoint';
@@ -49,10 +47,10 @@ class WP_Experience_Queue_Object {
 	 * @return WP_Experience_Queue_Object
 	 */
 	public static function with_statement_lrs_info( $statement, $lrs_info ) {
-		global $debug;
 		try {
 			$instance = new self();
 		} catch ( Exception $e ) {
+			error_log( 'Exception thrown: ' . $e->getMessage() );
 			return false;
 		}
 
@@ -67,7 +65,7 @@ class WP_Experience_Queue_Object {
 		//ok, setup instance info so we can send it back!
 		$instance->statement = $statement;
 		$instance->lrs_info = $lrs_info;
-		if ( $debug ) { error_log("wp-experience-api-queue-obj.php line 70 lrs_info: $lrs_info"); }
+
 		return $instance;
 	}
 
@@ -140,12 +138,10 @@ class WP_Experience_Queue_Object {
 	 */
 	private function generate_insert_sql( $prepared = true ) {
 		global $wpdb;
-		global $debug;
 		$table_name = self::get_queue_table_name();
-		//$statement = serialize( $this->statement->asVersion( $this->lrs_info[ WP_Experience_Queue_Object::LRS_VERSION ] ) );
-		$statement = serialize( $this->statement->asVersion( $this->lrs_info ) );
+
+		$statement = serialize( $this->statement->asVersion( $this->lrs_info[ WP_Experience_Queue_Object::LRS_VERSION ] ) );
 		$lrs_info = $this->lrs_info;
-		if ( $debug ) { error_log("wp-experience-api-queue-obj.php line 150 lrs_info: $lrs_info"); error_log("wp-experience-api-queue-obj.php line 150 statement: $statement"); }
 		$ltt = $this->last_try_time;
 		$tries = $this->tries;
 
