@@ -102,7 +102,15 @@ Nothing yet.
 
 == Changelog ==
 
-= 1.1.17 - 1.2.00 =
+= 1.2.00 =
+* P@ntaJim, BigLebo version.
+* Added a few more exceptions on Page Views Tracking (eg. cron jobs were erroneously recorded before).
+* Implemented Play / Pause / Seek Video Interactions Tracking.
+* Other video interactions (Initialize, Seek, Complete, Terminate etc) waiting patiently in the sidelines.
+* Clean-up code and directories.
+* Bug fixes and performance improvements.
+
+= 1.1.17 - 1.1.19 =
 * P@ntaJim, BigLebo version.
 * JWPlayer onPlay and onPause intgration v1.2 on /includes/triggers.php and /js/wpxapi_link_click_log.js, /js/wpxapi_video_interactions_log.js
 * correlating_xapi_events and xapi-youtube integration v1.2
