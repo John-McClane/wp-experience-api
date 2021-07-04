@@ -6,28 +6,16 @@
 $debug = 1;
 if ($debug) { error_reporting(E_ALL); }
 
-function debug_to_console($data3) {
-    $output = $data3;
-    if (is_array($output))
-        $output = implode(',', $output);
-    echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
-	echo "<script>console.log(<?= json_encode($output); ?>);</script>";
-	echo("<script>console.log('PHP: " . $jw_playfrom  . "');</script>");
-}
-
 function wpxapi_enqueue_script( $hook ) {
 	// if( is_user_logged_in() ) {
 		$wpxapi_uid = wp_get_current_user();
 		$wpxapi_uid = base64_encode( $wpxapi_uid->ID );
 		$wpxapi_blogid = get_current_blog_id();
 		$wpxapi_blogid = base64_encode( $wpxapi_blogid );
-		$jw_videourl; $jw_videotitle; $jw_playcount; $jw_playfrom; $jw_position; $jw_duration; $jw_pausestatement;
 		wp_enqueue_script( 'wpxapi_ajax_script', plugins_url( '/js/wpxapi_link_click_log.js', dirname(__FILE__) ), array('jquery') );
-		$array = array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid );
-		// , 'jw_videourl' =>  $jw_videourl, 'jw_videotitle' => $jw_videotitle, 'jw_playcount' => $jw_playcount, 'jw_playfrom' => $jw_playfrom, 'jw_position' => $jw_position, 'jw_duration' => $jw_duration, 'jw_pausestatement' => $jw_pausestatement );
-		wp_localize_script( 'wpxapi_ajax_script', 'wpxapi_ajax_object', $array );
 		// wp_localize_script( 'wpxapi_ajax_script', 'wpxapi_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid ) );
-
+		$array = array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid );
+		wp_localize_script( 'wpxapi_ajax_script', 'wpxapi_ajax_object', $array );
 	// }
 }
 
@@ -47,14 +35,17 @@ function xapivideointeraction_action() {
 
 /**
  * Video Interactions tracking
-**/
+ * WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
+ *	    'hooks' => array( 'xapiclicklog_action_fire' ),
+ *		'process' => function( $hook, $args ) {
+ **/
 
 WP_Experience_API::register( 'wpxapi_video_interactions_log', array(
 	'hooks' => array( 'xapivideointeraction_action_fire' ),
 	'process' => function( $hook, $args ) {
 
 	global $debug;
-	if ( $debug ) { error_log("/includes/triggers.php line 48 hook and args"); error_log(print_r($hook,true)); error_log(print_r($args,true)); }
+	if ( $debug ) { error_log("/includes/triggers.php line 36 hook and args"); error_log(print_r($hook,true)); error_log(print_r($args,true)); }
 
 	$wpxapi_click_url_requested = urldecode( $_POST['wpxapi_click_url_requested'] );
 	$wpxapi_click_url_requested = sanitize_text_field( $wpxapi_click_url_requested );
@@ -72,55 +63,43 @@ WP_Experience_API::register( 'wpxapi_video_interactions_log', array(
 
 	$request_site_url = get_site_url( $wpxapi_blogid );
 
-	$jw_videourl = urldecode( $_POST['jw_videourl'] );
-	//	$jw_videourl = sanitize_text_field( $jw_videourl );
-	//	$jw_videourl = isset($jw_videourl) ? $jw_videourl : '';
-
-	$jw_videotitle = urldecode( $_POST['jw_videotitle'] );
-	//	$jw_videotitle = sanitize_text_field( $jw_videotitle );
-	//	$jw_videotitle = isset($jw_videotitle) ? $jw_videotitle : '';
-
-	$jw_playcount = $_POST['jw_playcount'];
-	//	$jw_playcount = intval( $jw_playcount );
-	//	$jw_playcount = isset($jw_playcount) ? $jw_playcount : '';
-
-	$jw_playfrom = $_POST['jw_playfrom'];
-	//	$jw_playfrom = intval( $jw_playfrom );
-	//	$jw_playfrom = isset($jw_playfrom) ? $jw_playfrom : '';
-
-	$jw_position = $_POST['jw_position'];
-	//	$jw_position = intval( $jw_position );
-	//	$jw_position = isset($jw_position) ? $jw_position : '';
-
-	$jw_duration = $_POST['jw_duration'];
-	//	$jw_duration = intval( $jw_duration );
-	//	$jw_duration = isset($jw_duration) ? $jw_duration : '';
-
-	$jw_pausestatement = $_POST['jw_pausestatement'];
-	//	$jw_pausestatement = intval( $jw_pausestatement );
-	//	$jw_pausestatement = isset($jw_pausestatement) ? $jw_pausestatement : '';
-
-	if ( $debug ) { error_log("/includes/triggers.php line 66 wpxapi_blogid, request_site_url, wpxapi_click_url_requested"); error_log(print_r($wpxapi_blogid,true)); error_log(print_r($request_site_url,true)); error_log(print_r($wpxapi_click_url_requested,true)); }
+	if ( $debug ) { error_log("/includes/triggers.php line 58 wpxapi_blogid, request_site_url, wpxapi_click_url_requested"); error_log(print_r($wpxapi_blogid,true)); error_log(print_r($request_site_url,true)); error_log(print_r($wpxapi_click_url_requested,true)); }
 	if (strpos($wpxapi_click_url_requested, '#') === 0) {
 		$wpxapi_click_url_requested = (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'selflink').$wpxapi_click_url_requested;
 		$wpxapi_click_url_requested = urldecode( $wpxapi_click_url_requested );
 		$wpxapi_click_url_requested = sanitize_text_field( $wpxapi_click_url_requested );
-		if ( $debug ) { error_log("/includes/triggers.php line 71 wpxapi_blogid, request_site_url, wpxapi_click_url_requested"); error_log(print_r($wpxapi_blogid,true)); error_log(print_r($request_site_url,true)); error_log(print_r($wpxapi_click_url_requested,true)); }
+		if ( $debug ) { error_log("/includes/triggers.php line 63 wpxapi_blogid, request_site_url, wpxapi_click_url_requested"); error_log(print_r($wpxapi_blogid,true)); error_log(print_r($request_site_url,true)); error_log(print_r($wpxapi_click_url_requested,true)); }
 	}
 
 	$referrer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-	if ( $debug ) { error_log("/includes/triggers.php line 75 referrer"); error_log(print_r($referrer,true)); }
+	if ( $debug ) { error_log("/includes/triggers.php line 67 referrer"); error_log(print_r($referrer,true)); }
 	$referrer = urldecode( $referrer );
 	$referrer = sanitize_text_field( $referrer );
-	if ( $debug ) { error_log("/includes/triggers.php line 78 referrer"); error_log(print_r($referrer,true)); }
+	if ( $debug ) { error_log("/includes/triggers.php line 69 referrer"); error_log(print_r($referrer,true)); }
 
-	if ($debug) {
-		debug_to_console( $jw_videourl );
-		debug_to_console( $jw_videotitle, $jw_playcount, $jw_playfrom, $jw_position, $jw_duration, $jw_pausestatement );
-		echo("<script>console.log('PHP: " . $jw_playfrom  . "');</script>");
-	}
+	$jw_videourl = urldecode( $_POST['jw_videourl'] );
+	$jw_videourl = sanitize_text_field( $jw_videourl );
+	$jw_videourl = isset($jw_videourl) ? $jw_videourl : '';
 
-	$statement = null;
+	$jw_filename = urldecode( $_POST['jw_filename'] );
+	$jw_filename = sanitize_text_field( $jw_filename );
+	$jw_filename = isset($jw_filename) ? $jw_filename : '';
+
+	$jw_playcount = ( $_POST['jw_playcount'] );
+	$jw_playcount = intval( $jw_playcount );
+	$jw_playcount = isset($jw_playcount) ? $jw_playcount : '';
+
+	$jw_playfrom = ( $_POST['jw_playfrom'] );
+	$jw_playfrom = intval( $jw_playfrom );
+	$jw_playfrom = isset($jw_playfrom) ? $jw_playfrom : '';
+
+	$jw_position = ( $_POST['jw_position'] );
+	$jw_position = intval( $jw_position );
+	$jw_position = isset($jw_position) ? $jw_position : '';
+
+	$jw_pausestatement = ( $_POST['jw_pausestatement'] );
+	$jw_pausestatement = intval( $jw_pausestatement );
+	$jw_pausestatement = isset($jw_pausestatement) ? $jw_pausestatement : '';
 
 	// if ( $wpxapi_pausestatement == 1 ) {
 		$statement = array(
@@ -130,21 +109,21 @@ WP_Experience_API::register( 'wpxapi_video_interactions_log', array(
 			),
 
 			'object' => array(
-				'id' => $jw_videourl,
+				'id' => $jw_filename,
 				'definition' => array(
 					'name' => array(
-						'en-US' => $jw_videourl,
+						'en-US' => '$jw_videourl + $jw_filename',
 					),
 					'description' => array(
-						'en-US' => 'Video Played. Played' + $jw_videotitle + '(' + $jw_videourl + ') from ' + $jw_playfrom + ' seconds, to ' + $jw_position + ' seconds, full video duration ' + $jw_duration +  ' seconds',
+						'en-US' => 'Video Paused. Played $jw_videourl $jw_filename from $jw_playfrom seconds, to $jw_position seconds, played for $jw_duration seconds',
 					),
 					'type' => 'http://adlnet.gov/expapi/activities/video',
 					)
 				),
 			'result' => array(
 				'extensions' => array(
-					'http://adlnet.gov/expapi/activities/link'=> $jw_videotitle,
-					'http://adlnet.gov/expapi/activities/file'=> $jw_videourl,
+					'http://adlnet.gov/expapi/activities/link'=> $jw_videourl,
+					'http://adlnet.gov/expapi/activities/file'=> $jw_filename,
 					'http://adlnet.gov/expapi/period_start'=> $jw_playfrom,
 					'http://adlnet.gov/expapi/period_end'=> $jw_position,
 					'http://adlnet.gov/expapi/period_duration'=> $jw_duration,
@@ -161,8 +140,8 @@ WP_Experience_API::register( 'wpxapi_video_interactions_log', array(
 			);
 		// }
 
-	// $user_obj = get_user_by( 'ID', $wpxapi_uid );
-	// $user = $user_obj->ID;
+	/** $user_obj = get_user_by( 'ID', $wpxapi_uid );
+	 * $user = $user_obj->ID; **/
 	$options = get_option( 'wpxapi_settings' );
 	$user = get_current_user_id();
 	if ( empty( $user ) ) {
@@ -171,9 +150,9 @@ WP_Experience_API::register( 'wpxapi_video_interactions_log', array(
 				'objectType' => 'Agent',
 				'name' => 'Guest.' . $_SERVER['REMOTE_ADDR'],
 				'mbox' => 'mailto:guest.' . $_SERVER['REMOTE_ADDR'] . '@ntua-guest.com',
-				// 'name' => 'Guest ' . $_SERVER['REMOTE_ADDR'],
-				// 'mbox' => 'mailto:guest-' . $_SERVER['REMOTE_ADDR'] . '@ntua-guest.com',
-				// 'mbox' => 'mailto:guest-' . $_SERVER['REMOTE_ADDR'] . '@' . preg_replace( '/http(s)?:\/\//', '', get_bloginfo( 'url' ) ),
+				/** 'name' => 'Guest ' . $_SERVER['REMOTE_ADDR'], **/
+				/** 'mbox' => 'mailto:guest-' . $_SERVER['REMOTE_ADDR'] . '@ntua-guest.com', **/
+				/** 'mbox' => 'mailto:guest-' . $_SERVER['REMOTE_ADDR'] . '@' . preg_replace( '/http(s)?:\/\//', '', get_bloginfo( 'url' ) ), **/
 			);
 			  $statement = array_merge( $statement, array( 'actor_raw' => $user ) );
 		 } else {
@@ -182,7 +161,7 @@ WP_Experience_API::register( 'wpxapi_video_interactions_log', array(
 	  } else {
 		  $statement = array_merge( $statement, array( 'user' => $user ) );
 	  }
-	if ( $debug ) { error_log("/includes/triggers.php line 166 statement"); error_log(print_r($statement,true)); }
+	if ( $debug ) { error_log("/includes/triggers.php line 108 statement"); error_log(print_r($statement,true)); }
 	return $statement;
   }
 ));
