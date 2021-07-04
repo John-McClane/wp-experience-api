@@ -5,22 +5,30 @@
 [![License](https://poser.pugx.org/rusticisoftware/tincan/license)](https://packagist.org/packages/rusticisoftware/tincan)
 [![Total Downloads](https://poser.pugx.org/rusticisoftware/tincan/downloads)](https://packagist.org/packages/rusticisoftware/tincan)
 
-[NetMode]http://www.netmode.ntua.gr/main/
-[GitHub]https://github.com/John-McClane/wp-experience-api/
+* [NetMode]http://www.netmode.ntua.gr/main/
+
+* [GitHub]https://github.com/John-McClane/wp-experience-api/
 
 Way to send basic xAPI statements from WordPress for various events.
 
 Contributors: P@ntaJim, BigLebo, CTLT, Devindra Payment, loongchan, Robert Plant, Jimmy Page, John Paul Jones, John Bonham, John McClane, Lucy McClane - Gennero.
+
 Tags:  xAPI, BadgeOS, Tincan, LRS, Experience API, Tin Can API
+
 Requires at least: WordPress 3.5
+
 Tested up to: 5.7.2
+
 Stable tag: 1.2.00
+
 License: GNU AGPLv3
+
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
-Adds the ability for WordPress to send preset xAPI statements to a Learning Record Store
 
 ### == Description ==
+
+Adds the ability for WordPress to send preset xAPI statements to a Learning Record Store.
 
 Sends xAPI statements to LRS (tested against LearningLocker).  Some features are enabled
 ONLY if the dependent plugins have also been installed.  The plugin can be used as a MU plugin as well.
@@ -31,6 +39,7 @@ It has been extensively tested and is (or appears to be) working seamlessly with
 
 well, so far at least, but, as everything with LL, YMMV.
 
+
 Statements that can be sent are:
 
 * Page Views.
@@ -40,45 +49,56 @@ Statements that can be sent are:
 * Commenting.
 
 This plugin was developed at the NTUA NetMode Laboratory.
-[NetMode]http://www.netmode.ntua.gr/main/
-[GitHub]https://github.com/John-McClane/wp-experience-api/
+
+* [NetMode]http://www.netmode.ntua.gr/main/
+* [GitHub]https://github.com/John-McClane/wp-experience-api/
+
 
 ### == Installation ==
 
 Assumes you are using PHP version >= 5.4 (requirement of TinCanPHP Library that the plugin includes)
-and optimally PHP version >= 7.4. Currently being tested with PHP 8.
+and optimally PHP version >= 7.4. Currently being tested internally with PHP 8.
 
 1. Plunk folder into plugins.
 2. Activate the plugin "WP Experience API" through the "Plugins" menu in WordPress.
 
 = EXTRA NOTES FOR MU: =
+
 If you want to install in wp-content/mu-plugins folder, the plugin uses a proxy loader file.
 
-1. copy wp-experience-api directory to mu-plugins folder
-2. copy wp-experience-api/wp-experience-api-mu-loader.php to directory one level up (same level as wp-experience-api itself AKA just under mu-plugins folder)
-3. it should be installed!  Enjoy!
+1. Copy wp-experience-api directory to mu-plugins folder
+2. Copy wp-experience-api/wp-experience-api-mu-loader.php to directory one level up (same level as wp-experience-api itself AKA just under mu-plugins folder)
+3. It should be installed!  Enjoy!
+
 
 = EXTRA EXTRA NOTES: =
-* now that the plugin uses the TinCanPHP library (https://github.com/RusticiSoftware/TinCanPHP/), please make sure that it is updated regularly as well!  current version is 1.1.1
+* Note that the plugin uses the TinCanPHP library (https://github.com/RusticiSoftware/TinCanPHP/), please make sure that it is updated regularly as well!  Current version is 1.1.1.
+
 
 == Frequently Asked Questions ==
 
 = How can I add more xAPI statements to the plugin? =
+
 You can create your own plugin and use the plugin's hooks!
 
 = How come nothing is being sent to the LRS after I activate the plugin? =
+
 The settings are defaulted so that nothing is sent by default.  Please go to the dashboard and the WP xAPI settings page to configure what statements are sent.
 
 = What is the queue for? =
+
 The queue is used for when for some reason, LRS can't be reached, then statements meant to be sent will be added to the queue to be sent later in the admin screen.
 
 == Upgrade Notice ==
+
 Nothing yet.
+
 
 == Screenshots ==
 
-1. The network level administration screen for a Multisite WordPress installtion.
+1. The network level administration screen for a Multisite WordPress installation.
 2. Site level administration page for users autorized to set the LRS at the site level.
+
 
 == Changelog ==
 
