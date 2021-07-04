@@ -1,7 +1,7 @@
 jQuery(document).ready( function($) {
 	var debug = 2;
 	if (debug > 1) {
-		$(window).ajaxComplete(function () {console.log("Info. Ajax Complete."); });
+		$(window).ajaxComplete(function () {console.log("=> Ajax Complete."); });
 		$(window).ajaxError(function (data2, textStatus, jqXHR) {console.log("Info. Ajax Error.");
 		console.log("Data2: " + data2 + ".");
 		console.log("TextStatus: " + textStatus + ".");
@@ -9,7 +9,7 @@ jQuery(document).ready( function($) {
 		$(window).ajaxSend(function () {console.log("=> Ajax Send."); });
 		$(window).ajaxStart(function () {console.log("Info. Ajax Start."); });
 		$(window).ajaxStop(function () {console.log("Info. Ajax Stop."); });
-		$(window).ajaxSuccess(function () {console.log("=> Ajax Success."); });
+		$(window).ajaxSuccess(function () {console.log("Info. Ajax Success."); });
 		$("a").on({
 			"click": function() {
 				// $( this ).toggleClass( "active" );
@@ -49,7 +49,7 @@ jQuery(document).ready( function($) {
 		var request;
 		if (request) { request.abort(); }
 
-		var str1, wpxapi_jw_videourl, wpxapi_jw_videotitle, wpxapi_jw_playcount, wpxapi_jw_playfrom, wpxapi_jw_position, wpxapi_jw_duration, wpxapi_jw_pausestatement = 0;
+		var wpxapi_jw_videourl, wpxapi_jw_videotitle, wpxapi_jw_playcount, wpxapi_jw_playfrom, wpxapi_jw_position, wpxapi_jw_duration, wpxapi_jw_pausestatement = 0;
 		var wpxapi_click_url_requested =  $(this).attr('href');
 		var wpxapi_click_referrer_location = document.location.href;
 		// var wpxapi_jw_videourl = window.location.pathname;
@@ -66,26 +66,19 @@ jQuery(document).ready( function($) {
 			jwplayer().onPlay(function(event){
 				wpxapi_jw_pausestatement = 0;
 				wpxapi_jw_videourl = jwplayer().getPlaylistItem()['file'];
-				str1 = wpxapi_jw_videourl.title;
-				if (debug > 1) {
-					console.log("document.title: " + document.title);
-					console.log("str1: " + str1);
-				};
-
-				if (typeof str1 == 'undefined' || !str1 || str1.length === 0 || str1 === "" || !/[^\s]/.test(str1) || /^\s*$/.test(str1) || str1.replace(/\s/g,"") === "") { str1 = document.title; };
-				if (debug > 1) {
-					console.log("document.title: " + document.title);
-					console.log("str1: " + str1);
-				};
-
-				// wpxapi_jw_videotitle = jwplayer().getPlaylistItem().title;
-				// str2 = str1.split(/(\d{2}\/\d{2}\/\d{4})/g); 	Also: str2 = str1.split(' – ')[0] + " – " + str1.split(' – ')[1]; split(' - */*/*')[0]);
-				wpxapi_jw_videotitle = str1.split(/(\d{2}\/\d{2}\/\d{4})/g)[0] + str1.split(/(\d{2}\/\d{2}\/\d{4})/g)[1];
+				wpxapi_jw_videotitle = wpxapi_jw_videourl.title;
 				if (debug > 1) {
 					console.log("document.title: " + document.title);
 					console.log("wpxapi_jw_videotitle: " + wpxapi_jw_videotitle);
 				};
+				str = wpxapi_jw_videotitle;
+				if (typeof str == 'undefined' || !str || str.length === 0 || str === "" || !/[^\s]/.test(str) || /^\s*$/.test(str) || str.replace(/\s/g,"") === "") { wpxapi_jw_videotitle = document.title; };
 
+				if (debug > 1) {
+					console.log("document.title: " + document.title);
+					console.log("wpxapi_jw_videotitle: " + wpxapi_jw_videotitle);
+				};
+				// wpxapi_jw_videotitle = jwplayer().getPlaylistItem().title;
 				wpxapi_jw_playfrom = jwplayer().getPosition();
 				wpxapi_jw_duration = jwplayer().getDuration();
 				if (debug > 0) {

@@ -1,22 +1,22 @@
 {
-	"name": 	"ubc/wp-experience-api",
+	"name": 	"John-McClane/wp-experience-api",
 	"description": 	"",
 	"keywords": 	[ "wordpress", "plugin", "xapi" ],
-	"homepage": 	"http://github.com/ubc/",
+	"homepage": 	"http://github.com/John-McClane/",
 	"license": 		"GPLv3",
 
 	"authors": [
 		{
-			"name": 	"University of British Columbia",
-			"email": 	"web.admin@ubc.ca",
-			"homepage": "http://ctlt.ubc.ca/"
+			"name": 	"National Technical University of Athens. NetMode Laboratory",
+			"email": 	"web.admin@netmode.ntua.gr",
+			"homepage": "http://www.netmode.ntua.gr/main/"
 		}
 	],
 
 	"type": "wordpress-plugin",
 
 	"require": {
-		"php": ">=5.4",
+		"php": ">=7.4",
 		"composer/installers": "~1.0"
 	}
 }
