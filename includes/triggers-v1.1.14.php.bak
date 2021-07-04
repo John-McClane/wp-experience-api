@@ -12,7 +12,7 @@ function debug_to_console($data3) {
         $output = implode(',', $output);
     echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
 	echo "<script>console.log(<?= json_encode($output); ?>);</script>";
-	echo("<script>console.log('PHP: " . $wpxapi_jw_playfrom  . "');</script>");
+	echo("<script>console.log('PHP: " . $jw_playfrom  . "');</script>");
 }
 
 function wpxapi_enqueue_script( $hook ) {
@@ -21,19 +21,12 @@ function wpxapi_enqueue_script( $hook ) {
 		$wpxapi_uid = base64_encode( $wpxapi_uid->ID );
 		$wpxapi_blogid = get_current_blog_id();
 		$wpxapi_blogid = base64_encode( $wpxapi_blogid );
-		$wpxapi_jw_videourl; $wpxapi_jw_videotitle; $wpxapi_jw_playcount; $wpxapi_jw_playfrom; $wpxapi_jw_position; $wpxapi_jw_duration; $wpxapi_jw_pausestatement;
-
-		wp_enqueue_script( 'wpxapi_ajax_script1', plugins_url( '/js/wpxapi_link_click_log.js', dirname(__FILE__) ), array('jquery') );
-		$array1 = array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid );
-		// , 'wpxapi_jw_videourl' =>  $wpxapi_jw_videourl, 'wpxapi_jw_videotitle' => $wpxapi_jw_videotitle, 'wpxapi_jw_playcount' => $wpxapi_jw_playcount, 'wpxapi_jw_playfrom' => $wpxapi_jw_playfrom, 'wpxapi_jw_position' => $wpxapi_jw_position, 'wpxapi_jw_duration' => $wpxapi_jw_duration, 'wpxapi_jw_pausestatement' => $wpxapi_jw_pausestatement );
-		wp_localize_script( 'wpxapi_ajax_script1', 'wpxapi_ajax_object1', $array1 );
-		// wp_localize_script( 'wpxapi_ajax_script1', 'wpxapi_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid ) );
-
-		wp_enqueue_script( 'wpxapi_ajax_script2', plugins_url( '/js/wpxapi_video_interactions_log.js', dirname(__FILE__) ), array('jquery') );
-		$array2 = array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid );
-		// $array2 = array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid, 'wpxapi_jw_videourl' =>  $wpxapi_jw_videourl, 'wpxapi_jw_videotitle' => $wpxapi_jw_videotitle, 'wpxapi_jw_playcount' => $wpxapi_jw_playcount, 'wpxapi_jw_playfrom' => $wpxapi_jw_playfrom, 'wpxapi_jw_position' => $wpxapi_jw_position, 'wpxapi_jw_duration' => $wpxapi_jw_duration, 'wpxapi_jw_pausestatement' => $wpxapi_jw_pausestatement );
-		wp_localize_script( 'wpxapi_ajax_script2', 'wpxapi_ajax_object2', $array2 );
-		// wp_localize_script( 'wpxapi_ajax_script2', 'wpxapi_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid ) );
+		$jw_videourl; $jw_videotitle; $jw_playcount; $jw_playfrom; $jw_position; $jw_duration; $jw_pausestatement;
+		wp_enqueue_script( 'wpxapi_ajax_script', plugins_url( '/js/wpxapi_link_click_log.js', dirname(__FILE__) ), array('jquery') );
+		$array = array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid );
+		// , 'jw_videourl' =>  $jw_videourl, 'jw_videotitle' => $jw_videotitle, 'jw_playcount' => $jw_playcount, 'jw_playfrom' => $jw_playfrom, 'jw_position' => $jw_position, 'jw_duration' => $jw_duration, 'jw_pausestatement' => $jw_pausestatement );
+		wp_localize_script( 'wpxapi_ajax_script', 'wpxapi_ajax_object', $array );
+		// wp_localize_script( 'wpxapi_ajax_script', 'wpxapi_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid ) );
 
 	// }
 }
@@ -79,33 +72,33 @@ WP_Experience_API::register( 'wpxapi_video_interactions_log', array(
 
 	$request_site_url = get_site_url( $wpxapi_blogid );
 
-	$wpxapi_jw_videourl = urldecode( $_POST['wpxapi_jw_videourl'] );
-	$wpxapi_jw_videourl = sanitize_text_field( $wpxapi_jw_videourl );
-	$wpxapi_jw_videourl = isset($wpxapi_jw_videourl) ? $wpxapi_jw_videourl : '';
+	$jw_videourl = urldecode( $_POST['jw_videourl'] );
+	//	$jw_videourl = sanitize_text_field( $jw_videourl );
+	//	$jw_videourl = isset($jw_videourl) ? $jw_videourl : '';
 
-	$wpxapi_jw_videotitle = urldecode( $_POST['wpxapi_jw_videotitle'] );
-	$wpxapi_jw_videotitle = sanitize_text_field( $wpxapi_jw_videotitle );
-	$wpxapi_jw_videotitle = isset($wpxapi_jw_videotitle) ? $wpxapi_jw_videotitle : '';
+	$jw_videotitle = urldecode( $_POST['jw_videotitle'] );
+	//	$jw_videotitle = sanitize_text_field( $jw_videotitle );
+	//	$jw_videotitle = isset($jw_videotitle) ? $jw_videotitle : '';
 
-	$wpxapi_jw_playcount = $_POST['wpxapi_jw_playcount'];
-	$wpxapi_jw_playcount = intval( $wpxapi_jw_playcount );
-	$wpxapi_jw_playcount = isset($wpxapi_jw_playcount) ? $wpxapi_jw_playcount : '';
+	$jw_playcount = $_POST['jw_playcount'];
+	//	$jw_playcount = intval( $jw_playcount );
+	//	$jw_playcount = isset($jw_playcount) ? $jw_playcount : '';
 
-	$wpxapi_jw_playfrom = $_POST['wpxapi_jw_playfrom'];
-	$wpxapi_jw_playfrom = intval( $wpxapi_jw_playfrom );
-	$wpxapi_jw_playfrom = isset($wpxapi_jw_playfrom) ? $wpxapi_jw_playfrom : '';
+	$jw_playfrom = $_POST['jw_playfrom'];
+	//	$jw_playfrom = intval( $jw_playfrom );
+	//	$jw_playfrom = isset($jw_playfrom) ? $jw_playfrom : '';
 
-	$wpxapi_jw_position = $_POST['wpxapi_jw_position'];
-	$wpxapi_jw_position = intval( $wpxapi_jw_position );
-	$wpxapi_jw_position = isset($wpxapi_jw_position) ? $wpxapi_jw_position : '';
+	$jw_position = $_POST['jw_position'];
+	//	$jw_position = intval( $jw_position );
+	//	$jw_position = isset($jw_position) ? $jw_position : '';
 
-	$wpxapi_jw_duration = $_POST['wpxapi_jw_duration'];
-	$wpxapi_jw_duration = intval( $wpxapi_jw_duration );
-	$wpxapi_jw_duration = isset($wpxapi_jw_duration) ? $wpxapi_jw_duration : '';
+	$jw_duration = $_POST['jw_duration'];
+	//	$jw_duration = intval( $jw_duration );
+	//	$jw_duration = isset($jw_duration) ? $jw_duration : '';
 
-	$wpxapi_jw_pausestatement = $_POST['wpxapi_jw_pausestatement'];
-	$wpxapi_jw_pausestatement = intval( $wpxapi_jw_pausestatement );
-	$wpxapi_jw_pausestatement = isset($wpxapi_jw_pausestatement) ? $wpxapi_jw_pausestatement : '';
+	$jw_pausestatement = $_POST['jw_pausestatement'];
+	//	$jw_pausestatement = intval( $jw_pausestatement );
+	//	$jw_pausestatement = isset($jw_pausestatement) ? $jw_pausestatement : '';
 
 	if ( $debug ) { error_log("/includes/triggers.php line 66 wpxapi_blogid, request_site_url, wpxapi_click_url_requested"); error_log(print_r($wpxapi_blogid,true)); error_log(print_r($request_site_url,true)); error_log(print_r($wpxapi_click_url_requested,true)); }
 	if (strpos($wpxapi_click_url_requested, '#') === 0) {
@@ -122,9 +115,9 @@ WP_Experience_API::register( 'wpxapi_video_interactions_log', array(
 	if ( $debug ) { error_log("/includes/triggers.php line 78 referrer"); error_log(print_r($referrer,true)); }
 
 	if ($debug) {
-		debug_to_console( $wpxapi_jw_videourl );
-		debug_to_console( $wpxapi_jw_videotitle, $wpxapi_jw_playcount, $wpxapi_jw_playfrom, $wpxapi_jw_position, $wpxapi_jw_duration, $wpxapi_jw_pausestatement );
-		echo("<script>console.log('PHP: " . $wpxapi_jw_playfrom  . "');</script>");
+		debug_to_console( $jw_videourl );
+		debug_to_console( $jw_videotitle, $jw_playcount, $jw_playfrom, $jw_position, $jw_duration, $jw_pausestatement );
+		echo("<script>console.log('PHP: " . $jw_playfrom  . "');</script>");
 	}
 
 	$statement = null;
@@ -137,24 +130,24 @@ WP_Experience_API::register( 'wpxapi_video_interactions_log', array(
 			),
 
 			'object' => array(
-				'id' => $wpxapi_jw_videourl,
+				'id' => $jw_videourl,
 				'definition' => array(
 					'name' => array(
-						'en-US' => $wpxapi_jw_videourl,
+						'en-US' => $jw_videourl,
 					),
 					'description' => array(
-						'en-US' => 'Video Played. Played' + $wpxapi_jw_videotitle + '(' + $wpxapi_jw_videourl + ') from ' + $wpxapi_jw_playfrom + ' seconds, to ' + $wpxapi_jw_position + ' seconds, full video duration ' + $wpxapi_jw_duration +  ' seconds',
+						'en-US' => 'Video Played. Played' + $jw_videotitle + '(' + $jw_videourl + ') from ' + $jw_playfrom + ' seconds, to ' + $jw_position + ' seconds, full video duration ' + $jw_duration +  ' seconds',
 					),
 					'type' => 'http://adlnet.gov/expapi/activities/video',
 					)
 				),
 			'result' => array(
 				'extensions' => array(
-					'http://adlnet.gov/expapi/activities/link'=> $wpxapi_jw_videotitle,
-					'http://adlnet.gov/expapi/activities/file'=> $wpxapi_jw_videourl,
-					'http://adlnet.gov/expapi/period_start'=> $wpxapi_jw_playfrom,
-					'http://adlnet.gov/expapi/period_end'=> $wpxapi_jw_position,
-					'http://adlnet.gov/expapi/period_duration'=> $wpxapi_jw_duration,
+					'http://adlnet.gov/expapi/activities/link'=> $jw_videotitle,
+					'http://adlnet.gov/expapi/activities/file'=> $jw_videourl,
+					'http://adlnet.gov/expapi/period_start'=> $jw_playfrom,
+					'http://adlnet.gov/expapi/period_end'=> $jw_position,
+					'http://adlnet.gov/expapi/period_duration'=> $jw_duration,
 					),
 				),
 			'context_raw' => array(
