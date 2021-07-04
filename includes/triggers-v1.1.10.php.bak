@@ -7,25 +7,32 @@ $debug = 1;
 if ($debug) { error_reporting(E_ALL); }
 
 function wpxapi_enqueue_script( $hook ) {
-	// if( is_user_logged_in() ) {
-		$wpxapi_uid = wp_get_current_user();
-		$wpxapi_uid = base64_encode( $wpxapi_uid->ID );
-		$wpxapi_blogid = get_current_blog_id();
-		$wpxapi_blogid = base64_encode( $wpxapi_blogid );
-		wp_enqueue_script( 'wpxapi_ajax_script', plugins_url( '/js/wpxapi_link_click_log.js', dirname(__FILE__) ), array('jquery') );
-		// wp_localize_script( 'wpxapi_ajax_script', 'wpxapi_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid ) );
-		$array = array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid );
-		wp_localize_script( 'wpxapi_ajax_script', 'wpxapi_ajax_object', $array );
-	// }
+	$wpxapi_uid = get_current_user_id();
+	$wpxapi_uid = base64_encode( $wpxapi_uid );
+	$wpxapi_blogid = get_current_blog_id();
+	$wpxapi_blogid = base64_encode( $wpxapi_blogid );
+	wp_enqueue_script( 'wpxapi_ajax_script1', plugins_url( '/js/wpxapi_link_click_log.js', dirname(__FILE__) ), array('jquery') );
+	wp_enqueue_script( 'wpxapi_ajax_script2', plugins_url( '/js/wpxapi_video_interactions_log.js', dirname(__FILE__) ), array('jquery') );
+	$array = array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid );
+	wp_localize_script( 'wpxapi_ajax_script1', 'wpxapi_ajax_object1', $array );
+	wp_localize_script( 'wpxapi_ajax_script2', 'wpxapi_ajax_object2', $array );
+}
+
+function xapiclicklog_action() {
+	do_action( 'xapiclicklog_action_fire' );
+	wp_die();
+}
+
+function xapivideointeraction_action() {
+	do_action( 'xapivideointeraction_action_fire' );
+	wp_die();
 }
 
 add_action( 'wp_enqueue_scripts', 'wpxapi_enqueue_script' );
 add_action( 'wp_ajax_xapiclicklog_action', 'xapiclicklog_action' );
 add_action( 'wp_ajax_nopriv_xapiclicklog_action', 'xapiclicklog_action' );
-
-function xapiclicklog_action() {
-	do_action( 'xapiclicklog_action_fire' );
-}
+add_action( 'wp_ajax_xapivideointeraction_action', 'xapivideointeraction_action' );
+add_action( 'wp_ajax_nopriv_xapivideointeraction_action', 'xapivideointeraction_action' );
 
 /**
  * Video Interactions tracking
