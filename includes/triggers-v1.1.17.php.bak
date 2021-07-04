@@ -8,8 +8,8 @@ if ($debug) { error_reporting(E_ALL); }
 
 function debug_to_console($data3) {
     $output = $data3;
-    if (is_array($output)) {
-        $output = implode(',', $output); }
+    if (is_array($output))
+        $output = implode(',', $output);
     echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
 	echo "<script>console.log(<?= json_encode($output); ?>);</script>";
 	echo("<script>console.log('PHP: " . $wpxapi_jw_playfrom  . "');</script>");
@@ -85,9 +85,7 @@ WP_Experience_API::register( 'wpxapi_video_interactions_log', array(
 
 	$wpxapi_jw_videotitle = urldecode( $_POST['wpxapi_jw_videotitle'] );
 	$wpxapi_jw_videotitle = sanitize_text_field( $wpxapi_jw_videotitle );
-	// $wpxapi_jw_videotitle = isset($wpxapi_jw_videotitle) ? $wpxapi_jw_videotitle : '';
-	if ( !isset($wpxapi_jw_videotitle) || empty($wpxapi_jw_videotitle) )  { $wpxapi_jw_videotitle = get_the_title( absint( $postid ) ) . ' | ' . get_bloginfo( 'name' ); };
-	// if ( empty($wpxapi_jw_videotitle) ) { $wpxapi_jw_videotitle = get_the_title( absint( $postid ) ) . ' | ' . get_bloginfo( 'name' ); }
+	$wpxapi_jw_videotitle = isset($wpxapi_jw_videotitle) ? $wpxapi_jw_videotitle : '';
 
 	$wpxapi_jw_playcount = $_POST['wpxapi_jw_playcount'];
 	$wpxapi_jw_playcount = intval( $wpxapi_jw_playcount );
@@ -134,51 +132,22 @@ WP_Experience_API::register( 'wpxapi_video_interactions_log', array(
 	// if ( $wpxapi_pausestatement == 1 ) {
 		$statement = array(
 			'verb' => array(
-				'id' => 'http://activitystrea.ms/schema/1.0/play',
-				'display' => array(
-					'en-US' => 'Played',
-					'el-GR' => $wpxapi_jw_videourl,
-				),
+				'id' => 'http://adlnet.gov/expapi/verbs/Play',
+				'display' => array( 'en-US' => 'Video Played' ),
 			),
 
 			'object' => array(
-				'objectType' => 'Activity',
 				'id' => $wpxapi_jw_videourl,
 				'definition' => array(
-					'name' => array( 'en-US' => $wpxapi_jw_videotitle, ),
-					'type' => 'http://adlnet.gov/expapi/activities/video',
-					'description' => array(
-						'en-US' => 'Video Played.'
-						// Played' + $wpxapi_jw_videotitle + '(' + $wpxapi_jw_videourl + ') from ' + $wpxapi_jw_playfrom + ' seconds, to ' + $wpxapi_jw_position + ' seconds, full video duration ' + $wpxapi_jw_duration +  ' seconds',
+					'name' => array(
+						'en-US' => $wpxapi_jw_videourl,
 					),
-				)
-			),
-			// 'result' => array(
-			// 	'extensions' => array(
-			// 		'https://w3id.org/xapi/cmi5/result/extensions/progress' => '0',
-			// 	)
-			// ),
-			// 'context' => array (
-			// 	'contextActivities' => array (
-			// 		'other' => array (
-			// 			'objectType' => 'Activity',
-			// 			'id' => $wpxapi_jw_videourl,
-			// 			'definition' => array(
-			// 				'name' => array( 'en' => $wpxapi_jw_videotitle ),
-			// 				'type' => 'http://activitystrea.ms/schema/1.0/application',
-			// 		  )
-			// 		)
-			// 	),
-			// 	'category' => array (
-			// 		'objectType' => 'Activity',
-			// 		'id' => 'http://tincan-definitions.kaltura.com/products/mediaspace/1',
-			// 		'definition' => array ( 'type' => 'http://id.tincanapi.com/activitytype/source' )
-			// 	),
-
-			// 	'extensions' => array ( 'http://tincan-definitions.kaltura.com/extensions/context/video-mode' => 'VOD' )
-			// ),
-			'version' => '1.0.0',
-
+					'description' => array(
+						'en-US' => 'Video Played. Played' + $wpxapi_jw_videotitle + '(' + $wpxapi_jw_videourl + ') from ' + $wpxapi_jw_playfrom + ' seconds, to ' + $wpxapi_jw_position + ' seconds, full video duration ' + $wpxapi_jw_duration +  ' seconds',
+					),
+					'type' => 'http://adlnet.gov/expapi/activities/video',
+					)
+				),
 			'result' => array(
 				'extensions' => array(
 					'http://adlnet.gov/expapi/activities/link'=> $wpxapi_jw_videotitle,
@@ -360,14 +329,9 @@ WP_Experience_API::register( 'page_views', array(
 
 		//need to make sure that description is working.
 		$description = get_bloginfo( 'description' );
-		// if ( empty( $description ) ) {
-		// 	$description = 'N/A';
-		// }
-		// $description = isset($description) ? $description : get_the_title( absint( $postid ) ) . ' | ' . get_bloginfo( 'name' );
-		// if ( emtpy($description) ) { $description = get_the_title( absint( $postid ) ) . ' | ' . get_bloginfo( 'name' ); }
-
-		if ( !isset($description) || empty($description) ) { $description = get_the_title( absint( $postid ) ) . ' | ' . get_bloginfo( 'name' ); };
-
+		if ( empty( $description ) ) {
+			$description = 'N/A';
+		}
 
 		$referrer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 		$referrer = urldecode( $referrer );
