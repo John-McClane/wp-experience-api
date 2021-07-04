@@ -4,7 +4,6 @@
  */
 
 $debug = 1;
-if ($debug) { error_reporting(E_ALL); }
 
 function wpxapi_enqueue_script( $hook ) {
 	$wpxapi_uid = get_current_user_id();
@@ -12,11 +11,20 @@ function wpxapi_enqueue_script( $hook ) {
 	$wpxapi_blogid = get_current_blog_id();
 	$wpxapi_blogid = base64_encode( $wpxapi_blogid );
 	wp_enqueue_script( 'wpxapi_ajax_script', plugins_url( '/js/wpxapi_link_click_log.js', dirname(__FILE__) ), array('jquery') );
+	/* wp_enqueue_script( 'cryptojs_script', plugins_url( '/js/cryptojs_v3.1.2.js', dirname(__FILE__) ), array('jquery') );
+	wp_enqueue_script( 'verbs_script', plugins_url( '/js/verbs.js', dirname(__FILE__) ), array('jquery') );
+	wp_enqueue_script( 'xapistatement_script', plugins_url( '/js/xapistatement.js', dirname(__FILE__) ), array('jquery') );
+	wp_enqueue_script( 'xapiwrapper_script', plugins_url( '/js/xapiwrapper.js', dirname(__FILE__) ), array('jquery') );
+	wp_enqueue_script( 'jwplayer_script', plugins_url( '/js/jwplayer6/jwplayer.js', dirname(__FILE__) ), array('jquery') ); */
 	$array = array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid );
+
 	/* $array = array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid, 'wpxapi_click_url_requested' => $wpxapi_click_url_requested, 'wpxapi_click_referrer_location' => $wpxapi_click_referrer_location, 'wpxapi_playcount' => $wpxapi_playcount, 'wpxapi_playfrom' => $wpxapi_playfrom, 'wpxapi_videourl' => $wpxapi_videourl, 'wpxapi_filename' => $wpxapi_filename, 'wpxapi_position' => $wpxapi_position, 'wpxapi_duration' => $wpxapi_duration, 'wpxapi_pausestatement' => $wpxapi_pausestatement ); */
-	/* $array = array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid, 'jw_playcount' => $jw_playcount, 'jw_playfrom' => $jw_playfrom, 'jw_videourl' => $jw_videourl, 'jw_filename' => $jw_filename, 'jw_position' => $jw_position, 'jw_duration' => $jw_duration, 'jw_pausestatement' => $jw_pausestatement ); */
+
 	wp_localize_script( 'wpxapi_ajax_script', 'wpxapi_ajax_object', $array );
 }
+
+/* $array = array( 'ajax_url' => admin_url( 'admin-ajax.php' ),  'wpxapi_uid' => $wpxapi_uid, 'wpxapi_blogid' => $wpxapi_blogid );
+wp_localize_script( 'wpxapi_ajax_script', 'wpxapi_ajax_object', $array ); */
 
 function xapiclicklog_action() {
 	do_action( 'xapiclicklog_action_fire' );
@@ -29,13 +37,9 @@ add_action( 'wp_ajax_nopriv_xapiclicklog_action', 'xapiclicklog_action' );
 
 /**
  * Video Interactions tracking
- * WP_Experience_API::register( 'wpxapi_jwplayer_video_track', array(
- *	'hooks' => array( 'xapiclicklog_action_fire' ),
- *	'process' => function( $hook, $args ) {
  **/
-
-WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
-	'hooks' => array( 'videotrack_action_fire' ),
+WP_Experience_API::register( 'wpxapi_jwplayer_video_track', array(
+	'hooks' => array( 'xapiclicklog_action_fire' ),
 	'process' => function( $hook, $args ) {
 
 	global $debug;
@@ -49,11 +53,15 @@ WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
 
 	$wpxapi_uid = base64_decode( $_POST['wpxapi_uid'] );
 	$wpxapi_uid = intval( $wpxapi_uid );
-	$wpxapi_uid = isset($wpxapi_uid) ? $wpxapi_uid : '';
+	if ( ! $wpxapi_uid ) {
+		  $wpxapi_uid = '';
+	}
 
 	$wpxapi_blogid = base64_decode( $_POST['wpxapi_blogid'] );
 	$wpxapi_blogid = intval( $wpxapi_blogid );
-	$wpxapi_blogid = isset($wpxapi_blogid) ? $wpxapi_blogid : '';
+	if ( ! $wpxapi_blogid ) {
+		$wpxapi_blogid = '';
+	}
 
 	$request_site_url = get_site_url( $wpxapi_blogid );
 
@@ -71,31 +79,7 @@ WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
 	$referrer = sanitize_text_field( $referrer );
 	if ( $debug ) { error_log("/includes/triggers.php line 69 referrer"); error_log(print_r($referrer,true)); }
 
-	$jw_videourl = urldecode( $_POST['jw_videourl'] );
-	$jw_videourl = sanitize_text_field( $jw_videourl );
-	$jw_videourl = isset($jw_videourl) ? $jw_videourl : '';
-
-	$jw_filename = urldecode( $_POST['jw_filename'] );
-	$jw_filename = sanitize_text_field( $jw_filename );
-	$jw_filename = isset($jw_filename) ? $jw_filename : '';
-
-	$jw_playcount = ( $_POST['jw_playcount'] );
-	$jw_playcount = intval( $jw_playcount );
-	$jw_playcount = isset($jw_playcount) ? $jw_playcount : '';
-
-	$jw_playfrom = ( $_POST['jw_playfrom'] );
-	$jw_playfrom = intval( $jw_playfrom );
-	$jw_playfrom = isset($jw_playfrom) ? $jw_playfrom : '';
-
-	$jw_position = ( $_POST['jw_position'] );
-	$jw_position = intval( $jw_position );
-	$jw_position = isset($jw_position) ? $jw_position : '';
-
-	$jw_pausestatement = ( $_POST['jw_pausestatement'] );
-	$jw_pausestatement = intval( $jw_pausestatement );
-	$jw_pausestatement = isset($jw_pausestatement) ? $jw_pausestatement : '';
-
-	// if ( $wpxapi_pausestatement == 1 ) {
+	if ( $wpxapi_pausestatement == 1 ) {
 		$statement = array(
 			'verb' => array(
 				'id' => 'http://adlnet.gov/expapi/verbs/Play',
@@ -103,36 +87,32 @@ WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
 			),
 
 			'object' => array(
-				'id' => $jw_filename,
+				'id' => $wpxapi_filename,
 				'definition' => array(
 					'name' => array(
-						'en-US' => '$jw_videourl + $jw_filename',
+						'en-US' => '$wpxapi_videourl + $wpxapi_filename',
 					),
 					'description' => array(
-						'en-US' => 'Video Paused. Played $jw_videourl $jw_filename from $jw_playfrom seconds, to $jw_position seconds, played for $jw_duration seconds',
+						'en-US' => 'Video Paused. Played $wpxapi_videourl $wpxapi_filename from $wpxapi_playfrom seconds, to $wpxapi_position seconds, played for $wpxapi_duration seconds',
 					),
 					'type' => 'http://adlnet.gov/expapi/activities/video',
 					)
-				),
-			'result' => array(
-				'extensions' => array(
-					'http://adlnet.gov/expapi/activities/link'=> $jw_videourl,
-					'http://adlnet.gov/expapi/activities/file'=> $jw_filename,
-					'http://adlnet.gov/expapi/period_start'=> $jw_playfrom,
-					'http://adlnet.gov/expapi/period_end'=> $jw_position,
-					'http://adlnet.gov/expapi/period_duration'=> $jw_duration,
-					),
 				),
 			'context_raw' => array(
 				'extensions' => array(
 					'http://id.tincanapi.com/extension/browser-info' => array( 'user_agent' => $_SERVER['HTTP_USER_AGENT'] ),
 					'http://id.tincanapi.com/extension/referrer' => $referrer,
+					'http://adlnet.gov/expapi/activities/link'=> $wpxapi_videourl,
+					'http://adlnet.gov/expapi/activities/file'=> $wpxapi_filename,
+					'http://adlnet.gov/expapi/period_start'=> $wpxapi_playfrom,
+					'http://adlnet.gov/expapi/period_end'=> $wpxapi_position,
+					'http://adlnet.gov/expapi/duration'=> $wpxapi_duration,
 					),
 				'platform' => defined( 'CTLT_PLATFORM' ) ? constant( 'CTLT_PLATFORM' ) : 'Unknown'
 				),
 			'timestamp_raw' => date( 'c' )
 			);
-		// }
+		}
 
 	/** $user_obj = get_user_by( 'ID', $wpxapi_uid );
 	 * $user = $user_obj->ID; **/
@@ -178,11 +158,15 @@ WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
 
 		$wpxapi_uid = base64_decode( $_POST['wpxapi_uid'] );
 		$wpxapi_uid = intval( $wpxapi_uid );
-		$wpxapi_uid = isset($wpxapi_uid) ? $wpxapi_uid : '';
+		if ( ! $wpxapi_uid ) {
+  			$wpxapi_uid = '';
+		}
 
 		$wpxapi_blogid = base64_decode( $_POST['wpxapi_blogid'] );
 		$wpxapi_blogid = intval( $wpxapi_blogid );
-		$wpxapi_blogid = isset($wpxapi_blogid) ? $wpxapi_blogid : '';
+		if ( ! $wpxapi_blogid ) {
+			$wpxapi_blogid = '';
+        }
 
 		$request_site_url = get_site_url( $wpxapi_blogid );
 
