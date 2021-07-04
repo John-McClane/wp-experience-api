@@ -3,7 +3,7 @@ Contributors: P@ntaJim, BigLebo, Devindra Payment, loongchan, ctlt-dev
 Tags:  xAPI, BadgeOS, Tincan, LRS, Experience API, Tin Can API
 Requires at least: WordPress 3.5
 Tested up to: 5.5.3
-Stable tag: 1.1.8
+Stable tag: 1.1.9
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -64,9 +64,14 @@ Nothing yet.
 
 == Changelog ==
 
+= 1.1.9 =
+* P@ntaJim, BigLebo version.
+* jwplayer onPause intgration v1.1 on /includes/triggers.php and /js/wpxapi_link_click_log.js
+* correlating_xapi_events and xapi-youtube integration v1.1
+
 = 1.1.8 =
 * P@ntaJim, BigLebo version.
-* jwplayer onPause intgration v1.0 on /includes/trigger.php *
+* jwplayer onPause intgration v1.0 on /includes/triggers.php
 * xapi-youtube integration v1.0
 
 = 1.1.7 =
