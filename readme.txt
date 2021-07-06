@@ -7,12 +7,13 @@
 
 [![Build](https://travis-ci.org/gorhill/uBlock.svg?branch=master)](https://travis-ci.org/gorhill/uBlock)
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/ublock/localized.svg)](https://crowdin.com/project/ublock)
-[![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/gorhill/uBlock/blob/master/LICENSE.txt)
+[![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/John-McClane/wp-experience-api/blob/master/LICENSE.txt)
 
 
-* [NetMode]http://www.netmode.ntua.gr/main/
+* [NTUA NetMode Laboratory](http://www.netmode.ntua.gr/main/)
 
-* [GitHub]https://github.com/John-McClane/wp-experience-api/
+* [GitHub](https://github.com/John-McClane/wp-experience-api/)
+
 
 Way to send basic xAPI statements from WordPress for various events.
 
@@ -26,7 +27,7 @@ Tested up to: 5.7.2
 
 Stable tag: 1.2.00
 
-License: GNU AGPLv3
+License: [GNU AGPLv3](https://github.com/John-McClane/wp-experience-api/blob/master/LICENSE.txt)
 
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -55,8 +56,8 @@ Statements that can be sent are:
 
 This plugin was developed at the NTUA NetMode Laboratory.
 
-* [NetMode]http://www.netmode.ntua.gr/main/
-* [GitHub]https://github.com/John-McClane/wp-experience-api/
+* [NTUA NetMode Laboratory](http://www.netmode.ntua.gr/main/)
+* [GitHub](https://github.com/John-McClane/wp-experience-api/)
 
 
 ## == Installation ==
