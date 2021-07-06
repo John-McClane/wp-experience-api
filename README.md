@@ -30,6 +30,8 @@ License: GNU AGPLv3
 
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
+* [Description](#Description)
+
 
 ## == Description ==
 
