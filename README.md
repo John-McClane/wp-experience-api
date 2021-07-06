@@ -28,7 +28,7 @@ Tested up to: 5.7.2
 
 Stable tag: 1.2.00
 
-License: [GNU AGPLv3] (https://github.com/John-McClane/wp-experience-api/blob/master/LICENSE.txt)
+License: [GNU AGPLv3](https://github.com/John-McClane/wp-experience-api/blob/master/LICENSE.txt)
 
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -57,8 +57,8 @@ Statements that can be sent are:
 
 This plugin was developed at the NTUA NetMode Laboratory.
 
-* [NetMode]http://www.netmode.ntua.gr/main/
-* [GitHub]https://github.com/John-McClane/wp-experience-api/
+* [NTUA NetMode Laboratory](http://www.netmode.ntua.gr/main/)
+* [GitHub](https://github.com/John-McClane/wp-experience-api/)
 
 
 ## == Installation ==
