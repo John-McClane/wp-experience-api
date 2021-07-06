@@ -10,11 +10,11 @@
 [![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/gorhill/uBlock/blob/master/LICENSE.txt)
 
 
-* [NTUA NetMode Laboratory] (http://www.netmode.ntua.gr/main/)
+* [NTUA NetMode Laboratory](http://www.netmode.ntua.gr/main/)
 
 
-* [GitHub] (https://github.com/John-McClane/wp-experience-api/)
-* 
+* [GitHub](https://github.com/John-McClane/wp-experience-api/)
+
 
 Way to send basic xAPI statements from WordPress for various events.
 
