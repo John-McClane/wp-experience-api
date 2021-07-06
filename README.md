@@ -1,9 +1,14 @@
-### === WP Experience API ===
+## === WP Experience API ===
 
 [![Build Status](https://travis-ci.org/RusticiSoftware/TinCanPHP.png)](https://travis-ci.org/RusticiSoftware/TinCanPHP)
 [![Latest Stable Version](https://poser.pugx.org/rusticisoftware/tincan/v/stable)](https://packagist.org/packages/rusticisoftware/tincan)
 [![License](https://poser.pugx.org/rusticisoftware/tincan/license)](https://packagist.org/packages/rusticisoftware/tincan)
 [![Total Downloads](https://poser.pugx.org/rusticisoftware/tincan/downloads)](https://packagist.org/packages/rusticisoftware/tincan)
+
+[![Build](https://travis-ci.org/gorhill/uBlock.svg?branch=master)](https://travis-ci.org/gorhill/uBlock)
+[![Crowdin](https://d322cqt584bo4o.cloudfront.net/ublock/localized.svg)](https://crowdin.com/project/ublock)
+[![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/gorhill/uBlock/blob/master/LICENSE.txt)
+
 
 * [NetMode]http://www.netmode.ntua.gr/main/
 
@@ -26,7 +31,7 @@ License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
 
-### == Description ==
+## == Description ==
 
 Adds the ability for WordPress to send preset xAPI statements to a Learning Record Store.
 
@@ -54,7 +59,7 @@ This plugin was developed at the NTUA NetMode Laboratory.
 * [GitHub]https://github.com/John-McClane/wp-experience-api/
 
 
-### == Installation ==
+## == Installation ==
 
 Assumes you are using PHP version >= 5.4 (requirement of TinCanPHP Library that the plugin includes)
 and optimally PHP version >= 7.4. Currently being tested internally with PHP 8.
@@ -100,6 +105,10 @@ Nothing yet.
 2. Site level administration page for users autorized to set the LRS at the site level.
 
 
+## Release History
+
+See the [releases pages](https://github.com/John-McClane/wp-experience-api/releases) for a history of releases and highlights for each release.
+
 == Changelog ==
 
 = 1.2.00 =
@@ -112,32 +121,32 @@ Nothing yet.
 
 = 1.1.17 - 1.1.19 =
 * P@ntaJim, BigLebo version.
-* JWPlayer onPlay and onPause intgration v1.2 on /includes/triggers.php and /js/wpxapi_link_click_log.js, /js/wpxapi_video_interactions_log.js
+* JWPlayer onPlay and onPause integration v1.2 on /includes/triggers.php and /js/wpxapi_link_click_log.js, /js/wpxapi_video_interactions_log.js
 * correlating_xapi_events and xapi-youtube integration v1.2
 
 = 1.1.12 - 1.1.17 =
 * P@ntaJim, BigLebo version.
-* JWPlayer onPlay and onPause intgration v1.17 on /includes/triggers.php and /js/wpxapi_link_click_log.js, /js/wpxapi_video_interactions_log.js
+* JWPlayer onPlay and onPause integration v1.17 on /includes/triggers.php and /js/wpxapi_link_click_log.js, /js/wpxapi_video_interactions_log.js
 * correlating_xapi_events and xapi-youtube integration v1.17
 
 = 1.1.11 =
 * P@ntaJim, BigLebo version.
-* jwplayer onPause intgration v1.3 on /includes/triggers.php and /js/wpxapi_link_click_log.js
+* jwplayer onPause integration v1.3 on /includes/triggers.php and /js/wpxapi_link_click_log.js
 * correlating_xapi_events and xapi-youtube integration v1.3
 
 = 1.1.10 =
 * P@ntaJim, BigLebo version.
-* jwplayer onPause intgration v1.2 on /includes/triggers.php and /js/wpxapi_link_click_log.js
+* jwplayer onPause integration v1.2 on /includes/triggers.php and /js/wpxapi_link_click_log.js
 * correlating_xapi_events and xapi-youtube integration v1.2
 
 = 1.1.9 =
 * P@ntaJim, BigLebo version.
-* jwplayer onPause intgration v1.1 on /includes/triggers.php and /js/wpxapi_link_click_log.js
+* jwplayer onPause integration v1.1 on /includes/triggers.php and /js/wpxapi_link_click_log.js
 * correlating_xapi_events and xapi-youtube integration v1.1
 
 = 1.1.8 =
 * P@ntaJim, BigLebo version.
-* jwplayer onPause intgration v1.0 on /includes/triggers.php
+* jwplayer onPause integration v1.0 on /includes/triggers.php
 * xapi-youtube integration v1.0
 
 = 1.1.7 =
@@ -188,3 +197,15 @@ Nothing yet.
 
 = 1.0.0 =
 * Initial public release
+
+## About
+
+Free. Open source. For users by users. No donations sought.
+
+If ever you really do want to contribute something, think about the people working hard
+to maintain the projects you are using, which were made available to use by
+all for free.
+
+## License
+
+[GPLv3](https://github.com/John-McClane/wp-experience-api/blob/master/LICENSE.txt).
