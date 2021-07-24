@@ -19,7 +19,7 @@ Way to send basic xAPI statements from WordPress for various events.
 
 Contributors: John McClane, BigLebo, P@ntaJim, CTLT, Devindra Payment, loongchan.
 
-(Honorable Mentions: Robert Plant, Jimmy Page, John Paul Jones, John Bonham, VR46, Lucy McClane - Gennero, Jeff Lebowski, Walter Sobchak, Jesus Quintana)
+(Honorable Mentions: Robert Plant, Jimmy Page, John Paul Jones, John Bonham, VR46, Lucy McClane - Gennero, Jeff Lebowski, Walter Sobchak, Jesus Quintana.)
 
 Tags:  xAPI, BadgeOS, Tincan, LRS, Experience API, Tin Can API
 
@@ -31,7 +31,7 @@ Stable tag: 1.2.00
 
 License: [GNU AGPLv3](https://github.com/John-McClane/wp-experience-api/blob/master/LICENSE.txt)
 
-License URI: http://www.gnu.org/licenses/agpl-3.0.html
+License URI: [GNU Affero General Public License Version 3](http://www.gnu.org/licenses/agpl-3.0.html)
 
 
 ## == Description ==
@@ -80,7 +80,7 @@ If you want to install in wp-content/mu-plugins folder, the plugin uses a proxy 
 
 
 = EXTRA EXTRA NOTES: =
-* Note that the plugin uses the TinCanPHP library (https://github.com/RusticiSoftware/TinCanPHP/), please make sure that it is updated regularly as well!  Current version is 1.1.1.
+* Note that the plugin uses the [TinCanPHP library](https://github.com/RusticiSoftware/TinCanPHP/), please make sure that it is updated regularly as well!  Current version is 1.1.1.
 
 
 == Frequently Asked Questions ==
