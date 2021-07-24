@@ -18,7 +18,6 @@
 Way to send basic xAPI statements from WordPress for various events.
 
 Contributors: John McClane, BigLebo, P@ntaJim, CTLT, Devindra Payment, loongchan.
-
 (Honorable Mentions: Robert Plant, Jimmy Page, John Paul Jones, John Bonham, VR46, Lucy McClane - Gennero, Jeff Lebowski, Walter Sobchak, Jesus Quintana.)
 
 Tags:  xAPI, BadgeOS, Tincan, LRS, Experience API, Tin Can API
