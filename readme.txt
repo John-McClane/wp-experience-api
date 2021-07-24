@@ -45,7 +45,7 @@ It has been extensively tested and is (or appears to be) working seamlessly with
 
 * [Learning Locker](http://learninglocker.net/)
 
-(well, so far at least, but, as everything with LL, YMMV!)
+(well, so far at least, but, as everything with LL, YMMV!).
 
 
 Statements that can be sent are:
