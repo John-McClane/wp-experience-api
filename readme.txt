@@ -115,7 +115,7 @@ See the [releases pages](https://github.com/John-McClane/wp-experience-api/relea
 == Changelog ==
 
 = 1.2.00 =
-* P@ntaJim, BigLebo version.
+* BigLebo, P@ntaJim version.
 * Added a few more exceptions on Page Views Tracking (eg. cron jobs were erroneously recorded before).
 * Implemented Play / Pause / Seek Video Interactions Tracking.
 * Other video interactions (Initialize, Seek, Complete, Terminate etc) waiting patiently in the sidelines.
@@ -123,59 +123,59 @@ See the [releases pages](https://github.com/John-McClane/wp-experience-api/relea
 * Bug fixes and performance improvements.
 
 = 1.1.17 - 1.1.19 =
-* P@ntaJim, BigLebo version.
+* BigLebo, P@ntaJim version.
 * JWPlayer onPlay and onPause integration v1.2 on /includes/triggers.php and /js/wpxapi_link_click_log.js, /js/wpxapi_video_interactions_log.js
 * correlating_xapi_events and xapi-youtube integration v1.2
 
 = 1.1.12 - 1.1.17 =
-* P@ntaJim, BigLebo version.
+* BigLebo, P@ntaJim version.
 * JWPlayer onPlay and onPause integration v1.17 on /includes/triggers.php and /js/wpxapi_link_click_log.js, /js/wpxapi_video_interactions_log.js
 * correlating_xapi_events and xapi-youtube integration v1.17
 
 = 1.1.11 =
-* P@ntaJim, BigLebo version.
+* BigLebo, P@ntaJim version.
 * jwplayer onPause integration v1.3 on /includes/triggers.php and /js/wpxapi_link_click_log.js
 * correlating_xapi_events and xapi-youtube integration v1.3
 
 = 1.1.10 =
-* P@ntaJim, BigLebo version.
+* BigLebo, P@ntaJim version.
 * jwplayer onPause integration v1.2 on /includes/triggers.php and /js/wpxapi_link_click_log.js
 * correlating_xapi_events and xapi-youtube integration v1.2
 
 = 1.1.9 =
-* P@ntaJim, BigLebo version.
+* BigLebo, P@ntaJim version.
 * jwplayer onPause integration v1.1 on /includes/triggers.php and /js/wpxapi_link_click_log.js
 * correlating_xapi_events and xapi-youtube integration v1.1
 
 = 1.1.8 =
-* P@ntaJim, BigLebo version.
+* BigLebo, P@ntaJim version.
 * jwplayer onPause integration v1.0 on /includes/triggers.php
 * xapi-youtube integration v1.0
 
 = 1.1.7 =
-* P@ntaJim, BigLebo version.
+* BigLebo, P@ntaJim version.
 * xapi-youtube integration v1.0
 
 = 1.1.6 =
-* P@ntaJim, BigLebo version.
+* BigLebo, P@ntaJim version.
 
 = 1.1.5 =
-* P@ntaJim, BigLebo version.
+* BigLebo, P@ntaJim version.
 
 = 1.1.4 =
-* P@ntaJim, BigLebo version.
+* BigLebo, P@ntaJim version.
 
 = 1.1.3 =
-* P@ntaJim, BigLebo version.
+* BigLebo, P@ntaJim version.
 
 = 1.1.2 =
-* P@ntaJim, BigLebo version.
+* BigLebo, P@ntaJim version.
 
 = 1.1.1 =
-* P@ntaJim, BigLebo version.
+* BigLebo, P@ntaJim version.
 
 = 1.1.0 =
-* P@ntaJim, BigLebo version.
+* BigLebo, P@ntaJim version.
 
 = 1.0.6 =
 * tweaked syntax to fit with wordpress better (got codesniffer to work on my ide again!)
