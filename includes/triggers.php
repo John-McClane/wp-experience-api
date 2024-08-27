@@ -147,13 +147,59 @@ WP_Experience_API::register( 'page_views', array(
 			'timestamp_raw' => date( 'c' )
 		);
 
+		$UserAgentString = $_SERVER['HTTP_USER_AGENT'];
+		// $UserAgentString1 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36";
+		// $UserAgentString2 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36";
+		// $UserAgentString3 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:129.0) Gecko/20100101 Firefox/129.0";
+		// $UserAgentString4 = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36";
+		// $UserAgentString5 = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36";
+		if (str_contains($UserAgentString, "Windows")) {
+			if (str_contains($UserAgentString, "Chrome")) {
+				$array= explode(' ',$UserAgentString);
+				$sub1 = str_replace("/" , "." , $array[10]) ;
+				$sub2 = str_replace("0.0.0" , "0" , $sub1) ;
+			}
+			elseif (str_contains($UserAgentString, "Firefox")) {
+				$array= explode(' ',$UserAgentString);
+				$sub1 = str_replace("/" , "." , $array[8]) ;
+				$sub2 = str_replace("0.0.0" , "0" , $sub1) ;
+			}
+			$subOS = "Win";
+			$sub = $subOS . "." . $sub2;
+		}
+		elseif (str_contains($UserAgentString, "Macintosh")) {
+			if (str_contains($UserAgentString, "Chrome")) {
+				$array= explode(' ',$UserAgentString);
+				$sub1 = str_replace("/" , "." , $array[11]) ;
+				$sub2 = str_replace("0.0.0" , "0" , $sub1) ;
+			}
+			$subOS = "Mac";
+			$sub = $subOS . "." . $sub2;
+		}
+		elseif (str_contains($UserAgentString, "Linux")) {
+			if (str_contains($UserAgentString, "Chrome")) {
+				$array= explode(' ',$UserAgentString);
+				$sub1 = str_replace("/" , "." , $array[8]) ;
+				$sub2 = str_replace("0.0.0" , "0" , $sub1) ;
+			}
+			$subOS = "Linux";
+			$sub = $subOS . "." . $sub2;
+		}
+		else {
+			$sub = "Win.Chrome.128.0";
+		}
+
+		$UserAgent = $sub;
+
 		$user = get_current_user_id();
 		if ( empty( $user ) ) {
 			if ( 1 == $options['wpxapi_guest'] ) {
 				$user = array(
 					'objectType' => 'Agent',
-					'name' => 'Guest.' . $_SERVER['REMOTE_ADDR'],
-					'mbox' => 'mailto:guest.' . $_SERVER['REMOTE_ADDR'] . '@ntua-guest.com',
+					'name' => 'Guest.' . $UserAgent,
+					// 'name' => 'Guest.' . $_SERVER['REMOTE_ADDR'],
+					'mbox' => 'mailto:guest.' . $UserAgent . '@ntua-guest.com',
+					// 'mbox' => 'mailto:guest.' . $_SERVER['REMOTE_ADDR'] . '@ntua-guest.com',
 					/** 'name' => 'Guest ' . $_SERVER['REMOTE_ADDR'], **/
 					/** 'mbox' => 'mailto:guest-' . $_SERVER['REMOTE_ADDR'] . '@ntua-guest.com', **/
 					/** 'mbox' => 'mailto:guest-' . $_SERVER['REMOTE_ADDR'] . '@' . preg_replace( '/http(s)?:\/\//', '', get_bloginfo( 'url' ) ), **/
@@ -326,6 +372,45 @@ WP_Experience_API::register( 'wpxapi_video_interactions_log', array(
 			);
 		}
 
+	$UserAgentString = $_SERVER['HTTP_USER_AGENT'];
+	if (str_contains($UserAgentString, "Windows")) {
+		if (str_contains($UserAgentString, "Chrome")) {
+			$array= explode(' ',$UserAgentString);
+			$sub1 = str_replace("/" , "." , $array[10]) ;
+			$sub2 = str_replace("0.0.0" , "0" , $sub1) ;
+		}
+		elseif (str_contains($UserAgentString, "Firefox")) {
+			$array= explode(' ',$UserAgentString);
+			$sub1 = str_replace("/" , "." , $array[8]) ;
+			$sub2 = str_replace("0.0.0" , "0" , $sub1) ;
+		}
+		$subOS = "Win";
+		$sub = $subOS . "." . $sub2;
+	}
+	elseif (str_contains($UserAgentString, "Macintosh")) {
+		if (str_contains($UserAgentString, "Chrome")) {
+			$array= explode(' ',$UserAgentString);
+			$sub1 = str_replace("/" , "." , $array[11]) ;
+			$sub2 = str_replace("0.0.0" , "0" , $sub1) ;
+		}
+		$subOS = "Mac";
+		$sub = $subOS . "." . $sub2;
+	}
+	elseif (str_contains($UserAgentString, "Linux")) {
+		if (str_contains($UserAgentString, "Chrome")) {
+			$array= explode(' ',$UserAgentString);
+			$sub1 = str_replace("/" , "." , $array[8]) ;
+			$sub2 = str_replace("0.0.0" , "0" , $sub1) ;
+		}
+		$subOS = "Linux";
+		$sub = $subOS . "." . $sub2;
+	}
+	else {
+		$sub = "Win.Chrome.128.0";
+	}
+
+	$UserAgent = $sub;
+
 	// $user_obj = get_user_by( 'ID', $wpxapi_uid );
 	// $user = $user_obj->ID;
 	$options = get_option( 'wpxapi_settings' );
@@ -334,8 +419,10 @@ WP_Experience_API::register( 'wpxapi_video_interactions_log', array(
 		if ( 1 == $options['wpxapi_guest'] ) {
 			$user = array(
 				'objectType' => 'Agent',
-				'name' => 'Guest.' . $_SERVER['REMOTE_ADDR'],
-				'mbox' => 'mailto:guest.' . $_SERVER['REMOTE_ADDR'] . '@ntua-guest.com',
+				'name' => 'Guest.' . $UserAgent,
+				// 'name' => 'Guest.' . $_SERVER['REMOTE_ADDR'],
+				'mbox' => 'mailto:guest.' . $UserAgent . '@ntua-guest.com',
+				// 'mbox' => 'mailto:guest.' . $_SERVER['REMOTE_ADDR'] . '@ntua-guest.com',
 				// 'name' => 'Guest ' . $_SERVER['REMOTE_ADDR'],
 				// 'mbox' => 'mailto:guest-' . $_SERVER['REMOTE_ADDR'] . '@ntua-guest.com',
 				// 'mbox' => 'mailto:guest-' . $_SERVER['REMOTE_ADDR'] . '@' . preg_replace( '/http(s)?:\/\//', '', get_bloginfo( 'url' ) ),
@@ -426,6 +513,45 @@ WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
 			'timestamp_raw' => date( 'c' )
 		);
 
+		$UserAgentString = $_SERVER['HTTP_USER_AGENT'];
+		if (str_contains($UserAgentString, "Windows")) {
+			if (str_contains($UserAgentString, "Chrome")) {
+				$array= explode(' ',$UserAgentString);
+				$sub1 = str_replace("/" , "." , $array[10]) ;
+				$sub2 = str_replace("0.0.0" , "0" , $sub1) ;
+			}
+			elseif (str_contains($UserAgentString, "Firefox")) {
+				$array= explode(' ',$UserAgentString);
+				$sub1 = str_replace("/" , "." , $array[8]) ;
+				$sub2 = str_replace("0.0.0" , "0" , $sub1) ;
+			}
+			$subOS = "Win";
+			$sub = $subOS . "." . $sub2;
+		}
+		elseif (str_contains($UserAgentString, "Macintosh")) {
+			if (str_contains($UserAgentString, "Chrome")) {
+				$array= explode(' ',$UserAgentString);
+				$sub1 = str_replace("/" , "." , $array[11]) ;
+				$sub2 = str_replace("0.0.0" , "0" , $sub1) ;
+			}
+			$subOS = "Mac";
+			$sub = $subOS . "." . $sub2;
+		}
+		elseif (str_contains($UserAgentString, "Linux")) {
+			if (str_contains($UserAgentString, "Chrome")) {
+				$array= explode(' ',$UserAgentString);
+				$sub1 = str_replace("/" , "." , $array[8]) ;
+				$sub2 = str_replace("0.0.0" , "0" , $sub1) ;
+			}
+			$subOS = "Linux";
+			$sub = $subOS . "." . $sub2;
+		}
+		else {
+			$sub = "Win.Chrome.128.0";
+		}
+
+		$UserAgent = $sub;
+
 		/** $user_obj = get_user_by( 'ID', $wpxapi_uid );
 		 * $user = $user_obj->ID; **/
 		$options = get_option( 'wpxapi_settings' );
@@ -434,8 +560,10 @@ WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
 			if ( 1 == $options['wpxapi_guest'] ) {
 				$user = array(
 					'objectType' => 'Agent',
-					'name' => 'Guest.' . $_SERVER['REMOTE_ADDR'],
-					'mbox' => 'mailto:guest.' . $_SERVER['REMOTE_ADDR'] . '@ntua-guest.com',
+					'name' => 'Guest.' . $UserAgent,
+					// 'name' => 'Guest.' . $_SERVER['REMOTE_ADDR'],
+					'mbox' => 'mailto:guest.' . $UserAgent . '@ntua-guest.com',
+					// 'mbox' => 'mailto:guest.' . $_SERVER['REMOTE_ADDR'] . '@ntua-guest.com',
 					/** 'name' => 'Guest ' . $_SERVER['REMOTE_ADDR'], **/
 					/** 'mbox' => 'mailto:guest-' . $_SERVER['REMOTE_ADDR'] . '@ntua-guest.com', **/
 					/** 'mbox' => 'mailto:guest-' . $_SERVER['REMOTE_ADDR'] . '@' . preg_replace( '/http(s)?:\/\//', '', get_bloginfo( 'url' ) ), **/
