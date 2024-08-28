@@ -25,7 +25,7 @@ Tags:  xAPI, BadgeOS, Tincan, LRS, Experience API, Tin Can API
 
 Requires at least: WordPress 3.5
 
-Tested up to: 6.5
+Tested up to: 6.8
 
 Stable tag: 1.5.00
 
