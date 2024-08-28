@@ -3,7 +3,7 @@
  * These are just default constants that can be used anywhere
  *
  */
-define( 'WP_XAPI_PLUGIN_VERSION', '202408201300' );
+define( 'WP_XAPI_PLUGIN_VERSION', '202408281400' );
 /* define( 'WP_XAPI_PLUGIN_VERSION', '20150908101' ); */
 define( 'WP_XAPI_DEFAULT_ACTOR_ACCOUNT_HOMEPAGE', 'http://www.netmode.ntua.gr/main/' );
 define( 'WP_XAPI_DEFAULT_XAPI_VERSION', '1.0.0' );

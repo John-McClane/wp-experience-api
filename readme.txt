@@ -27,7 +27,7 @@ Requires at least: WordPress 3.5
 
 Tested up to: 6.5
 
-Stable tag: 1.4.00
+Stable tag: 1.5.00
 
 License: [GNU AGPLv3](https://github.com/John-McClane/wp-experience-api/blob/master/LICENSE.txt)
 
@@ -113,6 +113,14 @@ Nothing yet.
 See the [releases pages](https://github.com/John-McClane/wp-experience-api/releases) for a history of releases and highlights for each release.
 
 == Changelog ==
+
+= 1.5.00 =
+* John McClane, BigLebo, P@ntaJim version.
+* Implemented non-logged-in Agent recording as Guest.OS.Browser.Version, rather than Guest.IP. Great for Data Anonymization too.
+* Added a few more exceptions on Page Views Tracking (eg. cron jobs were erroneously recorded before).
+* Other video interactions (Initialize, Seek, Complete, Terminate etc) waiting patiently in the sidelines.
+* Clean-up code and directories.
+* Bug fixes and performance improvements.
 
 = 1.4.00 =
 * John McClane, BigLebo, P@ntaJim version.
