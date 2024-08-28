@@ -141,6 +141,7 @@ WP_Experience_API::register( 'page_views', array(
 					'http://id.tincanapi.com/extension/target' => $page_description,
 					'http://id.tincanapi.com/extension/browser-info' => array( 'user_agent' => $_SERVER['HTTP_USER_AGENT'] ),
 					'http://id.tincanapi.com/extension/referrer' => $referrer,
+					'http://id.tincanapi.com/extension/ip-address' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '',
 				),
 				'platform' => defined( 'CTLT_PLATFORM' ) ? constant( 'CTLT_PLATFORM' ) : 'Unknown'
 			),
@@ -342,6 +343,7 @@ WP_Experience_API::register( 'wpxapi_video_interactions_log', array(
 					'http://id.tincanapi.com/extension/target' => $wpxapi_jw_videotitle,
 					'http://id.tincanapi.com/extension/browser-info' => array( 'user_agent' => $_SERVER['HTTP_USER_AGENT'] ),
 					'http://id.tincanapi.com/extension/referrer' => $referrer,
+					'http://id.tincanapi.com/extension/ip-address' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '',
 					// Initialize
 					// 'https://w3id.org/xapi/video/extensions/length' => '194.937',
 					// Play
@@ -507,6 +509,7 @@ WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
 					'http://id.tincanapi.com/extension/target' => $wpxapi_click_url_requested,
 					'http://id.tincanapi.com/extension/browser-info' => array( 'user_agent' => $_SERVER['HTTP_USER_AGENT'] ),
 					'http://id.tincanapi.com/extension/referrer' => $referrer,
+					'http://id.tincanapi.com/extension/ip-address' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '',
 					),
 				'platform' => defined( 'CTLT_PLATFORM' ) ? constant( 'CTLT_PLATFORM' ) : 'Unknown'
 				),
@@ -704,6 +707,7 @@ WP_Experience_API::register( 'transition_post', array(
 					'http://id.tincanapi.com/extension/target' => (string) $current_post->post_title . ' | ' . get_bloginfo( 'name' ),
 					'http://id.tincanapi.com/extension/browser-info' => array( 'user_agent' => $_SERVER['HTTP_USER_AGENT'] ),
 					'http://id.tincanapi.com/extension/referrer' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '',
+					'http://id.tincanapi.com/extension/ip-address' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '',
 				),
 				'platform' => defined( 'CTLT_PLATFORM' ) ? constant( 'CTLT_PLATFORM' ) : 'Unknown'
 			),
