@@ -112,7 +112,7 @@ WP_Experience_API::register( 'page_views', array(
 		$current_page_url = sanitize_text_field( $current_page_url );
 
 		// Check if $current_page_url is 'wp-cron.php' and omit capturing and sending statement, in order to not capture page "views" of cron events.
-		if ( contains( 'wp-cron.php', $current_page_url ) | $current_page_url == 'http://') {
+		if ( contains( 'wp-cron.php', $current_page_url ) | contains( 'wp-login.php', $current_page_url ) | contains( 'xmlrpc.php', $current_page_url ) | $current_page_url == 'http://') {
 			return false;
 		}
 
