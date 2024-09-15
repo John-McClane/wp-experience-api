@@ -10,7 +10,7 @@
 [![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/John-McClane/wp-experience-api/blob/master/LICENSE.txt)
 
 
-* [NTUA NetMode Laboratory](http://www.netmode.ntua.gr/main/)
+* [NTUA NetMode Laboratory](https://www.netmode.ntua.gr/)
 
 * [GitHub](https://github.com/John-McClane/wp-experience-api/)
 
@@ -27,7 +27,7 @@ Requires at least: WordPress 3.5
 
 Tested up to: 6.8
 
-Stable tag: 1.5.00
+Stable tag: 1.6.00
 
 License: [GNU AGPLv3](https://github.com/John-McClane/wp-experience-api/blob/master/LICENSE.txt)
 
@@ -58,7 +58,7 @@ Statements that can be sent are:
 
 This plugin was developed at the NTUA NetMode Laboratory.
 
-* [NTUA NetMode Laboratory](http://www.netmode.ntua.gr/main/)
+* [NTUA NetMode Laboratory](https://www.netmode.ntua.gr/)
 * [GitHub](https://github.com/John-McClane/wp-experience-api/)
 
 
@@ -113,6 +113,14 @@ Nothing yet.
 See the [releases pages](https://github.com/John-McClane/wp-experience-api/releases) for a history of releases and highlights for each release.
 
 == Changelog ==
+
+= 1.6.00 =
+* John McClane, BigLebo, P@ntaJim version.
+* Implemented non-logged-in Agent recording as Guest.OS.Browser.Version, rather than Guest.IP. Great for Data Anonymization too.
+* Added a few more exceptions on Page Views Tracking (eg. cron jobs were erroneously recorded before).
+* Other video interactions (Initialize, Seek, Complete, Terminate etc) waiting patiently in the sidelines.
+* Clean-up code and directories.
+* Bug fixes and performance improvements.
 
 = 1.5.00 =
 * John McClane, BigLebo, P@ntaJim version.
