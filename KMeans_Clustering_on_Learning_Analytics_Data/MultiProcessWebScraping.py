@@ -11,6 +11,7 @@ from datetime import datetime
 from multiprocessing import Process
 
 verboselogs = 1
+headless = 1
 
 def create_browser():
     # Set UserAgent
@@ -19,13 +20,15 @@ def create_browser():
 
     # Set up Chrome options
     chrome_options = Options()
-    chrome_options.add_argument("--headless")  # Run in headless mode for faster performance
-    chrome_options.add_argument("--window-size=1920,1080")
+    if headless:
+        chrome_options.add_argument("--headless")  # Run in headless mode for faster performance
+        chrome_options.add_argument("--window-size=1920,1080")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
 
-    create_browser.UserAgent = random.choice(UserAgents)
+    # create_browser.UserAgent = random.choices(UserAgents, weights=(10, 10, 7, 7, 3, 3, 5, 5), k=1)
+    create_browser.UserAgent = random.choices(UserAgents, weights=(1, 1, 1, 1, 1, 1, 1, 1), k=1)
     chrome_options.add_argument(f"--user-agent={create_browser.UserAgent}")
 
     # Create a new instance of Chrome WebDriver
@@ -63,7 +66,7 @@ def send_keys_to_page(url, key):
         KeysRandom = random.choice(keys_to_send)
 
         # Navigate to the page
-        browser.get(url)
+        # browser.get(url)
 
         # Pause for the page to load
         time.sleep(2)
