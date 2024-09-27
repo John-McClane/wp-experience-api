@@ -102,10 +102,11 @@ def send_keys_to_page(url, key):
             input_field.send_keys(Keys.SPACE)
 
         time.sleep(5)                                   # Pause to see the result before closing
+        if verboselogs: print(f"Time4: {datetime.today().strftime('%Y/%m/%d %H:%M:%S')}: Task {key}: Title: '{browser.title}' UserAgent: '{create_browser.UserAgent}'")
 
     finally:
         browser.quit()                                  # Close the browser
-        if verboselogs: print(f"Time4: {datetime.today().strftime('%Y/%m/%d %H:%M:%S')}: Task {key}: Title: '{browser.title}' UserAgent: '{create_browser.UserAgent}'")
+
 
 if __name__ == "__main__":
     # Define the URLs and keys to send
