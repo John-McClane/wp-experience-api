@@ -149,11 +149,14 @@ WP_Experience_API::register( 'page_views', array(
 		);
 
 		$UserAgentString = $_SERVER['HTTP_USER_AGENT'];
-		// $UserAgentString1 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36";
-		// $UserAgentString2 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36";
-		// $UserAgentString3 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:129.0) Gecko/20100101 Firefox/129.0";
-		// $UserAgentString4 = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36";
-		// $UserAgentString5 = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36";
+		// $UserAgentString1 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
+		// $UserAgentString2 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36";
+		// $UserAgentString3 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0";
+		// $UserAgentString4 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:130.0) Gecko/20100101 Firefox/130.0";
+		// $UserAgentString5 = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
+		// $UserAgentString6 = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36";
+		// $UserAgentString7 = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
+		// $UserAgentString8 = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36";
 		if (str_contains($UserAgentString, "Windows")) {
 			if (str_contains($UserAgentString, "Chrome")) {
 				$array= explode(' ',$UserAgentString);
@@ -163,7 +166,7 @@ WP_Experience_API::register( 'page_views', array(
 			elseif (str_contains($UserAgentString, "Firefox")) {
 				$array= explode(' ',$UserAgentString);
 				$sub1 = str_replace("/" , "." , $array[8]) ;
-				$sub2 = str_replace("0.0.0" , "0" , $sub1) ;
+				$sub2 = $sub1 ;
 			}
 			$subOS = "Win";
 			$sub = $subOS . "." . $sub2;
