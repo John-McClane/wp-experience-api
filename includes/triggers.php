@@ -501,8 +501,8 @@ WP_Experience_API::register( 'wpxapi_video_interactions_log', array(
 **************************************/
 
 WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
-	    'hooks' => array( 'xapiclicklog_action_fire' ),
-		'process' => function( $hook, $args ) use ($debug) {
+	'hooks' => array( 'xapiclicklog_action_fire' ),
+	'process' => function( $hook, $args ) use ($debug) {
 
 		if ($debug > 0) { error_log("/includes/triggers.php line 36 hook and args"); error_log(print_r($hook,true)); error_log(print_r($args,true)); }
 
