@@ -149,14 +149,20 @@ WP_Experience_API::register( 'page_views', array(
 		);
 
 		$UserAgentString = $_SERVER['HTTP_USER_AGENT'];
-		// $UserAgentString1 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
-		// $UserAgentString2 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36";
-		// $UserAgentString3 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0";
-		// $UserAgentString4 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:130.0) Gecko/20100101 Firefox/130.0";
-		// $UserAgentString5 = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
-		// $UserAgentString6 = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36";
-		// $UserAgentString7 = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
-		// $UserAgentString8 = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36";
+		// UserAgents = [
+		// 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
+		// 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+		// 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0",
+		// 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:130.0) Gecko/20100101 Firefox/130.0",
+		// 	"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
+		// 	"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+		// 	"Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0",
+		// 	"Mozilla/5.0 (X11; Linux x86_64; rv:130.0) Gecko/20100101 Firefox/130.0",
+		// 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
+		// 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+		// 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:131.0) Gecko/20100101 Firefox/131.0",
+		// 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:130.0) Gecko/20100101 Firefox/130.0"
+		// ]
 		if (str_contains($UserAgentString, "Windows")) {
 			if (str_contains($UserAgentString, "Chrome")) {
 				$subStr = strstr($UserAgentString, 'Chrome');
@@ -180,6 +186,12 @@ WP_Experience_API::register( 'page_views', array(
 				$sub1 = str_replace("/" , "." , $array[0]) ;
 				$sub2 = str_replace(".0.0.0" , "" , $sub1) ;
 			}
+			elseif (str_contains($UserAgentString, "Firefox")) {
+				$subStr = strstr($UserAgentString, 'Firefox');
+				$array= explode(' ',$subStr);
+				$sub1 = str_replace("/" , "." , $array[0]) ;
+				$sub2 = str_replace(".0" , "" , $sub1) ;
+			}
 			$subOS = "Mac";
 			$sub = $subOS . "." . $sub2;
 		}
@@ -189,6 +201,12 @@ WP_Experience_API::register( 'page_views', array(
 				$array= explode(' ',$subStr);
 				$sub1 = str_replace("/" , "." , $array[0]) ;
 				$sub2 = str_replace(".0.0.0" , "" , $sub1) ;
+			}
+			elseif (str_contains($UserAgentString, "Firefox")) {
+				$subStr = strstr($UserAgentString, 'Firefox');
+				$array= explode(' ',$subStr);
+				$sub1 = str_replace("/" , "." , $array[0]) ;
+				$sub2 = str_replace(".0" , "" , $sub1) ;
 			}
 			$subOS = "Linux";
 			$sub = $subOS . "." . $sub2;
@@ -411,6 +429,12 @@ WP_Experience_API::register( 'wpxapi_video_interactions_log', array(
 			$sub1 = str_replace("/" , "." , $array[0]) ;
 			$sub2 = str_replace(".0.0.0" , "" , $sub1) ;
 		}
+		elseif (str_contains($UserAgentString, "Firefox")) {
+			$subStr = strstr($UserAgentString, 'Firefox');
+			$array= explode(' ',$subStr);
+			$sub1 = str_replace("/" , "." , $array[0]) ;
+			$sub2 = str_replace(".0" , "" , $sub1) ;
+		}
 		$subOS = "Mac";
 		$sub = $subOS . "." . $sub2;
 	}
@@ -420,6 +444,12 @@ WP_Experience_API::register( 'wpxapi_video_interactions_log', array(
 			$array= explode(' ',$subStr);
 			$sub1 = str_replace("/" , "." , $array[0]) ;
 			$sub2 = str_replace(".0.0.0" , "" , $sub1) ;
+		}
+		elseif (str_contains($UserAgentString, "Firefox")) {
+			$subStr = strstr($UserAgentString, 'Firefox');
+			$array= explode(' ',$subStr);
+			$sub1 = str_replace("/" , "." , $array[0]) ;
+			$sub2 = str_replace(".0" , "" , $sub1) ;
 		}
 		$subOS = "Linux";
 		$sub = $subOS . "." . $sub2;
@@ -563,6 +593,12 @@ WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
 				$sub1 = str_replace("/" , "." , $array[0]) ;
 				$sub2 = str_replace(".0.0.0" , "" , $sub1) ;
 			}
+			elseif (str_contains($UserAgentString, "Firefox")) {
+				$subStr = strstr($UserAgentString, 'Firefox');
+				$array= explode(' ',$subStr);
+				$sub1 = str_replace("/" , "." , $array[0]) ;
+				$sub2 = str_replace(".0" , "" , $sub1) ;
+			}
 			$subOS = "Mac";
 			$sub = $subOS . "." . $sub2;
 		}
@@ -572,6 +608,12 @@ WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
 				$array= explode(' ',$subStr);
 				$sub1 = str_replace("/" , "." , $array[0]) ;
 				$sub2 = str_replace(".0.0.0" , "" , $sub1) ;
+			}
+			elseif (str_contains($UserAgentString, "Firefox")) {
+				$subStr = strstr($UserAgentString, 'Firefox');
+				$array= explode(' ',$subStr);
+				$sub1 = str_replace("/" , "." , $array[0]) ;
+				$sub2 = str_replace(".0" , "" , $sub1) ;
 			}
 			$subOS = "Linux";
 			$sub = $subOS . "." . $sub2;
