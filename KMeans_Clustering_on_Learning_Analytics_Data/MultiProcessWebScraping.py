@@ -19,7 +19,20 @@ headless = 1
 def create_browser():
     # Set UserAgent
     # The list of UserAgents to rotate on
-    UserAgents = ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36" , "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36" , "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0" , "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:130.0) Gecko/20100101 Firefox/130.0" , "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36" , "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36" , "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36" , "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"]
+    UserAgents = [
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:130.0) Gecko/20100101 Firefox/130.0",
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0",
+        "Mozilla/5.0 (X11; Linux x86_64; rv:130.0) Gecko/20100101 Firefox/130.0",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:131.0) Gecko/20100101 Firefox/131.0",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:130.0) Gecko/20100101 Firefox/130.0"
+    ]
 
     # Set up Chrome options
     chrome_options = Options()
@@ -37,8 +50,8 @@ def create_browser():
     # ua = UserAgent()
     # create_browser.UserAgent = ua.random
 
-    # create_browser.UserAgent = random.choices(UserAgents, weights=(10, 10, 7, 7, 3, 3, 5, 5), k=1)
-    create_browser.UserAgent = random.choices(UserAgents, weights=(1, 1, 1, 1, 1, 1, 1, 1), k=1)
+    # create_browser.UserAgent = random.choices(UserAgents, weights=(10, 10, 7, 7, 5, 5, 3, 3, 5, 5, 3, 3), k=1)
+    create_browser.UserAgent = random.choices(UserAgents, weights=(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), k=1)
     chrome_options.add_argument(f"--user-agent={create_browser.UserAgent}")
 
     # Create a new instance of Chrome WebDriver
@@ -122,16 +135,16 @@ if __name__ == "__main__":
     # Define the URLs and keys to send
     # ints = [random.randint(0,9)]
     pages = [
-        {"url": "https://example.com", "key": "1"},
-        {"url": "https://example.com", "key": "2"},
-        {"url": "https://example.com", "key": "3"},
-        {"url": "https://example.com", "key": "4"},
-        {"url": "https://example.com", "key": "5"},
-        {"url": "https://example.com", "key": "6"},
-        {"url": "https://example.com", "key": "7"},
-        {"url": "https://example.com", "key": "8"},
-        {"url": "https://example.com", "key": "9"},
-        {"url": "https://example.com", "key": "10"}
+        {"url": "example.com", "key": "1"},
+        {"url": "example.com", "key": "2"},
+        {"url": "example.com", "key": "3"},
+        {"url": "example.com", "key": "4"},
+        {"url": "example.com", "key": "5"},
+        {"url": "example.com", "key": "6"},
+        {"url": "example.com", "key": "7"},
+        {"url": "example.com", "key": "8"},
+        {"url": "example.com", "key": "9"},
+        {"url": "example.com", "key": "10"}
     ]
 
     processes = []
