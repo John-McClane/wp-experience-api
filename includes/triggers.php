@@ -390,41 +390,51 @@ WP_Experience_API::register( 'wpxapi_video_interactions_log', array(
 	$UserAgentString = $_SERVER['HTTP_USER_AGENT'];
 	if (str_contains($UserAgentString, "Windows")) {
 		if (str_contains($UserAgentString, "Chrome")) {
-			$array= explode(' ',$UserAgentString);
-			$sub1 = str_replace("/" , "." , $array[10]) ;
-			$sub2 = str_replace("0.0.0" , "0" , $sub1) ;
+			$subStr = strstr($UserAgentString, 'Chrome');
+			$array= explode(' ',$subStr);
+			$sub1 = str_replace("/" , "." , $array[0]) ;
+			$sub2 = str_replace(".0.0.0" , "" , $sub1) ;
 		}
 		elseif (str_contains($UserAgentString, "Firefox")) {
-			$array= explode(' ',$UserAgentString);
-			$sub1 = str_replace("/" , "." , $array[8]) ;
-			$sub2 = str_replace("0.0.0" , "0" , $sub1) ;
+			$subStr = strstr($UserAgentString, 'Firefox');
+			$array= explode(' ',$subStr);
+			$sub1 = str_replace("/" , "." , $array[0]) ;
+			$sub2 = str_replace(".0" , "" , $sub1) ;
 		}
 		$subOS = "Win";
 		$sub = $subOS . "." . $sub2;
 	}
 	elseif (str_contains($UserAgentString, "Macintosh")) {
 		if (str_contains($UserAgentString, "Chrome")) {
-			$array= explode(' ',$UserAgentString);
-			$sub1 = str_replace("/" , "." , $array[11]) ;
-			$sub2 = str_replace("0.0.0" , "0" , $sub1) ;
+			$subStr = strstr($UserAgentString, 'Chrome');
+			$array= explode(' ',$subStr);
+			$sub1 = str_replace("/" , "." , $array[0]) ;
+			$sub2 = str_replace(".0.0.0" , "" , $sub1) ;
 		}
 		$subOS = "Mac";
 		$sub = $subOS . "." . $sub2;
 	}
 	elseif (str_contains($UserAgentString, "Linux")) {
 		if (str_contains($UserAgentString, "Chrome")) {
-			$array= explode(' ',$UserAgentString);
-			$sub1 = str_replace("/" , "." , $array[8]) ;
-			$sub2 = str_replace("0.0.0" , "0" , $sub1) ;
+			$subStr = strstr($UserAgentString, 'Chrome');
+			$array= explode(' ',$subStr);
+			$sub1 = str_replace("/" , "." , $array[0]) ;
+			$sub2 = str_replace(".0.0.0" , "" , $sub1) ;
 		}
 		$subOS = "Linux";
 		$sub = $subOS . "." . $sub2;
 	}
 	else {
-		$sub = "Win.Chrome.128.0";
+		$sub = "Win.Chrome.128";
 	}
 
-	$UserAgent = $sub;
+	function stripSpecialCharsAndWhitespace($string) {
+		return preg_replace('/[^A-Za-z0-9.]/', '', $string);
+	}
+	$cleanedSub = stripSpecialCharsAndWhitespace($sub);
+	$cleanedString = filter_var($cleanedSub, FILTER_SANITIZE_STRING);
+
+	$UserAgent = $cleanedString;
 
 	// $user_obj = get_user_by( 'ID', $wpxapi_uid );
 	// $user = $user_obj->ID;
@@ -532,41 +542,51 @@ WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
 		$UserAgentString = $_SERVER['HTTP_USER_AGENT'];
 		if (str_contains($UserAgentString, "Windows")) {
 			if (str_contains($UserAgentString, "Chrome")) {
-				$array= explode(' ',$UserAgentString);
-				$sub1 = str_replace("/" , "." , $array[10]) ;
-				$sub2 = str_replace("0.0.0" , "0" , $sub1) ;
+				$subStr = strstr($UserAgentString, 'Chrome');
+				$array= explode(' ',$subStr);
+				$sub1 = str_replace("/" , "." , $array[0]) ;
+				$sub2 = str_replace(".0.0.0" , "" , $sub1) ;
 			}
 			elseif (str_contains($UserAgentString, "Firefox")) {
-				$array= explode(' ',$UserAgentString);
-				$sub1 = str_replace("/" , "." , $array[8]) ;
-				$sub2 = str_replace("0.0.0" , "0" , $sub1) ;
+				$subStr = strstr($UserAgentString, 'Firefox');
+				$array= explode(' ',$subStr);
+				$sub1 = str_replace("/" , "." , $array[0]) ;
+				$sub2 = str_replace(".0" , "" , $sub1) ;
 			}
 			$subOS = "Win";
 			$sub = $subOS . "." . $sub2;
 		}
 		elseif (str_contains($UserAgentString, "Macintosh")) {
 			if (str_contains($UserAgentString, "Chrome")) {
-				$array= explode(' ',$UserAgentString);
-				$sub1 = str_replace("/" , "." , $array[11]) ;
-				$sub2 = str_replace("0.0.0" , "0" , $sub1) ;
+				$subStr = strstr($UserAgentString, 'Chrome');
+				$array= explode(' ',$subStr);
+				$sub1 = str_replace("/" , "." , $array[0]) ;
+				$sub2 = str_replace(".0.0.0" , "" , $sub1) ;
 			}
 			$subOS = "Mac";
 			$sub = $subOS . "." . $sub2;
 		}
 		elseif (str_contains($UserAgentString, "Linux")) {
 			if (str_contains($UserAgentString, "Chrome")) {
-				$array= explode(' ',$UserAgentString);
-				$sub1 = str_replace("/" , "." , $array[8]) ;
-				$sub2 = str_replace("0.0.0" , "0" , $sub1) ;
+				$subStr = strstr($UserAgentString, 'Chrome');
+				$array= explode(' ',$subStr);
+				$sub1 = str_replace("/" , "." , $array[0]) ;
+				$sub2 = str_replace(".0.0.0" , "" , $sub1) ;
 			}
 			$subOS = "Linux";
 			$sub = $subOS . "." . $sub2;
 		}
 		else {
-			$sub = "Win.Chrome.128.0";
+			$sub = "Win.Chrome.128";
 		}
 
-		$UserAgent = $sub;
+		function stripSpecialCharsAndWhitespace($string) {
+			return preg_replace('/[^A-Za-z0-9.]/', '', $string);
+		}
+		$cleanedSub = stripSpecialCharsAndWhitespace($sub);
+		$cleanedString = filter_var($cleanedSub, FILTER_SANITIZE_STRING);
+
+		$UserAgent = $cleanedString;
 
 		/** $user_obj = get_user_by( 'ID', $wpxapi_uid );
 		 * $user = $user_obj->ID; **/
