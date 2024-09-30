@@ -193,7 +193,13 @@ WP_Experience_API::register( 'page_views', array(
 			$sub = "Win.Chrome.128.0";
 		}
 
-		$UserAgent = $sub;
+		function stripSpecialCharsAndWhitespace($string) {
+			return preg_replace('/[^A-Za-z0-9.]/', '', $string);
+		}
+		$cleanedSub = stripSpecialCharsAndWhitespace($sub);
+		$cleanedString = filter_var($cleanedSub, FILTER_SANITIZE_STRING);
+
+		$UserAgent = $cleanedString;
 
 		$user = get_current_user_id();
 		if ( empty( $user ) ) {
