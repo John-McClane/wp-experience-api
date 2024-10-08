@@ -6,7 +6,7 @@
  * Description: This plugin generates and sends various xAPI statements to the specified LRS
  * Tags: xAPI
  * Author: P@ntaJim, BigLebo, CTLT, Devindra Payment, loongchan, Robert Plant, Jimmy Page, John Paul Jones, John Bonham, John McClane, Lucy McClane - Gennero.
- * Version: 1.6.00
+ * Version: 1.7.00
  * Author URI: https://www.netmode.ntua.gr/
  * License: GNU AGPLv3
  * License URI: http://www.gnu.org/licenses/agpl-3.0.html
