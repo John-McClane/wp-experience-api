@@ -152,63 +152,246 @@ WP_Experience_API::register( 'page_views', array(
 		// UserAgents = [
 		// 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
 		// 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
-		// 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0",
+		// 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
+		// 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36",
+		// 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+		// 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+
+		//  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0",
+		//  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0",
+		//  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0",
+		//  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 Edg/127.0.0.0",
+		//  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0",
+		//  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0",
+
 		// 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:130.0) Gecko/20100101 Firefox/130.0",
+		// 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:129.0) Gecko/20100101 Firefox/129.0",
+		// 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0",
+		// 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0",
+		// 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.0",
+		// 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0",
+
 		// 	"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
 		// 	"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
-		// 	"Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0",
+		// 	"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
+		// 	"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36",
+		// 	"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+		// 	"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+
+		//  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0",
+		//  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0",
+		//  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0",
+		//  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 Edg/127.0.0.0",
+		//  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0",
+		//  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0",
+
 		// 	"Mozilla/5.0 (X11; Linux x86_64; rv:130.0) Gecko/20100101 Firefox/130.0",
+		// 	"Mozilla/5.0 (X11; Linux x86_64; rv:129.0) Gecko/20100101 Firefox/129.0",
+		// 	"Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0",
+		// 	"Mozilla/5.0 (X11; Linux x86_64; rv:127.0) Gecko/20100101 Firefox/127.0",
+		// 	"Mozilla/5.0 (X11; Linux x86_64; rv:126.0) Gecko/20100101 Firefox/126.0",
+		// 	"Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0",
+
 		// 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
 		// 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
-		// 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:131.0) Gecko/20100101 Firefox/131.0",
-		// 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:130.0) Gecko/20100101 Firefox/130.0"
+		// 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
+		// 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36",
+		// 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+		// 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+
+		//  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0",
+		//  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0",
+		//  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0",
+		//  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 Edg/127.0.0.0",
+		//  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0",
+		//  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0",
+
+		// 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:130.0) Gecko/20100101 Firefox/130.0",
+		// 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:129.0) Gecko/20100101 Firefox/129.0",
+		// 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:128.0) Gecko/20100101 Firefox/128.0",
+		// 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:127.0) Gecko/20100101 Firefox/127.0",
+		// 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:126.0) Gecko/20100101 Firefox/126.0",
+		// 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:125.0) Gecko/20100101 Firefox/125.0",
+
+		//  "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.3",
+		//  "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Mobile Safari/537.3",
+		//  "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Mobile Safari/537.3",
+		//  "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Mobile Safari/537.3",
+		//  "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.3",
+		//  "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Mobile Safari/537.3",
+
+		//  "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36 EdgA/130.0.0.0",
+		//  "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Mobile Safari/537.36 EdgA/129.0.0.0",
+		//  "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Mobile Safari/537.36 EdgA/128.0.0.0",
+		//  "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Mobile Safari/537.36 EdgA/127.0.0.0",
+		//  "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36 EdgA/126.0.0.0",
+		//  "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Mobile Safari/537.36 EdgA/125.0.0.0",
+
+		//  "Mozilla/5.0 (Android 15; Mobile; rv:130.0) Gecko/130.0 Firefox/130.0",
+		//  "Mozilla/5.0 (Android 15; Mobile; rv:129.0) Gecko/129.0 Firefox/129.0",
+		//  "Mozilla/5.0 (Android 15; Mobile; rv:128.0) Gecko/128.0 Firefox/128.0",
+		//  "Mozilla/5.0 (Android 15; Mobile; rv:127.0) Gecko/127.0 Firefox/127.0",
+		//  "Mozilla/5.0 (Android 15; Mobile; rv:126.0) Gecko/126.0 Firefox/126.0",
+		//  "Mozilla/5.0 (Android 15; Mobile; rv:125.0) Gecko/125.0 Firefox/125.0"
 		// ]
 		if (str_contains($UserAgentString, "Windows")) {
-			if (str_contains($UserAgentString, "Chrome")) {
+			if ( (str_contains($UserAgentString, "Chrome")) and !(str_contains($UserAgentString, "Edg")) ) {
 				$subStr = strstr($UserAgentString, 'Chrome');
 				$array= explode(' ',$subStr);
-				$sub1 = str_replace("/" , "." , $array[0]) ;
-				$sub2 = str_replace(".0.0.0" , "" , $sub1) ;
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = $sub1 ;
 			}
 			elseif (str_contains($UserAgentString, "Firefox")) {
 				$subStr = strstr($UserAgentString, 'Firefox');
 				$array= explode(' ',$subStr);
-				$sub1 = str_replace("/" , "." , $array[0]) ;
-				$sub2 = str_replace(".0" , "" , $sub1) ;
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = $sub1 ;
+			}
+			elseif ( (str_contains($UserAgentString, "Chrome")) and (str_contains($UserAgentString, "Edg")) ) {
+				$subStr = strstr($UserAgentString, 'Edg');
+				$array= explode(' ',$subStr);
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = str_replace("Edg" , "Edge" , $sub1) ;
 			}
 			$subOS = "Win";
 			$sub = $subOS . "." . $sub2;
 		}
-		elseif (str_contains($UserAgentString, "Macintosh")) {
-			if (str_contains($UserAgentString, "Chrome")) {
+		elseif ( (str_contains($UserAgentString, "Linux")) and !(str_contains($UserAgentString, "Android")) ) {
+			if ( (str_contains($UserAgentString, "Chrome")) and !(str_contains($UserAgentString, "Edg")) ) {
 				$subStr = strstr($UserAgentString, 'Chrome');
 				$array= explode(' ',$subStr);
-				$sub1 = str_replace("/" , "." , $array[0]) ;
-				$sub2 = str_replace(".0.0.0" , "" , $sub1) ;
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = $sub1 ;
 			}
 			elseif (str_contains($UserAgentString, "Firefox")) {
 				$subStr = strstr($UserAgentString, 'Firefox');
 				$array= explode(' ',$subStr);
-				$sub1 = str_replace("/" , "." , $array[0]) ;
-				$sub2 = str_replace(".0" , "" , $sub1) ;
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = $sub1 ;
+			}
+			elseif ( (str_contains($UserAgentString, "Chrome")) and (str_contains($UserAgentString, "Edg")) ) {
+				$subStr = strstr($UserAgentString, 'Edg');
+				$array= explode(' ',$subStr);
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = str_replace("Edg" , "Edge" , $sub1) ;
+			}
+			$subOS = "Linux";
+			$sub = $subOS . "." . $sub2;
+		}
+		elseif (str_contains($UserAgentString, "Macintosh")) {
+			if ( (str_contains($UserAgentString, "Chrome")) and !(str_contains($UserAgentString, "Edg")) ) {
+				$subStr = strstr($UserAgentString, 'Chrome');
+				$array= explode(' ',$subStr);
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = $sub1 ;
+			}
+			elseif (str_contains($UserAgentString, "Firefox")) {
+				$subStr = strstr($UserAgentString, 'Firefox');
+				$array= explode(' ',$subStr);
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = $sub1 ;
+			}
+			elseif ( (str_contains($UserAgentString, "Chrome")) and (str_contains($UserAgentString, "Edg")) ) {
+				$subStr = strstr($UserAgentString, 'Edg');
+				$array= explode(' ',$subStr);
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = str_replace("Edg" , "Edge" , $sub1) ;
 			}
 			$subOS = "Mac";
 			$sub = $subOS . "." . $sub2;
 		}
-		elseif (str_contains($UserAgentString, "Linux")) {
-			if (str_contains($UserAgentString, "Chrome")) {
+		elseif (str_contains($UserAgentString, "Android")) {
+			if ( (str_contains($UserAgentString, "Chrome")) and !(str_contains($UserAgentString, "Edg")) ) {
 				$subStr = strstr($UserAgentString, 'Chrome');
 				$array= explode(' ',$subStr);
-				$sub1 = str_replace("/" , "." , $array[0]) ;
-				$sub2 = str_replace(".0.0.0" , "" , $sub1) ;
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = $sub1 ;
 			}
 			elseif (str_contains($UserAgentString, "Firefox")) {
 				$subStr = strstr($UserAgentString, 'Firefox');
 				$array= explode(' ',$subStr);
-				$sub1 = str_replace("/" , "." , $array[0]) ;
-				$sub2 = str_replace(".0" , "" , $sub1) ;
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = $sub1 ;
 			}
-			$subOS = "Linux";
+			elseif ( (str_contains($UserAgentString, "Chrome")) and (str_contains($UserAgentString, "Edg")) ) {
+				$subStr = strstr($UserAgentString, 'Edg');
+				$array= explode(' ',$subStr);
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = str_replace("EdgA" , "Edge" , $sub1) ;
+			}
+			$subOS = "Android";
 			$sub = $subOS . "." . $sub2;
 		}
 		else {
@@ -407,51 +590,163 @@ WP_Experience_API::register( 'wpxapi_video_interactions_log', array(
 
 	$UserAgentString = $_SERVER['HTTP_USER_AGENT'];
 	if (str_contains($UserAgentString, "Windows")) {
-		if (str_contains($UserAgentString, "Chrome")) {
+		if ( (str_contains($UserAgentString, "Chrome")) and !(str_contains($UserAgentString, "Edg")) ) {
 			$subStr = strstr($UserAgentString, 'Chrome');
 			$array= explode(' ',$subStr);
-			$sub1 = str_replace("/" , "." , $array[0]) ;
-			$sub2 = str_replace(".0.0.0" , "" , $sub1) ;
+			$position = strpos($array[0], '.');
+			if ($position !== false) {
+				$sub0 = substr($array[0], 0, $position);
+			} else {
+				$sub0 = $array[0];
+			}
+			$sub1 = str_replace("/" , "." , $sub0) ;
+			$sub2 = $sub1 ;
 		}
 		elseif (str_contains($UserAgentString, "Firefox")) {
 			$subStr = strstr($UserAgentString, 'Firefox');
 			$array= explode(' ',$subStr);
-			$sub1 = str_replace("/" , "." , $array[0]) ;
-			$sub2 = str_replace(".0" , "" , $sub1) ;
+			$position = strpos($array[0], '.');
+			if ($position !== false) {
+				$sub0 = substr($array[0], 0, $position);
+			} else {
+				$sub0 = $array[0];
+			}
+			$sub1 = str_replace("/" , "." , $sub0) ;
+			$sub2 = $sub1 ;
+		}
+		elseif ( (str_contains($UserAgentString, "Chrome")) and (str_contains($UserAgentString, "Edg")) ) {
+			$subStr = strstr($UserAgentString, 'Edg');
+			$array= explode(' ',$subStr);
+			$position = strpos($array[0], '.');
+			if ($position !== false) {
+				$sub0 = substr($array[0], 0, $position);
+			} else {
+				$sub0 = $array[0];
+			}
+			$sub1 = str_replace("/" , "." , $sub0) ;
+			$sub2 = str_replace("Edg" , "Edge" , $sub1) ;
 		}
 		$subOS = "Win";
 		$sub = $subOS . "." . $sub2;
 	}
-	elseif (str_contains($UserAgentString, "Macintosh")) {
-		if (str_contains($UserAgentString, "Chrome")) {
+	elseif ( (str_contains($UserAgentString, "Linux")) and !(str_contains($UserAgentString, "Android")) ) {
+		if ( (str_contains($UserAgentString, "Chrome")) and !(str_contains($UserAgentString, "Edg")) ) {
 			$subStr = strstr($UserAgentString, 'Chrome');
 			$array= explode(' ',$subStr);
-			$sub1 = str_replace("/" , "." , $array[0]) ;
-			$sub2 = str_replace(".0.0.0" , "" , $sub1) ;
+			$position = strpos($array[0], '.');
+			if ($position !== false) {
+				$sub0 = substr($array[0], 0, $position);
+			} else {
+				$sub0 = $array[0];
+			}
+			$sub1 = str_replace("/" , "." , $sub0) ;
+			$sub2 = $sub1 ;
 		}
 		elseif (str_contains($UserAgentString, "Firefox")) {
 			$subStr = strstr($UserAgentString, 'Firefox');
 			$array= explode(' ',$subStr);
-			$sub1 = str_replace("/" , "." , $array[0]) ;
-			$sub2 = str_replace(".0" , "" , $sub1) ;
+			$position = strpos($array[0], '.');
+			if ($position !== false) {
+				$sub0 = substr($array[0], 0, $position);
+			} else {
+				$sub0 = $array[0];
+			}
+			$sub1 = str_replace("/" , "." , $sub0) ;
+			$sub2 = $sub1 ;
+		}
+		elseif ( (str_contains($UserAgentString, "Chrome")) and (str_contains($UserAgentString, "Edg")) ) {
+			$subStr = strstr($UserAgentString, 'Edg');
+			$array= explode(' ',$subStr);
+			$position = strpos($array[0], '.');
+			if ($position !== false) {
+				$sub0 = substr($array[0], 0, $position);
+			} else {
+				$sub0 = $array[0];
+			}
+			$sub1 = str_replace("/" , "." , $sub0) ;
+			$sub2 = str_replace("Edg" , "Edge" , $sub1) ;
+		}
+		$subOS = "Linux";
+		$sub = $subOS . "." . $sub2;
+	}
+	elseif (str_contains($UserAgentString, "Macintosh")) {
+		if ( (str_contains($UserAgentString, "Chrome")) and !(str_contains($UserAgentString, "Edg")) ) {
+			$subStr = strstr($UserAgentString, 'Chrome');
+			$array= explode(' ',$subStr);
+			$position = strpos($array[0], '.');
+			if ($position !== false) {
+				$sub0 = substr($array[0], 0, $position);
+			} else {
+				$sub0 = $array[0];
+			}
+			$sub1 = str_replace("/" , "." , $sub0) ;
+			$sub2 = $sub1 ;
+		}
+		elseif (str_contains($UserAgentString, "Firefox")) {
+			$subStr = strstr($UserAgentString, 'Firefox');
+			$array= explode(' ',$subStr);
+			$position = strpos($array[0], '.');
+			if ($position !== false) {
+				$sub0 = substr($array[0], 0, $position);
+			} else {
+				$sub0 = $array[0];
+			}
+			$sub1 = str_replace("/" , "." , $sub0) ;
+			$sub2 = $sub1 ;
+		}
+		elseif ( (str_contains($UserAgentString, "Chrome")) and (str_contains($UserAgentString, "Edg")) ) {
+			$subStr = strstr($UserAgentString, 'Edg');
+			$array= explode(' ',$subStr);
+			$position = strpos($array[0], '.');
+			if ($position !== false) {
+				$sub0 = substr($array[0], 0, $position);
+			} else {
+				$sub0 = $array[0];
+			}
+			$sub1 = str_replace("/" , "." , $sub0) ;
+			$sub2 = str_replace("Edg" , "Edge" , $sub1) ;
 		}
 		$subOS = "Mac";
 		$sub = $subOS . "." . $sub2;
 	}
-	elseif (str_contains($UserAgentString, "Linux")) {
-		if (str_contains($UserAgentString, "Chrome")) {
+	elseif (str_contains($UserAgentString, "Android")) {
+		if ( (str_contains($UserAgentString, "Chrome")) and !(str_contains($UserAgentString, "Edg")) ) {
 			$subStr = strstr($UserAgentString, 'Chrome');
 			$array= explode(' ',$subStr);
-			$sub1 = str_replace("/" , "." , $array[0]) ;
-			$sub2 = str_replace(".0.0.0" , "" , $sub1) ;
+			$position = strpos($array[0], '.');
+			if ($position !== false) {
+				$sub0 = substr($array[0], 0, $position);
+			} else {
+				$sub0 = $array[0];
+			}
+			$sub1 = str_replace("/" , "." , $sub0) ;
+			$sub2 = $sub1 ;
 		}
 		elseif (str_contains($UserAgentString, "Firefox")) {
 			$subStr = strstr($UserAgentString, 'Firefox');
 			$array= explode(' ',$subStr);
-			$sub1 = str_replace("/" , "." , $array[0]) ;
-			$sub2 = str_replace(".0" , "" , $sub1) ;
+			$position = strpos($array[0], '.');
+			if ($position !== false) {
+				$sub0 = substr($array[0], 0, $position);
+			} else {
+				$sub0 = $array[0];
+			}
+			$sub1 = str_replace("/" , "." , $sub0) ;
+			$sub2 = $sub1 ;
 		}
-		$subOS = "Linux";
+		elseif ( (str_contains($UserAgentString, "Chrome")) and (str_contains($UserAgentString, "Edg")) ) {
+			$subStr = strstr($UserAgentString, 'Edg');
+			$array= explode(' ',$subStr);
+			$position = strpos($array[0], '.');
+			if ($position !== false) {
+				$sub0 = substr($array[0], 0, $position);
+			} else {
+				$sub0 = $array[0];
+			}
+			$sub1 = str_replace("/" , "." , $sub0) ;
+			$sub2 = str_replace("EdgA" , "Edge" , $sub1) ;
+		}
+		$subOS = "Android";
 		$sub = $subOS . "." . $sub2;
 	}
 	else {
@@ -571,51 +866,163 @@ WP_Experience_API::register( 'wpxapi_linkclick_track_log', array(
 
 		$UserAgentString = $_SERVER['HTTP_USER_AGENT'];
 		if (str_contains($UserAgentString, "Windows")) {
-			if (str_contains($UserAgentString, "Chrome")) {
+			if ( (str_contains($UserAgentString, "Chrome")) and !(str_contains($UserAgentString, "Edg")) ) {
 				$subStr = strstr($UserAgentString, 'Chrome');
 				$array= explode(' ',$subStr);
-				$sub1 = str_replace("/" , "." , $array[0]) ;
-				$sub2 = str_replace(".0.0.0" , "" , $sub1) ;
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = $sub1 ;
 			}
 			elseif (str_contains($UserAgentString, "Firefox")) {
 				$subStr = strstr($UserAgentString, 'Firefox');
 				$array= explode(' ',$subStr);
-				$sub1 = str_replace("/" , "." , $array[0]) ;
-				$sub2 = str_replace(".0" , "" , $sub1) ;
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = $sub1 ;
+			}
+			elseif ( (str_contains($UserAgentString, "Chrome")) and (str_contains($UserAgentString, "Edg")) ) {
+				$subStr = strstr($UserAgentString, 'Edg');
+				$array= explode(' ',$subStr);
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = str_replace("Edg" , "Edge" , $sub1) ;
 			}
 			$subOS = "Win";
 			$sub = $subOS . "." . $sub2;
 		}
-		elseif (str_contains($UserAgentString, "Macintosh")) {
-			if (str_contains($UserAgentString, "Chrome")) {
+		elseif ( (str_contains($UserAgentString, "Linux")) and !(str_contains($UserAgentString, "Android")) ) {
+			if ( (str_contains($UserAgentString, "Chrome")) and !(str_contains($UserAgentString, "Edg")) ) {
 				$subStr = strstr($UserAgentString, 'Chrome');
 				$array= explode(' ',$subStr);
-				$sub1 = str_replace("/" , "." , $array[0]) ;
-				$sub2 = str_replace(".0.0.0" , "" , $sub1) ;
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = $sub1 ;
 			}
 			elseif (str_contains($UserAgentString, "Firefox")) {
 				$subStr = strstr($UserAgentString, 'Firefox');
 				$array= explode(' ',$subStr);
-				$sub1 = str_replace("/" , "." , $array[0]) ;
-				$sub2 = str_replace(".0" , "" , $sub1) ;
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = $sub1 ;
+			}
+			elseif ( (str_contains($UserAgentString, "Chrome")) and (str_contains($UserAgentString, "Edg")) ) {
+				$subStr = strstr($UserAgentString, 'Edg');
+				$array= explode(' ',$subStr);
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = str_replace("Edg" , "Edge" , $sub1) ;
+			}
+			$subOS = "Linux";
+			$sub = $subOS . "." . $sub2;
+		}
+		elseif (str_contains($UserAgentString, "Macintosh")) {
+			if ( (str_contains($UserAgentString, "Chrome")) and !(str_contains($UserAgentString, "Edg")) ) {
+				$subStr = strstr($UserAgentString, 'Chrome');
+				$array= explode(' ',$subStr);
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = $sub1 ;
+			}
+			elseif (str_contains($UserAgentString, "Firefox")) {
+				$subStr = strstr($UserAgentString, 'Firefox');
+				$array= explode(' ',$subStr);
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = $sub1 ;
+			}
+			elseif ( (str_contains($UserAgentString, "Chrome")) and (str_contains($UserAgentString, "Edg")) ) {
+				$subStr = strstr($UserAgentString, 'Edg');
+				$array= explode(' ',$subStr);
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = str_replace("Edg" , "Edge" , $sub1) ;
 			}
 			$subOS = "Mac";
 			$sub = $subOS . "." . $sub2;
 		}
-		elseif (str_contains($UserAgentString, "Linux")) {
-			if (str_contains($UserAgentString, "Chrome")) {
+		elseif (str_contains($UserAgentString, "Android")) {
+			if ( (str_contains($UserAgentString, "Chrome")) and !(str_contains($UserAgentString, "Edg")) ) {
 				$subStr = strstr($UserAgentString, 'Chrome');
 				$array= explode(' ',$subStr);
-				$sub1 = str_replace("/" , "." , $array[0]) ;
-				$sub2 = str_replace(".0.0.0" , "" , $sub1) ;
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = $sub1 ;
 			}
 			elseif (str_contains($UserAgentString, "Firefox")) {
 				$subStr = strstr($UserAgentString, 'Firefox');
 				$array= explode(' ',$subStr);
-				$sub1 = str_replace("/" , "." , $array[0]) ;
-				$sub2 = str_replace(".0" , "" , $sub1) ;
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = $sub1 ;
 			}
-			$subOS = "Linux";
+			elseif ( (str_contains($UserAgentString, "Chrome")) and (str_contains($UserAgentString, "Edg")) ) {
+				$subStr = strstr($UserAgentString, 'Edg');
+				$array= explode(' ',$subStr);
+				$position = strpos($array[0], '.');
+				if ($position !== false) {
+				    $sub0 = substr($array[0], 0, $position);
+				} else {
+				    $sub0 = $array[0];
+				}
+				$sub1 = str_replace("/" , "." , $sub0) ;
+				$sub2 = str_replace("EdgA" , "Edge" , $sub1) ;
+			}
+			$subOS = "Android";
 			$sub = $subOS . "." . $sub2;
 		}
 		else {

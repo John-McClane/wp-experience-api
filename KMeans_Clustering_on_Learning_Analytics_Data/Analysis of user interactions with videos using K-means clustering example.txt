@@ -1,0 +1,86 @@
+# Import necessary libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import silhouette_score
+
+# Sample DataFrame creation (You can replace this with your actual data)
+data = {
+    'user_id': [1, 1, 2, 2, 3, 3],
+    'video_id': ['A', 'A', 'B', 'B', 'A', 'B'],
+    'start_time': [0, 10, 0, 5, 0, 15],  # Start times in seconds
+    'duration_watched': [30, 20, 15, 25, 10, 20]  # Duration watched in seconds
+}
+
+df = pd.DataFrame(data)
+
+# Feature Engineering
+# Aggregate data to create a feature set for each user
+features = df.groupby('user_id').agg({
+    'start_time': 'mean',  # Average start time
+    'duration_watched': 'sum'  # Total watch time
+}).reset_index()
+
+# Normalize the features
+scaler = StandardScaler()
+scaled_features = scaler.fit_transform(features[['start_time', 'duration_watched']])
+
+# Determine the optimal number of clusters (k) using the elbow method
+sse = []
+silhouette_scores = []
+k_values = range(2, 10)
+
+for k in k_values:
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    kmeans.fit(scaled_features)
+    sse.append(kmeans.inertia_)
+    silhouette_scores.append(silhouette_score(scaled_features, kmeans.labels_))
+
+# Plot the Elbow Method
+plt.figure(figsize=(12, 6))
+plt.subplot(1, 2, 1)
+plt.plot(k_values, sse, marker='o')
+plt.title('Elbow Method for Optimal k')
+plt.xlabel('Number of Clusters (k)')
+plt.ylabel('SSE')
+
+# Plot Silhouette Scores
+plt.subplot(1, 2, 2)
+plt.plot(k_values, silhouette_scores, marker='o')
+plt.title('Silhouette Scores for Different k')
+plt.xlabel('Number of Clusters (k)')
+plt.ylabel('Silhouette Score')
+plt.show()
+
+# Choose an optimal k (let's say we choose k=3 for this example)
+optimal_k = 3
+kmeans = KMeans(n_clusters=optimal_k, random_state=42)
+features['cluster'] = kmeans.fit_predict(scaled_features)
+
+# Display the cluster assignments
+print(features)
+
+# Visualize the clusters
+plt.figure(figsize=(8, 6))
+plt.scatter(scaled_features[:, 0], scaled_features[:, 1], c=features['cluster'], cmap='viridis')
+plt.xlabel('Normalized Start Time')
+plt.ylabel('Normalized Duration Watched')
+plt.title('K-Means Clustering of Users')
+plt.colorbar(label='Cluster')
+plt.show()
+
+Explanation:
+Data Creation: Replace the sample data with your actual user interaction data.
+Feature Engineering: We aggregate the data to get average start time and total watch duration for each user.
+Normalization: Standardize the features for better clustering performance.
+K-means Clustering:
+We determine the optimal number of clusters using the elbow method and silhouette scores.
+We fit the K-means model with the chosen number of clusters.
+Visualization: Finally, we visualize the clusters.
+Make sure to have the required libraries installed in your Jupyter environment. You can install any missing libraries using pip:
+
+bash
+Copy code
+pip install pandas numpy matplotlib scikit-learn

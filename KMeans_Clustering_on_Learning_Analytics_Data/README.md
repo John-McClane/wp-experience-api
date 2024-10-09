@@ -3,7 +3,7 @@
 **John McClane, Zep Addicted**<br>
 *NTUA*
 
-**April 2022**
+**October 2024**
 
 ## Introduction
 <p>
@@ -21,9 +21,10 @@ For this project, we use several Python-based scientific computing technologies 
 
 
 ```python
-import kneed
+# Import necessary libraries
 import requests
 import numpy as np
+import kneed
 import pandas as pd
 from pandas import DataFrame
 from pandas import json_normalize
@@ -34,6 +35,8 @@ import ipywidgets as widgets
 from scipy.stats import mstats
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import silhouette_score
 from datetime import datetime, timedelta
 from requests.adapters import HTTPAdapter
 from requests.exceptions import ConnectionError
@@ -56,8 +59,6 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 <p>
 K-Means Clustering is a form of unsupervised <a href="https://hdonnelly6.medium.com/list/machine-learning-for-investing-7f2690bb1826">machine learning</a> (ML). It is considered to be one of the simplest and most popular unsupervised machine learning techniques.
 Unsupervised algorithms use vectors on data points. These data points are not labeled or classified. Our goal is to discover hidden patterns and group the data points in a sensible way based on similarity of features. Each group of data points is a cluster and each cluster will have a center.
-
-#### K-Means
 
 <img src="img/k_means.png">
 
@@ -188,7 +189,7 @@ try:
     lldb = session.connection['learninglocker_v2'] #(max_retries=retry_strategy)
     print("\nDataBase Connection Info:\n", lldb, "\n")
     if debug > 0 :
-        print("\nCollections Names List:\n",lldb.list_collection_names(include_system_collections=False),"\n")
+        print("\nCollections Names List:\n",lldb.list_collection_names(),"\n")
     # Get Learning Analytics statements from MongoDB Learning Locker LRS from collection "statement"
     statements_coll = lldb.statements
     print("\nCollection Statements:\n",statements_coll, "\n")
@@ -219,7 +220,7 @@ statements_coll.aggregate([
             }
         },
         { "$sort": { "stored": -1 } },
-        { "$limit": 30 }
+        { "$limit": 1000 }
     ])
 ))
 
@@ -248,984 +249,6 @@ if debug > 1 :
     print ("\nData")
     data
 ```
-
-    MongoSessionCredentials
-
-
-    2022-04-19 12:24:04,584| ERROR   | Password is required for key id_rsa
-    2022-04-19 12:24:04,584 ERROR Password is required for key id_rsa
-    2022-04-19 12:24:04,668 INFO Connected (version 2.0, client OpenSSH_7.6p1)
-    2022-04-19 12:24:05,573 INFO Authentication (publickey) successful!
-
-
-
-    DataBase Connection Info:
-     Database(MongoClient(host=['127.0.0.1:35015'], document_class=dict, tz_aware=False, connect=True), 'learninglocker_v2')
-
-
-    Collections Names List:
-     ['importcsv', 'personaAttributes', 'dashboards', 'migrations', 'personasImportTemplates', 'queryBuilderCacheValues', 'statements', 'lrs', 'batchDelete', 'orgUsageStats', 'exports', 'client', 'queries', 'users', 'queryBuilderCaches', 'statementForwarding', 'personaIdentifiers', 'organisations', 'downloads', 'personasImports', 'siteSettings', 'states', 'oAuthTokens', 'personas', 'role', 'fullActivities', 'importPersonasLock', 'streams', 'visualisations', 'importdata']
-
-
-    Collection Statements:
-     Collection(Database(MongoClient(host=['127.0.0.1:35015'], document_class=dict, tz_aware=False, connect=True), 'learninglocker_v2'), 'statements')
-
-
-    ########## Execution Time: 0.000s
-
-    Type of df: <class 'pandas.core.frame.DataFrame'>
-
-    ########## Execution Time: 0.000s
-
-
-    Data Length
-
-
-
-
-
-    30
-
-
-
-
-    Data Shape
-
-
-
-
-
-    (30, 21)
-
-
-
-
-    Data Description
-
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>timestamp</th>
-      <th>id</th>
-      <th>stored</th>
-      <th>version</th>
-      <th>actor.objectType</th>
-      <th>actor.name</th>
-      <th>actor.mbox</th>
-      <th>verb.id</th>
-      <th>verb.display.en-US</th>
-      <th>context.platform</th>
-      <th>...</th>
-      <th>context.extensions.http://id&amp;46;tincanapi&amp;46;com/extension/browser-info.user_agent</th>
-      <th>context.extensions.http://id&amp;46;tincanapi&amp;46;com/extension/referrer</th>
-      <th>object.objectType</th>
-      <th>object.id</th>
-      <th>object.definition.type</th>
-      <th>object.definition.name.en-US</th>
-      <th>object.definition.description.en-US</th>
-      <th>authority.objectType</th>
-      <th>authority.name</th>
-      <th>authority.mbox</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>count</th>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>...</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-    </tr>
-    <tr>
-      <th>unique</th>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>1</td>
-      <td>1</td>
-      <td>28</td>
-      <td>28</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>...</td>
-      <td>24</td>
-      <td>2</td>
-      <td>1</td>
-      <td>10</td>
-      <td>1</td>
-      <td>8</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>top</th>
-      <td>2021-12-29T04:39:20+00:00</td>
-      <td>e7048d33-82cc-4d60-b29f-14d604203d53</td>
-      <td>2021-12-29T04:39:25.224Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.109.168.97.89</td>
-      <td>mailto:guest.109.168.97.89@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (compatible; SemrushBot/7~bl; +htt...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>freq</th>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>30</td>
-      <td>30</td>
-      <td>2</td>
-      <td>2</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>...</td>
-      <td>3</td>
-      <td>29</td>
-      <td>30</td>
-      <td>21</td>
-      <td>30</td>
-      <td>22</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-    </tr>
-  </tbody>
-</table>
-<p>4 rows × 21 columns</p>
-</div>
-
-
-
-
-    Data
-
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>timestamp</th>
-      <th>id</th>
-      <th>stored</th>
-      <th>version</th>
-      <th>actor.objectType</th>
-      <th>actor.name</th>
-      <th>actor.mbox</th>
-      <th>verb.id</th>
-      <th>verb.display.en-US</th>
-      <th>context.platform</th>
-      <th>...</th>
-      <th>context.extensions.http://id&amp;46;tincanapi&amp;46;com/extension/browser-info.user_agent</th>
-      <th>context.extensions.http://id&amp;46;tincanapi&amp;46;com/extension/referrer</th>
-      <th>object.objectType</th>
-      <th>object.id</th>
-      <th>object.definition.type</th>
-      <th>object.definition.name.en-US</th>
-      <th>object.definition.description.en-US</th>
-      <th>authority.objectType</th>
-      <th>authority.name</th>
-      <th>authority.mbox</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>2021-12-29T04:39:20+00:00</td>
-      <td>e7048d33-82cc-4d60-b29f-14d604203d53</td>
-      <td>2021-12-29T04:39:25.224Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.115.29.199.218</td>
-      <td>mailto:guest.115.29.199.218@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; Win64; x64) Apple...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2021-12-29T04:23:58+00:00</td>
-      <td>1de0f462-f2d5-4822-a246-c07a925eb447</td>
-      <td>2021-12-29T04:23:58.246Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.212.103.4.29</td>
-      <td>mailto:guest.212.103.4.29@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 10.0; Win64; x64) Appl...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2021-12-29T04:08:55+00:00</td>
-      <td>6a984cb0-92ff-48a1-a632-b77f53494390</td>
-      <td>2021-12-29T04:08:55.557Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.188.166.152.29</td>
-      <td>mailto:guest.188.166.152.29@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKi...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>2021-12-29T03:53:54+00:00</td>
-      <td>bc89786b-5544-4597-a1ef-7ee665a53e2f</td>
-      <td>2021-12-29T03:53:54.498Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.35.241.177.128</td>
-      <td>mailto:guest.35.241.177.128@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; Win64; x64) Apple...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>2021-12-29T03:38:45+00:00</td>
-      <td>d3bd2bfd-3350-4b23-9d22-37d447a08a47</td>
-      <td>2021-12-29T03:38:45.230Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.109.168.97.89</td>
-      <td>mailto:guest.109.168.97.89@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKi...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>2021-12-29T03:23:35+00:00</td>
-      <td>48033410-76a9-4e4c-b098-9c867d5de538</td>
-      <td>2021-12-29T03:23:35.118Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.65.21.234.156</td>
-      <td>mailto:guest.65.21.234.156@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.3...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>2021-12-29T02:52:57+00:00</td>
-      <td>27c2cd27-b061-469c-ad77-1e89a1585056</td>
-      <td>2021-12-29T02:52:57.445Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.109.168.97.89</td>
-      <td>mailto:guest.109.168.97.89@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.3; Win64; x64) Apple...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>2021-12-29T02:50:17+00:00</td>
-      <td>d684ce9e-4bbf-478d-bc8f-bc8a70e630e5</td>
-      <td>2021-12-29T02:50:17.697Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.207.46.13.197</td>
-      <td>mailto:guest.207.46.13.197@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (compatible; bingbot/2.0; +http://...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/courses/?lecture...</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td>Διαχείριση Δικτύων – Ευφυή Δίκτυα, 9ο Εξάμηνο,...</td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>2021-12-29T02:22:20+00:00</td>
-      <td>404fb2f5-ba7d-4463-a699-0de42d7037bb</td>
-      <td>2021-12-29T02:22:20.463Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.107.172.82.148</td>
-      <td>mailto:guest.107.172.82.148@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>2021-12-29T02:06:55+00:00</td>
-      <td>b2cf9f12-214b-45a9-86fb-ad24053b54c2</td>
-      <td>2021-12-29T02:06:55.439Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.173.212.235.115</td>
-      <td>mailto:guest.173.212.235.115@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 10.0; Win64; x64) Appl...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>2021-12-29T01:51:38+00:00</td>
-      <td>25e6f0a0-2d22-48f6-9776-4c35d664b821</td>
-      <td>2021-12-29T01:51:43.095Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.157.245.217.209</td>
-      <td>mailto:guest.157.245.217.209@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; Win64; x64) Apple...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>2021-12-29T01:36:18+00:00</td>
-      <td>becefa60-19b7-49cd-91b9-66fccbc4e330</td>
-      <td>2021-12-29T01:36:18.724Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.161.35.94.99</td>
-      <td>mailto:guest.161.35.94.99@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.3...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>2021-12-29T01:21:19+00:00</td>
-      <td>441a84c2-8471-47ad-8cf2-0189df8bec00</td>
-      <td>2021-12-29T01:21:19.502Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.34.96.130.6</td>
-      <td>mailto:guest.34.96.130.6@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Expanse indexes the network perimeters of our ...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td>Διαλέξεις Μαθημάτων NETMODE</td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>2021-12-29T01:05:47+00:00</td>
-      <td>34b69e43-d137-4d85-9fb7-6dc9723ee9c9</td>
-      <td>2021-12-29T01:05:47.067Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.188.166.236.240</td>
-      <td>mailto:guest.188.166.236.240@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebK...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>2021-12-29T00:50:29+00:00</td>
-      <td>0f90c9c5-1bf6-4117-90bf-585a3ea96f2f</td>
-      <td>2021-12-29T00:50:29.976Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.128.199.242.105</td>
-      <td>mailto:guest.128.199.242.105@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; Win64; x64) Apple...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <td>2021-12-29T00:34:38+00:00</td>
-      <td>6f0d3e96-560b-4b84-9e0e-283ce5333a49</td>
-      <td>2021-12-29T00:34:38.655Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.77.88.5.245</td>
-      <td>mailto:guest.77.88.5.245@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (compatible; YandexBot/3.0; +http:...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/courses/?lecture...</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td>Network Management &amp;#8211; Intelligent Network...</td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <td>2021-12-29T00:20:01+00:00</td>
-      <td>ac9c2973-05cc-4cf7-b9f6-8d8bb286aee8</td>
-      <td>2021-12-29T00:20:01.359Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.133.130.102.247</td>
-      <td>mailto:guest.133.130.102.247@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 10.0; Win64; x64) Appl...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <td>2021-12-29T00:07:15+00:00</td>
-      <td>4c948a67-63ff-4c03-b72f-2b1a950e58db</td>
-      <td>2021-12-29T00:07:15.472Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.69.30.240.28</td>
-      <td>mailto:guest.69.30.240.28@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKi...</td>
-      <td>http://www.google.com.hk</td>
-      <td>Activity</td>
-      <td>https://example.com//xmlrpc.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>18</th>
-      <td>2021-12-29T00:04:42+00:00</td>
-      <td>c969f849-3f1b-4099-829c-ab1ee7790aca</td>
-      <td>2021-12-29T00:04:42.728Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.173.255.112.220</td>
-      <td>mailto:guest.173.255.112.220@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKi...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>19</th>
-      <td>2021-12-28T23:34:13+00:00</td>
-      <td>ee513cdb-f6ae-47f7-bca1-3e0e5ba64a00</td>
-      <td>2021-12-28T23:34:13.802Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.95.217.3.203</td>
-      <td>mailto:guest.95.217.3.203@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.3...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>20</th>
-      <td>2021-12-28T23:23:54+00:00</td>
-      <td>94ed85d9-ead3-450d-aeb4-8f4a8f6003f5</td>
-      <td>2021-12-28T23:23:54.763Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.185.191.171.39</td>
-      <td>mailto:guest.185.191.171.39@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (compatible; SemrushBot/7~bl; +htt...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/courses/?lecture...</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td>Διαχείριση Δικτύων – Ευφυή Δίκτυα, 9ο Εξάμηνο,...</td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>21</th>
-      <td>2021-12-28T23:17:35+00:00</td>
-      <td>7176c726-ca24-4734-88f9-7362e7ef9567</td>
-      <td>2021-12-28T23:17:35.899Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.77.88.5.44</td>
-      <td>mailto:guest.77.88.5.44@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (compatible; YandexBot/3.0; +http:...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/courses/</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td>Διαλέξεις Μαθημάτων NETMODE</td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>22</th>
-      <td>2021-12-28T23:03:48+00:00</td>
-      <td>6cb279fc-359d-4b8d-8cb2-8bcef73b66ff</td>
-      <td>2021-12-28T23:03:48.472Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.46.101.150.34</td>
-      <td>mailto:guest.46.101.150.34@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; Win64; x64) Apple...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>23</th>
-      <td>2021-12-28T22:48:33+00:00</td>
-      <td>6c1dcdf3-6350-4555-8777-8e71995914ac</td>
-      <td>2021-12-28T22:48:33.194Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.159.65.76.38</td>
-      <td>mailto:guest.159.65.76.38@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKi...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>24</th>
-      <td>2021-12-28T22:33:21+00:00</td>
-      <td>fa16547d-ecd8-417d-a2e9-89916791b821</td>
-      <td>2021-12-28T22:33:21.335Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.207.180.213.165</td>
-      <td>mailto:guest.207.180.213.165@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; Win64; x64) Apple...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>25</th>
-      <td>2021-12-28T22:26:35+00:00</td>
-      <td>d3b01d9a-87b6-436b-af1f-cf5efe282651</td>
-      <td>2021-12-28T22:26:35.336Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.185.191.171.19</td>
-      <td>mailto:guest.185.191.171.19@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (compatible; SemrushBot/7~bl; +htt...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/courses/?lecture...</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td>Συστήματα Αναμονής, 6ο Εξάμηνο: Εισαγωγή (Μέρο...</td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>26</th>
-      <td>2021-12-28T22:14:12+00:00</td>
-      <td>13cf6340-6df2-4c33-ae87-6abe820fe3e4</td>
-      <td>2021-12-28T22:14:17.930Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.185.191.171.41</td>
-      <td>mailto:guest.185.191.171.41@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (compatible; SemrushBot/7~bl; +htt...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/courses/?lecture...</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td>Διαχείριση Δικτύων – Ευφυή Δίκτυα, 9ο Εξάμηνο,...</td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>27</th>
-      <td>2021-12-28T22:06:50+00:00</td>
-      <td>b2506701-5aae-4209-a4b9-6ca7f59746a8</td>
-      <td>2021-12-28T22:06:50.038Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.77.88.5.44</td>
-      <td>mailto:guest.77.88.5.44@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (compatible; YandexBot/3.0; +http:...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/courses/?lecture...</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td>Διαχείριση Δικτύων &amp;#8211; Ευφυή Δίκτυα, 9ο Εξ...</td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>28</th>
-      <td>2021-12-28T22:02:56+00:00</td>
-      <td>b6bc1fdf-39bb-4544-bb83-47b3219f9492</td>
-      <td>2021-12-28T22:02:56.558Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.95.216.235.214</td>
-      <td>mailto:guest.95.216.235.214@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.3...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>29</th>
-      <td>2021-12-28T21:47:49+00:00</td>
-      <td>67c33fc7-315e-4dbd-9a02-d87640ace839</td>
-      <td>2021-12-28T21:47:49.873Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.40.122.130.155</td>
-      <td>mailto:guest.40.122.130.155@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.3...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-  </tbody>
-</table>
-<p>30 rows × 21 columns</p>
-</div>
-
-
 
 
 ```python
@@ -1260,7 +283,7 @@ if debug > 0 :
 
 
 
-    (30, 21)
+    (1000, 27)
 
 
 
@@ -1289,129 +312,62 @@ if debug > 0 :
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>timestamp</th>
-      <th>id</th>
-      <th>stored</th>
-      <th>version</th>
-      <th>actor.objectType</th>
-      <th>actor.name</th>
-      <th>actor.mbox</th>
-      <th>verb.id</th>
-      <th>verb.display.en-US</th>
-      <th>context.platform</th>
-      <th>...</th>
-      <th>context.extensions.http://id&amp;46;tincanapi&amp;46;com/extension/browser-info.user_agent</th>
-      <th>context.extensions.http://id&amp;46;tincanapi&amp;46;com/extension/referrer</th>
-      <th>object.objectType</th>
-      <th>object.id</th>
-      <th>object.definition.type</th>
-      <th>object.definition.name.en-US</th>
-      <th>object.definition.description.en-US</th>
-      <th>authority.objectType</th>
-      <th>authority.name</th>
-      <th>authority.mbox</th>
+      <th>context.extensions.http://adlnet&amp;46;gov/expapi/period_start</th>
+      <th>context.extensions.http://adlnet&amp;46;gov/expapi/period_end</th>
+      <th>context.extensions.http://adlnet&amp;46;gov/expapi/period_duration</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>count</th>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>...</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
+      <td>512.000000</td>
+      <td>512.000000</td>
+      <td>512.000000</td>
     </tr>
     <tr>
-      <th>unique</th>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>1</td>
-      <td>1</td>
-      <td>28</td>
-      <td>28</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>...</td>
-      <td>24</td>
-      <td>2</td>
-      <td>1</td>
-      <td>10</td>
-      <td>1</td>
-      <td>8</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
+      <th>mean</th>
+      <td>1965.677734</td>
+      <td>2373.787109</td>
+      <td>6068.533203</td>
     </tr>
     <tr>
-      <th>top</th>
-      <td>2021-12-29T04:39:20+00:00</td>
-      <td>e7048d33-82cc-4d60-b29f-14d604203d53</td>
-      <td>2021-12-29T04:39:25.224Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.109.168.97.89</td>
-      <td>mailto:guest.109.168.97.89@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (compatible; SemrushBot/7~bl; +htt...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
+      <th>std</th>
+      <td>2055.827392</td>
+      <td>2129.552216</td>
+      <td>905.085322</td>
     </tr>
     <tr>
-      <th>freq</th>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>30</td>
-      <td>30</td>
-      <td>2</td>
-      <td>2</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>...</td>
-      <td>3</td>
-      <td>29</td>
-      <td>30</td>
-      <td>21</td>
-      <td>30</td>
-      <td>22</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
-      <td>30</td>
+      <th>min</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>4260.000000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>6.000000</td>
+      <td>18.750000</td>
+      <td>5236.000000</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>1349.000000</td>
+      <td>2024.000000</td>
+      <td>6415.000000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>3661.000000</td>
+      <td>4209.250000</td>
+      <td>6714.000000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>6738.000000</td>
+      <td>6733.000000</td>
+      <td>7420.000000</td>
     </tr>
   </tbody>
 </table>
-<p>4 rows × 21 columns</p>
 </div>
 
 
@@ -1457,8 +413,8 @@ data[data['verb.display.en-US'].isna() | data['actor.name'].isna()]
       <th>verb.display.en-US</th>
       <th>context.platform</th>
       <th>...</th>
-      <th>context.extensions.http://id&amp;46;tincanapi&amp;46;com/extension/browser-info.user_agent</th>
       <th>context.extensions.http://id&amp;46;tincanapi&amp;46;com/extension/referrer</th>
+      <th>context.extensions.http://id&amp;46;tincanapi&amp;46;com/extension/ip-address</th>
       <th>object.objectType</th>
       <th>object.id</th>
       <th>object.definition.type</th>
@@ -1472,7 +428,7 @@ data[data['verb.display.en-US'].isna() | data['actor.name'].isna()]
   <tbody>
   </tbody>
 </table>
-<p>0 rows × 21 columns</p>
+<p>0 rows × 27 columns</p>
 </div>
 
 
@@ -1516,8 +472,8 @@ data
       <th>verb.display.en-US</th>
       <th>context.platform</th>
       <th>...</th>
-      <th>context.extensions.http://id&amp;46;tincanapi&amp;46;com/extension/browser-info.user_agent</th>
       <th>context.extensions.http://id&amp;46;tincanapi&amp;46;com/extension/referrer</th>
+      <th>context.extensions.http://id&amp;46;tincanapi&amp;46;com/extension/ip-address</th>
       <th>object.objectType</th>
       <th>object.id</th>
       <th>object.definition.type</th>
@@ -1531,727 +487,271 @@ data
   <tbody>
     <tr>
       <th>0</th>
-      <td>2021-12-29T04:39:20+00:00</td>
-      <td>e7048d33-82cc-4d60-b29f-14d604203d53</td>
-      <td>2021-12-29T04:39:25.224Z</td>
+      <td>2024-10-04T19:55:48+00:00</td>
+      <td>cd30d343-1b4f-4ad8-8150-1f5522ae9ecb</td>
+      <td>2024-10-04T19:55:53.499Z</td>
       <td>1.0.0</td>
       <td>Agent</td>
-      <td>Guest.115.29.199.218</td>
-      <td>mailto:guest.115.29.199.218@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
+      <td>Guest.Mac.Chrome.130</td>
+      <td>mailto:guest.Mac.Chrome.130@ntua-guest.com</td>
+      <td>https://w3id.org/xapi/video/verbs/played</td>
+      <td>played</td>
       <td>Unknown</td>
       <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; Win64; x64) Apple...</td>
-      <td></td>
+      <td>https://lectures.netmode.ntua.gr/?lectures=δια...</td>
+      <td>83.235.182.89</td>
       <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
+      <td>https://youtu.be/LbT2Z3-Nc0w</td>
+      <td>http://adlnet.gov/expapi/activities/video</td>
+      <td>Διαχείριση Δικτύων – Ευφυή Δίκτυα, 9ο Εξάμηνο,...</td>
+      <td>Video Played</td>
       <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
+      <td>NTUA xAPI Store</td>
+      <td>mailto:ntuaxapistore@ntuaxapiendpoint.net</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>2021-12-29T04:23:58+00:00</td>
-      <td>1de0f462-f2d5-4822-a246-c07a925eb447</td>
-      <td>2021-12-29T04:23:58.246Z</td>
+      <td>2024-10-04T19:55:41+00:00</td>
+      <td>7db99702-184d-4f3a-b8dc-761755743b46</td>
+      <td>2024-10-04T19:55:46.862Z</td>
       <td>1.0.0</td>
       <td>Agent</td>
-      <td>Guest.212.103.4.29</td>
-      <td>mailto:guest.212.103.4.29@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
+      <td>Guest.Mac.Chrome.130</td>
+      <td>mailto:guest.Mac.Chrome.130@ntua-guest.com</td>
+      <td>https://w3id.org/xapi/video/verbs/played</td>
+      <td>played</td>
       <td>Unknown</td>
       <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 10.0; Win64; x64) Appl...</td>
-      <td></td>
+      <td>https://lectures.netmode.ntua.gr/?lectures=δια...</td>
+      <td>83.235.182.89</td>
       <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
+      <td>https://youtu.be/LbT2Z3-Nc0w</td>
+      <td>http://adlnet.gov/expapi/activities/video</td>
+      <td>Διαχείριση Δικτύων – Ευφυή Δίκτυα, 9ο Εξάμηνο,...</td>
+      <td>Video Played</td>
       <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
+      <td>NTUA xAPI Store</td>
+      <td>mailto:ntuaxapistore@ntuaxapiendpoint.net</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>2021-12-29T04:08:55+00:00</td>
-      <td>6a984cb0-92ff-48a1-a632-b77f53494390</td>
-      <td>2021-12-29T04:08:55.557Z</td>
+      <td>2024-10-04T19:55:16+00:00</td>
+      <td>2f154e5e-ce9d-4580-984b-235f395aa1a4</td>
+      <td>2024-10-04T19:55:21.447Z</td>
       <td>1.0.0</td>
       <td>Agent</td>
-      <td>Guest.188.166.152.29</td>
-      <td>mailto:guest.188.166.152.29@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
+      <td>Guest.Linux.Firefox.130</td>
+      <td>mailto:guest.Linux.Firefox.130@ntua-guest.com</td>
+      <td>https://w3id.org/xapi/video/verbs/played</td>
+      <td>played</td>
       <td>Unknown</td>
       <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKi...</td>
-      <td></td>
+      <td>https://lectures.netmode.ntua.gr/?lectures=δια...</td>
+      <td>83.235.182.89</td>
       <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
+      <td>https://youtu.be/eDv1VU04YW8</td>
+      <td>http://adlnet.gov/expapi/activities/video</td>
+      <td>Διαχείριση Δικτύων – Ευφυή Δίκτυα, 9ο Εξάμηνο,...</td>
+      <td>Video Played</td>
       <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
+      <td>NTUA xAPI Store</td>
+      <td>mailto:ntuaxapistore@ntuaxapiendpoint.net</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>2021-12-29T03:53:54+00:00</td>
-      <td>bc89786b-5544-4597-a1ef-7ee665a53e2f</td>
-      <td>2021-12-29T03:53:54.498Z</td>
+      <td>2024-10-04T19:55:11+00:00</td>
+      <td>33894400-370c-49a2-934e-e7c616c1990c</td>
+      <td>2024-10-04T19:55:16.721Z</td>
       <td>1.0.0</td>
       <td>Agent</td>
-      <td>Guest.35.241.177.128</td>
-      <td>mailto:guest.35.241.177.128@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
+      <td>Guest.Mac.Chrome.130</td>
+      <td>mailto:guest.Mac.Chrome.130@ntua-guest.com</td>
+      <td>https://w3id.org/xapi/video/verbs/played</td>
+      <td>played</td>
       <td>Unknown</td>
       <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; Win64; x64) Apple...</td>
-      <td></td>
+      <td>https://lectures.netmode.ntua.gr/?lectures=δια...</td>
+      <td>83.235.182.89</td>
       <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
+      <td>https://youtu.be/eDv1VU04YW8</td>
+      <td>http://adlnet.gov/expapi/activities/video</td>
+      <td>Διαχείριση Δικτύων – Ευφυή Δίκτυα, 9ο Εξάμηνο,...</td>
+      <td>Video Played</td>
       <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
+      <td>NTUA xAPI Store</td>
+      <td>mailto:ntuaxapistore@ntuaxapiendpoint.net</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>2021-12-29T03:38:45+00:00</td>
-      <td>d3bd2bfd-3350-4b23-9d22-37d447a08a47</td>
-      <td>2021-12-29T03:38:45.230Z</td>
+      <td>2024-10-04T19:55:05+00:00</td>
+      <td>f22d1b9a-34ee-4db1-ad0d-3efef64e363f</td>
+      <td>2024-10-04T19:55:10.458Z</td>
       <td>1.0.0</td>
       <td>Agent</td>
-      <td>Guest.109.168.97.89</td>
-      <td>mailto:guest.109.168.97.89@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
+      <td>Guest.Mac.Chrome.130</td>
+      <td>mailto:guest.Mac.Chrome.130@ntua-guest.com</td>
+      <td>https://w3id.org/xapi/video/verbs/played</td>
+      <td>played</td>
       <td>Unknown</td>
       <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKi...</td>
-      <td></td>
+      <td>https://lectures.netmode.ntua.gr/?lectures=δια...</td>
+      <td>83.235.182.89</td>
       <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>2021-12-29T03:23:35+00:00</td>
-      <td>48033410-76a9-4e4c-b098-9c867d5de538</td>
-      <td>2021-12-29T03:23:35.118Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.65.21.234.156</td>
-      <td>mailto:guest.65.21.234.156@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.3...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>2021-12-29T02:52:57+00:00</td>
-      <td>27c2cd27-b061-469c-ad77-1e89a1585056</td>
-      <td>2021-12-29T02:52:57.445Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.109.168.97.89</td>
-      <td>mailto:guest.109.168.97.89@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.3; Win64; x64) Apple...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>2021-12-29T02:50:17+00:00</td>
-      <td>d684ce9e-4bbf-478d-bc8f-bc8a70e630e5</td>
-      <td>2021-12-29T02:50:17.697Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.207.46.13.197</td>
-      <td>mailto:guest.207.46.13.197@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (compatible; bingbot/2.0; +http://...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/courses/?lecture...</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
+      <td>https://youtu.be/LbT2Z3-Nc0w</td>
+      <td>http://adlnet.gov/expapi/activities/video</td>
       <td>Διαχείριση Δικτύων – Ευφυή Δίκτυα, 9ο Εξάμηνο,...</td>
-      <td>Viewed Page</td>
+      <td>Video Played</td>
       <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
+      <td>NTUA xAPI Store</td>
+      <td>mailto:ntuaxapistore@ntuaxapiendpoint.net</td>
     </tr>
     <tr>
-      <th>8</th>
-      <td>2021-12-29T02:22:20+00:00</td>
-      <td>404fb2f5-ba7d-4463-a699-0de42d7037bb</td>
-      <td>2021-12-29T02:22:20.463Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.107.172.82.148</td>
-      <td>mailto:guest.107.172.82.148@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
+      <th>...</th>
       <td>...</td>
-      <td>Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
     </tr>
     <tr>
-      <th>9</th>
-      <td>2021-12-29T02:06:55+00:00</td>
-      <td>b2cf9f12-214b-45a9-86fb-ad24053b54c2</td>
-      <td>2021-12-29T02:06:55.439Z</td>
+      <th>994</th>
+      <td>2024-10-02T18:03:49+00:00</td>
+      <td>7ca5e7e8-854e-4fc4-9e0a-20141b5415f3</td>
+      <td>2024-10-02T18:03:54.966Z</td>
       <td>1.0.0</td>
       <td>Agent</td>
-      <td>Guest.173.212.235.115</td>
-      <td>mailto:guest.173.212.235.115@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
+      <td>Guest.Mac.Firefox.131</td>
+      <td>mailto:guest.Mac.Firefox.131@ntua-guest.com</td>
+      <td>https://w3id.org/xapi/video/verbs/played</td>
+      <td>played</td>
       <td>Unknown</td>
       <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 10.0; Win64; x64) Appl...</td>
-      <td></td>
+      <td>https://lectures.netmode.ntua.gr/?lectures=δια...</td>
+      <td>62.1.50.69</td>
       <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>2021-12-29T01:51:38+00:00</td>
-      <td>25e6f0a0-2d22-48f6-9776-4c35d664b821</td>
-      <td>2021-12-29T01:51:43.095Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.157.245.217.209</td>
-      <td>mailto:guest.157.245.217.209@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; Win64; x64) Apple...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>2021-12-29T01:36:18+00:00</td>
-      <td>becefa60-19b7-49cd-91b9-66fccbc4e330</td>
-      <td>2021-12-29T01:36:18.724Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.161.35.94.99</td>
-      <td>mailto:guest.161.35.94.99@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.3...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>2021-12-29T01:21:19+00:00</td>
-      <td>441a84c2-8471-47ad-8cf2-0189df8bec00</td>
-      <td>2021-12-29T01:21:19.502Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.34.96.130.6</td>
-      <td>mailto:guest.34.96.130.6@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Expanse indexes the network perimeters of our ...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td>Διαλέξεις Μαθημάτων NETMODE</td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>2021-12-29T01:05:47+00:00</td>
-      <td>34b69e43-d137-4d85-9fb7-6dc9723ee9c9</td>
-      <td>2021-12-29T01:05:47.067Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.188.166.236.240</td>
-      <td>mailto:guest.188.166.236.240@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebK...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>2021-12-29T00:50:29+00:00</td>
-      <td>0f90c9c5-1bf6-4117-90bf-585a3ea96f2f</td>
-      <td>2021-12-29T00:50:29.976Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.128.199.242.105</td>
-      <td>mailto:guest.128.199.242.105@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; Win64; x64) Apple...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <td>2021-12-29T00:34:38+00:00</td>
-      <td>6f0d3e96-560b-4b84-9e0e-283ce5333a49</td>
-      <td>2021-12-29T00:34:38.655Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.77.88.5.245</td>
-      <td>mailto:guest.77.88.5.245@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (compatible; YandexBot/3.0; +http:...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/courses/?lecture...</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td>Network Management &amp;#8211; Intelligent Network...</td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <td>2021-12-29T00:20:01+00:00</td>
-      <td>ac9c2973-05cc-4cf7-b9f6-8d8bb286aee8</td>
-      <td>2021-12-29T00:20:01.359Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.133.130.102.247</td>
-      <td>mailto:guest.133.130.102.247@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 10.0; Win64; x64) Appl...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <td>2021-12-29T00:07:15+00:00</td>
-      <td>4c948a67-63ff-4c03-b72f-2b1a950e58db</td>
-      <td>2021-12-29T00:07:15.472Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.69.30.240.28</td>
-      <td>mailto:guest.69.30.240.28@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKi...</td>
-      <td>http://www.google.com.hk</td>
-      <td>Activity</td>
-      <td>https://example.com//xmlrpc.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>18</th>
-      <td>2021-12-29T00:04:42+00:00</td>
-      <td>c969f849-3f1b-4099-829c-ab1ee7790aca</td>
-      <td>2021-12-29T00:04:42.728Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.173.255.112.220</td>
-      <td>mailto:guest.173.255.112.220@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKi...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>19</th>
-      <td>2021-12-28T23:34:13+00:00</td>
-      <td>ee513cdb-f6ae-47f7-bca1-3e0e5ba64a00</td>
-      <td>2021-12-28T23:34:13.802Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.95.217.3.203</td>
-      <td>mailto:guest.95.217.3.203@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.3...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>20</th>
-      <td>2021-12-28T23:23:54+00:00</td>
-      <td>94ed85d9-ead3-450d-aeb4-8f4a8f6003f5</td>
-      <td>2021-12-28T23:23:54.763Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.185.191.171.39</td>
-      <td>mailto:guest.185.191.171.39@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (compatible; SemrushBot/7~bl; +htt...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/courses/?lecture...</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
+      <td>https://youtu.be/SS2Cb0x_BsE</td>
+      <td>http://adlnet.gov/expapi/activities/video</td>
       <td>Διαχείριση Δικτύων – Ευφυή Δίκτυα, 9ο Εξάμηνο,...</td>
-      <td>Viewed Page</td>
+      <td>Video Played</td>
       <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
+      <td>NTUA xAPI Store</td>
+      <td>mailto:ntuaxapistore@ntuaxapiendpoint.net</td>
     </tr>
     <tr>
-      <th>21</th>
-      <td>2021-12-28T23:17:35+00:00</td>
-      <td>7176c726-ca24-4734-88f9-7362e7ef9567</td>
-      <td>2021-12-28T23:17:35.899Z</td>
+      <th>995</th>
+      <td>2024-10-02T18:03:47+00:00</td>
+      <td>1e53f2e0-5d77-46b7-91fc-62451bcc4c53</td>
+      <td>2024-10-02T18:03:52.117Z</td>
       <td>1.0.0</td>
       <td>Agent</td>
-      <td>Guest.77.88.5.44</td>
-      <td>mailto:guest.77.88.5.44@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
+      <td>Guest.Win.Chrome.129</td>
+      <td>mailto:guest.Win.Chrome.129@ntua-guest.com</td>
+      <td>https://w3id.org/xapi/video/verbs/played</td>
+      <td>played</td>
       <td>Unknown</td>
       <td>...</td>
-      <td>Mozilla/5.0 (compatible; YandexBot/3.0; +http:...</td>
-      <td></td>
+      <td>https://lectures.netmode.ntua.gr/?lectures=δια...</td>
+      <td>62.1.50.69</td>
       <td>Activity</td>
-      <td>https://example.com/courses/</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td>Διαλέξεις Μαθημάτων NETMODE</td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>22</th>
-      <td>2021-12-28T23:03:48+00:00</td>
-      <td>6cb279fc-359d-4b8d-8cb2-8bcef73b66ff</td>
-      <td>2021-12-28T23:03:48.472Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.46.101.150.34</td>
-      <td>mailto:guest.46.101.150.34@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; Win64; x64) Apple...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>23</th>
-      <td>2021-12-28T22:48:33+00:00</td>
-      <td>6c1dcdf3-6350-4555-8777-8e71995914ac</td>
-      <td>2021-12-28T22:48:33.194Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.159.65.76.38</td>
-      <td>mailto:guest.159.65.76.38@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKi...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>24</th>
-      <td>2021-12-28T22:33:21+00:00</td>
-      <td>fa16547d-ecd8-417d-a2e9-89916791b821</td>
-      <td>2021-12-28T22:33:21.335Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.207.180.213.165</td>
-      <td>mailto:guest.207.180.213.165@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1; Win64; x64) Apple...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>25</th>
-      <td>2021-12-28T22:26:35+00:00</td>
-      <td>d3b01d9a-87b6-436b-af1f-cf5efe282651</td>
-      <td>2021-12-28T22:26:35.336Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.185.191.171.19</td>
-      <td>mailto:guest.185.191.171.19@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (compatible; SemrushBot/7~bl; +htt...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/courses/?lecture...</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td>Συστήματα Αναμονής, 6ο Εξάμηνο: Εισαγωγή (Μέρο...</td>
-      <td>Viewed Page</td>
-      <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
-    </tr>
-    <tr>
-      <th>26</th>
-      <td>2021-12-28T22:14:12+00:00</td>
-      <td>13cf6340-6df2-4c33-ae87-6abe820fe3e4</td>
-      <td>2021-12-28T22:14:17.930Z</td>
-      <td>1.0.0</td>
-      <td>Agent</td>
-      <td>Guest.185.191.171.41</td>
-      <td>mailto:guest.185.191.171.41@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
-      <td>Unknown</td>
-      <td>...</td>
-      <td>Mozilla/5.0 (compatible; SemrushBot/7~bl; +htt...</td>
-      <td></td>
-      <td>Activity</td>
-      <td>https://example.com/courses/?lecture...</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
+      <td>https://youtu.be/oFUTf7_MouA</td>
+      <td>http://adlnet.gov/expapi/activities/video</td>
       <td>Διαχείριση Δικτύων – Ευφυή Δίκτυα, 9ο Εξάμηνο,...</td>
-      <td>Viewed Page</td>
+      <td>Video Played</td>
       <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
+      <td>NTUA xAPI Store</td>
+      <td>mailto:ntuaxapistore@ntuaxapiendpoint.net</td>
     </tr>
     <tr>
-      <th>27</th>
-      <td>2021-12-28T22:06:50+00:00</td>
-      <td>b2506701-5aae-4209-a4b9-6ca7f59746a8</td>
-      <td>2021-12-28T22:06:50.038Z</td>
+      <th>996</th>
+      <td>2024-10-02T18:03:28+00:00</td>
+      <td>e3577ee2-e595-43a1-a66f-16d9aaf7726b</td>
+      <td>2024-10-02T18:03:33.988Z</td>
       <td>1.0.0</td>
       <td>Agent</td>
-      <td>Guest.77.88.5.44</td>
-      <td>mailto:guest.77.88.5.44@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
+      <td>Guest.Win.Chrome.129</td>
+      <td>mailto:guest.Win.Chrome.129@ntua-guest.com</td>
+      <td>https://w3id.org/xapi/video/verbs/played</td>
+      <td>played</td>
       <td>Unknown</td>
       <td>...</td>
-      <td>Mozilla/5.0 (compatible; YandexBot/3.0; +http:...</td>
-      <td></td>
+      <td>https://lectures.netmode.ntua.gr/?lectures=δια...</td>
+      <td>62.1.50.69</td>
       <td>Activity</td>
-      <td>https://example.com/courses/?lecture...</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td>Διαχείριση Δικτύων &amp;#8211; Ευφυή Δίκτυα, 9ο Εξ...</td>
-      <td>Viewed Page</td>
+      <td>https://youtu.be/oFUTf7_MouA</td>
+      <td>http://adlnet.gov/expapi/activities/video</td>
+      <td>Διαχείριση Δικτύων – Ευφυή Δίκτυα, 9ο Εξάμηνο,...</td>
+      <td>Video Played</td>
       <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
+      <td>NTUA xAPI Store</td>
+      <td>mailto:ntuaxapistore@ntuaxapiendpoint.net</td>
     </tr>
     <tr>
-      <th>28</th>
-      <td>2021-12-28T22:02:56+00:00</td>
-      <td>b6bc1fdf-39bb-4544-bb83-47b3219f9492</td>
-      <td>2021-12-28T22:02:56.558Z</td>
+      <th>997</th>
+      <td>2024-10-02T18:03:24+00:00</td>
+      <td>c54a9714-133a-46d1-aa76-cb8ba862b6a9</td>
+      <td>2024-10-02T18:03:29.521Z</td>
       <td>1.0.0</td>
       <td>Agent</td>
-      <td>Guest.95.216.235.214</td>
-      <td>mailto:guest.95.216.235.214@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
+      <td>Guest.Linux.Chrome.129</td>
+      <td>mailto:guest.Linux.Chrome.129@ntua-guest.com</td>
+      <td>https://w3id.org/xapi/video/verbs/played</td>
+      <td>played</td>
       <td>Unknown</td>
       <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.3...</td>
-      <td></td>
+      <td>https://lectures.netmode.ntua.gr/?lectures=δια...</td>
+      <td>62.1.50.69</td>
       <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
+      <td>https://youtu.be/SS2Cb0x_BsE</td>
+      <td>http://adlnet.gov/expapi/activities/video</td>
+      <td>Διαχείριση Δικτύων – Ευφυή Δίκτυα, 9ο Εξάμηνο,...</td>
+      <td>Video Played</td>
       <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
+      <td>NTUA xAPI Store</td>
+      <td>mailto:ntuaxapistore@ntuaxapiendpoint.net</td>
     </tr>
     <tr>
-      <th>29</th>
-      <td>2021-12-28T21:47:49+00:00</td>
-      <td>67c33fc7-315e-4dbd-9a02-d87640ace839</td>
-      <td>2021-12-28T21:47:49.873Z</td>
+      <th>998</th>
+      <td>2024-10-02T18:03:09+00:00</td>
+      <td>f0cfe079-a7da-4ff0-a065-1fc814735bea</td>
+      <td>2024-10-02T18:03:14.704Z</td>
       <td>1.0.0</td>
       <td>Agent</td>
-      <td>Guest.40.122.130.155</td>
-      <td>mailto:guest.40.122.130.155@example.com</td>
-      <td>http://id.tincanapi.com/verb/viewed</td>
-      <td>viewed</td>
+      <td>Guest.Mac.Firefox.131</td>
+      <td>mailto:guest.Mac.Firefox.131@ntua-guest.com</td>
+      <td>https://w3id.org/xapi/video/verbs/played</td>
+      <td>played</td>
       <td>Unknown</td>
       <td>...</td>
-      <td>Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.3...</td>
-      <td></td>
+      <td>https://lectures.netmode.ntua.gr/?lectures=δια...</td>
+      <td>62.1.50.69</td>
       <td>Activity</td>
-      <td>https://example.com/wp-login.php</td>
-      <td>http://activitystrea.ms/schema/1.0/page</td>
-      <td></td>
-      <td>Viewed Page</td>
+      <td>https://youtu.be/SS2Cb0x_BsE</td>
+      <td>http://adlnet.gov/expapi/activities/video</td>
+      <td>Διαχείριση Δικτύων – Ευφυή Δίκτυα, 9ο Εξάμηνο,...</td>
+      <td>Video Played</td>
       <td>Agent</td>
-      <td>NTUA NetMODe</td>
-      <td>mailto:info@example.com</td>
+      <td>NTUA xAPI Store</td>
+      <td>mailto:ntuaxapistore@ntuaxapiendpoint.net</td>
     </tr>
   </tbody>
 </table>
-<p>30 rows × 21 columns</p>
+<p>512 rows × 27 columns</p>
 </div>
 
 
@@ -2259,123 +759,980 @@ data
 
 ```python
 # Visualize scatterplot
-plt.style.use("dark_background")
-g = sns.scatterplot(x='object.id', y='object.definition.description.en-US', data=data)
-plt.ylim([0,200])
-plt.title("Original Data")
+
+#plt.style.use("dark_background")
+#g = sns.scatterplot(x='object.id', y='object.definition.description.en-US', data=data)
+#plt.ylim([0,200])
+#plt.title("Original Data")
 
 # Some random point we want to classify
-plt.scatter(0.05, 50, marker='o', s=80, color='red')
+#plt.scatter(0.05, 50, marker='o', s=80, color='red')
+
+
+# Extract frame timestamps
+frame_times0 = []
+frame_times0 = data["context.extensions.http://adlnet&46;gov/expapi/period_end"]
+
+# Convert to numpy array for KMeans
+frame_times = np.array(frame_times0).reshape(-1, 1)
+
+# Apply KMeans
+kmeans = KMeans(n_clusters=5)  # Choose the number of clusters
+kmeans.fit(frame_times)
+
+# Plot the results
+plt.style.use("dark_background")
+plt.scatter(frame_times, [0]*len(frame_times), c=kmeans.labels_, cmap='viridis')
+plt.title('KMeans Clustering of Video Frame Timestamps')
+plt.xlabel('Time (s)')
+plt.show()
+
+
+# Extract frame timestamps
+frame_times0 = []
+frame_times0 = data["context.extensions.http://adlnet&46;gov/expapi/period_end"]
+
+# Convert to numpy array for KMeans
+frame_times = np.array(frame_times0).reshape(-1, 1)
+
+# Apply KMeans
+n_clusters = 6  # Adjust as needed
+kmeans = KMeans(n_clusters=n_clusters)
+kmeans.fit(frame_times)
+
+# Plot the results
+plt.style.use("dark_background")
+plt.figure(figsize=(10, 6))
+plt.scatter(frame_times, [0]*len(frame_times), c=kmeans.labels_, cmap='viridis')
+plt.title('KMeans Clustering of Video Frame Timestamps')
+plt.xlabel('Time (s)')
+plt.yticks([])  # Hide y-axis since it's not needed
+plt.grid()
+plt.show()
+
+# Print cluster centers
+print("Cluster centers (time in s):", kmeans.cluster_centers_)
+
 ```
 
 
 
 
-    (0.0, 200.0)
+<style>#sk-container-id-1 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: black;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-1 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-1 pre {
+  padding: 0;
+}
+
+#sk-container-id-1 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-1 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-1 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-1 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-1 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-1 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-1 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-1 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-1 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-1 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-1 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-1 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-1 label.sk-toggleable__label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#sk-container-id-1 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-1 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-1 div.sk-label label.sk-toggleable__label,
+#sk-container-id-1 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-1 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-1 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-1 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-1 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-1 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 1ex;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-1 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-1 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-1 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-1 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>KMeans(n_clusters=5)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" checked><label for="sk-estimator-id-1" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;KMeans<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.cluster.KMeans.html">?<span>Documentation for KMeans</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>KMeans(n_clusters=5)</pre></div> </div></div></div></div>
 
 
 
 
 
 
-    Text(0.5, 1.0, 'Original Data')
+    <matplotlib.collections.PathCollection at 0x7efe833ba420>
 
 
 
 
 
 
-    <matplotlib.collections.PathCollection at 0x7f2bc84dc250>
+    Text(0.5, 1.0, 'KMeans Clustering of Video Frame Timestamps')
 
 
 
 
 
-![png](output_files/output_29_3.png)
 
+    Text(0.5, 0, 'Time (s)')
+
+
+
+
+
+![png](KMeans_Clustering_on_Learning_Analytics_Data6_files/KMeans_Clustering_on_Learning_Analytics_Data6_29_4.png)
+
+
+
+
+
+
+<style>#sk-container-id-2 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: black;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-2 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-2 pre {
+  padding: 0;
+}
+
+#sk-container-id-2 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-2 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-2 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-2 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-2 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-2 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-2 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-2 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-2 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-2 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-2 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-2 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-2 label.sk-toggleable__label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#sk-container-id-2 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-2 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-2 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-2 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-2 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-2 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-2 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-2 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-2 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-2 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-2 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-2 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-2 div.sk-label label.sk-toggleable__label,
+#sk-container-id-2 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-2 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-2 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-2 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-2 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-2 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-2 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-2 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-2 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 1ex;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-2 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-2 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-2 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-2 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-2" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>KMeans(n_clusters=6)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-2" type="checkbox" checked><label for="sk-estimator-id-2" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;KMeans<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.cluster.KMeans.html">?<span>Documentation for KMeans</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>KMeans(n_clusters=6)</pre></div> </div></div></div></div>
+
+
+
+
+
+
+    <Figure size 1000x600 with 0 Axes>
+
+
+
+
+
+
+    <matplotlib.collections.PathCollection at 0x7efe833cfc20>
+
+
+
+
+
+
+    Text(0.5, 1.0, 'KMeans Clustering of Video Frame Timestamps')
+
+
+
+
+
+
+    Text(0.5, 0, 'Time (s)')
+
+
+
+
+
+
+    ([], [])
+
+
+
+
+
+![png](KMeans_Clustering_on_Learning_Analytics_Data6_files/KMeans_Clustering_on_Learning_Analytics_Data6_29_11.png)
+
+
+
+    Cluster centers (time in s): [[4950.84146341]
+     [1504.25974026]
+     [ 113.69021739]
+     [2742.77586207]
+     [3727.35211268]
+     [6223.5       ]]
 
 
 
 ```python
 # Both Revenue per share and Return on Assets are ratios. They are already scaled to the company size.
 # We can use Winsorization to transforms data by limiting extreme values, typically by setting all outliers to a specified percentile of data
-X =np.asarray([np.asarray(data['Return on Assets']),np.asarray(data['Rev per share'])])
-X = mstats.winsorize(X, limits = [0.05, 0.05])
-data=pd.DataFrame(X, index=['Return on Assets','Rev per share'], columns=data.index).T
-data.head()
+#X =np.asarray([np.asarray(data['Return on Assets']),np.asarray(data['Rev per share'])])
+#X = mstats.winsorize(X, limits = [0.05, 0.05])
+#data=pd.DataFrame(X, index=['Return on Assets','Rev per share'], columns=data.index).T
+#data.head()
 ```
-
-
-    ---------------------------------------------------------------------------
-
-    KeyError                                  Traceback (most recent call last)
-
-    File /usr/local/lib/python3.9/dist-packages/pandas/core/indexes/base.py:3621, in Index.get_loc(self, key, method, tolerance)
-       3620 try:
-    -> 3621     return self._engine.get_loc(casted_key)
-       3622 except KeyError as err:
-
-
-    File /usr/local/lib/python3.9/dist-packages/pandas/_libs/index.pyx:136, in pandas._libs.index.IndexEngine.get_loc()
-
-
-    File /usr/local/lib/python3.9/dist-packages/pandas/_libs/index.pyx:163, in pandas._libs.index.IndexEngine.get_loc()
-
-
-    File pandas/_libs/hashtable_class_helper.pxi:5198, in pandas._libs.hashtable.PyObjectHashTable.get_item()
-
-
-    File pandas/_libs/hashtable_class_helper.pxi:5206, in pandas._libs.hashtable.PyObjectHashTable.get_item()
-
-
-    KeyError: 'Return on Assets'
-
-
-    The above exception was the direct cause of the following exception:
-
-
-    KeyError                                  Traceback (most recent call last)
-
-    Input In [8], in <cell line: 3>()
-          1 # Both Revenue per share and Return on Assets are ratios. They are already scaled to the company size.
-          2 # We can use Winsorization to transforms data by limiting extreme values, typically by setting all outliers to a specified percentile of data
-    ----> 3 X =np.asarray([np.asarray(data['Return on Assets']),np.asarray(data['Rev per share'])])
-          4 X = mstats.winsorize(X, limits = [0.05, 0.05])
-          5 data=pd.DataFrame(X, index=['Return on Assets','Rev per share'], columns=data.index).T
-
-
-    File /usr/local/lib/python3.9/dist-packages/pandas/core/frame.py:3505, in DataFrame.__getitem__(self, key)
-       3503 if self.columns.nlevels > 1:
-       3504     return self._getitem_multilevel(key)
-    -> 3505 indexer = self.columns.get_loc(key)
-       3506 if is_integer(indexer):
-       3507     indexer = [indexer]
-
-
-    File /usr/local/lib/python3.9/dist-packages/pandas/core/indexes/base.py:3623, in Index.get_loc(self, key, method, tolerance)
-       3621     return self._engine.get_loc(casted_key)
-       3622 except KeyError as err:
-    -> 3623     raise KeyError(key) from err
-       3624 except TypeError:
-       3625     # If we have a listlike key, _check_indexing_error will raise
-       3626     #  InvalidIndexError. Otherwise we fall through and re-raise
-       3627     #  the TypeError.
-       3628     self._check_indexing_error(key)
-
-
-    KeyError: 'Return on Assets'
-
 
 
 ```python
 # Visualize scatterplot
-plt.style.use("dark_background")
-g = sns.scatterplot(x='Return on Assets', y='Rev per share', data=data)
-plt.title("Winsorized Data")
+#plt.style.use("dark_background")
+#g = sns.scatterplot(x='Return on Assets', y='Rev per share', data=data)
+#plt.title("Winsorized Data")
 
 # Some random point we want to classify
-plt.scatter(0.05, 50, marker='o', s=80, color='red')
-plt.show()
+#plt.scatter(0.05, 50, marker='o', s=80, color='red')
+#plt.show()
 ```
 
 ### <I>3. Choose K</I>
@@ -2393,7 +1750,7 @@ The silhouette coefficient is a value that ranges between -1 and 1. It quantifie
 Larger numbers for Silhouette coefficient indicate that samples are closer to their clusters than they are to other clusters.
 
 The elbow method is used by running several k-means, increment k with each iteration, and record the SSE ( Sum Of Squared Error) <br><br>
-$$SSE= Sum  \; Of  \; Euclidean  \; Squared  \; Distances  \; of  \; each  \; point \; to \; its  \; closest \; centroid $$<br>
+<!-- $$SSE= Sum  \; Of  \; Euclidean  \; Squared  \; Distances  \; of  \; each  \; point \; to \; its  \; closest \; centroid $$<br> -->
 After that , we plot SSE as a function of the number of clusters. SSE continues to decrease as you increase k. As more centroids are added, the distance from each point to its closest centroid will decrease.
 There’s a sweet spot where the SSE curve starts to bend known as the elbow point. The x-value of this point is thought to be a reasonable trade-off between error and number of clusters. <br>
 
@@ -2403,19 +1760,3565 @@ In this example, we will use the Elbow Method to determine K:
 
 
 ```python
-distorsions = []
-clusters_iterations=range(2, 20)
-for k in clusters_iterations:
-    k_means = KMeans(n_clusters=k)
-    k_means.fit(data)
-    distorsions.append(k_means.inertia_)
+#from sklearn import preprocessing
+#le = preprocessing.LabelEncoder()
+#for i in range(2):
+#    data[:,i] = le.fit_transform(data[:,i])
+
+#distorsions = []
+#clusters_iterations=range(2, 20)
+#for k in clusters_iterations:
+#    k_means = KMeans(n_clusters=k)
+#    k_means.fit(data)
+#    distorsions.append(k_means.inertia_)
 ```
+
+
+```python
+#Explanation:
+#Data Creation: Our actual user interaction data.
+#Feature Engineering: We aggregate the data to get average start time and total watch duration for each user.
+#Normalization: Standardize the features for better clustering performance.
+#K-means Clustering:
+#    We determine the optimal number of clusters using the elbow method and silhouette scores.
+#    We fit the K-means model with the chosen number of clusters.
+#Visualization: Finally, we visualize the clusters.
+
+#'context.extensions.http://adlnet&46;gov/expapi/period_start' = pd.to_numeric('context.extensions.http://adlnet&46;gov/expapi/period_start', errors='coerce').fillna(0).astype(np.int64)
+#'context.extensions.http://adlnet&46;gov/expapi/period_end' = pd.to_numeric('context.extensions.http://adlnet&46;gov/expapi/period_end', errors='coerce').fillna(0).astype(np.int64)
+
+#'start_time' = 'context.extensions.http://adlnet&46;gov/expapi/period_start'
+#'duration_watched' = 'context.extensions.http://adlnet&46;gov/expapi/period_end' - 'context.extensions.http://adlnet&46;gov/expapi/period_start'
+
+#data['start_time'] = data['context.extensions.http://adlnet&46;gov/expapi/period_start']
+#data.loc[data['context.extensions.http://adlnet&46;gov/expapi/period_start']] = start_time
+time_start = data.loc[:, ['context.extensions.http://adlnet&46;gov/expapi/period_start']]
+time_end = data.loc[:, ['context.extensions.http://adlnet&46;gov/expapi/period_end']]
+watch_duration = time_end - time_start
+#watch_duration = data.loc[:, ['watch_duration']]
+
+# Feature Engineering
+# Aggregate data to create a feature set for each user
+features = data.groupby('actor.name').agg({
+    'context.extensions.http://adlnet&46;gov/expapi/period_start': 'mean',  # Average start time
+    'context.extensions.http://adlnet&46;gov/expapi/period_start': 'sum'  # Total watch time
+}).reset_index()
+
+# Normalize the features
+scaler = StandardScaler()
+scaled_features = scaler.fit_transform(features[['context.extensions.http://adlnet&46;gov/expapi/period_start', 'context.extensions.http://adlnet&46;gov/expapi/period_start']])
+
+# Determine the optimal number of clusters (k) using the elbow method
+sse = []
+silhouette_scores = []
+k_values = range(2, 10)
+
+for k in k_values:
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    kmeans.fit(scaled_features)
+    sse.append(kmeans.inertia_)
+    silhouette_scores.append(silhouette_score(scaled_features, kmeans.labels_))
+
+# Plot the Elbow Method
+plt.figure(figsize=(12, 6))
+plt.subplot(1, 2, 1)
+plt.plot(k_values, sse, marker='o')
+plt.title('Elbow Method for Optimal k')
+plt.xlabel('Number of Clusters (k)')
+plt.ylabel('SSE')
+
+# Plot Silhouette Scores
+plt.subplot(1, 2, 2)
+plt.plot(k_values, silhouette_scores, marker='o')
+plt.title('Silhouette Scores for Different k')
+plt.xlabel('Number of Clusters (k)')
+plt.ylabel('Silhouette Score')
+plt.show()
+
+# Choose an optimal k (let's say we choose k=3 for this example)
+optimal_k = 3
+kmeans = KMeans(n_clusters=optimal_k, random_state=42)
+features['cluster'] = kmeans.fit_predict(scaled_features)
+
+# Display the cluster assignments
+print(features)
+
+# Visualize the clusters
+plt.figure(figsize=(8, 6))
+plt.scatter(scaled_features[:, 0], scaled_features[:, 1], c=features['cluster'], cmap='viridis')
+plt.xlabel('Normalized Start Time')
+plt.ylabel('Normalized Duration Watched')
+plt.title('K-Means Clustering of Users')
+plt.colorbar(label='Cluster')
+plt.show()
+```
+
+
+
+
+<style>#sk-container-id-43 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: black;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-43 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-43 pre {
+  padding: 0;
+}
+
+#sk-container-id-43 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-43 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-43 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-43 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-43 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-43 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-43 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-43 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-43 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-43 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-43 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-43 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-43 label.sk-toggleable__label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#sk-container-id-43 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-43 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-43 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-43 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-43 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-43 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-43 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-43 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-43 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-43 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-43 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-43 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-43 div.sk-label label.sk-toggleable__label,
+#sk-container-id-43 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-43 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-43 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-43 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-43 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-43 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-43 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-43 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-43 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 1ex;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-43 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-43 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-43 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-43 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-43" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>KMeans(n_clusters=2, random_state=42)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-43" type="checkbox" checked><label for="sk-estimator-id-43" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;KMeans<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.cluster.KMeans.html">?<span>Documentation for KMeans</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>KMeans(n_clusters=2, random_state=42)</pre></div> </div></div></div></div>
+
+
+
+
+
+
+<style>#sk-container-id-44 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: black;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-44 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-44 pre {
+  padding: 0;
+}
+
+#sk-container-id-44 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-44 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-44 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-44 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-44 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-44 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-44 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-44 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-44 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-44 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-44 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-44 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-44 label.sk-toggleable__label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#sk-container-id-44 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-44 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-44 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-44 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-44 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-44 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-44 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-44 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-44 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-44 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-44 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-44 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-44 div.sk-label label.sk-toggleable__label,
+#sk-container-id-44 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-44 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-44 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-44 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-44 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-44 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-44 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-44 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-44 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 1ex;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-44 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-44 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-44 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-44 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-44" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>KMeans(n_clusters=3, random_state=42)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-44" type="checkbox" checked><label for="sk-estimator-id-44" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;KMeans<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.cluster.KMeans.html">?<span>Documentation for KMeans</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>KMeans(n_clusters=3, random_state=42)</pre></div> </div></div></div></div>
+
+
+
+
+
+
+<style>#sk-container-id-45 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: black;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-45 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-45 pre {
+  padding: 0;
+}
+
+#sk-container-id-45 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-45 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-45 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-45 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-45 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-45 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-45 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-45 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-45 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-45 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-45 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-45 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-45 label.sk-toggleable__label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#sk-container-id-45 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-45 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-45 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-45 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-45 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-45 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-45 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-45 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-45 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-45 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-45 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-45 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-45 div.sk-label label.sk-toggleable__label,
+#sk-container-id-45 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-45 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-45 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-45 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-45 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-45 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-45 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-45 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-45 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 1ex;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-45 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-45 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-45 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-45 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-45" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>KMeans(n_clusters=4, random_state=42)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-45" type="checkbox" checked><label for="sk-estimator-id-45" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;KMeans<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.cluster.KMeans.html">?<span>Documentation for KMeans</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>KMeans(n_clusters=4, random_state=42)</pre></div> </div></div></div></div>
+
+
+
+
+
+
+<style>#sk-container-id-46 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: black;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-46 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-46 pre {
+  padding: 0;
+}
+
+#sk-container-id-46 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-46 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-46 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-46 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-46 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-46 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-46 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-46 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-46 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-46 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-46 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-46 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-46 label.sk-toggleable__label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#sk-container-id-46 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-46 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-46 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-46 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-46 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-46 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-46 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-46 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-46 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-46 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-46 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-46 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-46 div.sk-label label.sk-toggleable__label,
+#sk-container-id-46 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-46 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-46 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-46 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-46 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-46 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-46 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-46 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-46 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 1ex;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-46 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-46 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-46 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-46 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-46" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>KMeans(n_clusters=5, random_state=42)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-46" type="checkbox" checked><label for="sk-estimator-id-46" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;KMeans<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.cluster.KMeans.html">?<span>Documentation for KMeans</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>KMeans(n_clusters=5, random_state=42)</pre></div> </div></div></div></div>
+
+
+
+
+
+
+<style>#sk-container-id-47 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: black;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-47 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-47 pre {
+  padding: 0;
+}
+
+#sk-container-id-47 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-47 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-47 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-47 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-47 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-47 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-47 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-47 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-47 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-47 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-47 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-47 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-47 label.sk-toggleable__label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#sk-container-id-47 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-47 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-47 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-47 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-47 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-47 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-47 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-47 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-47 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-47 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-47 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-47 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-47 div.sk-label label.sk-toggleable__label,
+#sk-container-id-47 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-47 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-47 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-47 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-47 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-47 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-47 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-47 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-47 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 1ex;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-47 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-47 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-47 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-47 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-47" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>KMeans(n_clusters=6, random_state=42)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-47" type="checkbox" checked><label for="sk-estimator-id-47" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;KMeans<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.cluster.KMeans.html">?<span>Documentation for KMeans</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>KMeans(n_clusters=6, random_state=42)</pre></div> </div></div></div></div>
+
+
+
+
+
+
+<style>#sk-container-id-48 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: black;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-48 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-48 pre {
+  padding: 0;
+}
+
+#sk-container-id-48 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-48 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-48 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-48 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-48 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-48 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-48 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-48 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-48 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-48 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-48 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-48 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-48 label.sk-toggleable__label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#sk-container-id-48 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-48 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-48 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-48 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-48 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-48 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-48 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-48 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-48 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-48 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-48 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-48 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-48 div.sk-label label.sk-toggleable__label,
+#sk-container-id-48 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-48 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-48 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-48 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-48 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-48 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-48 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-48 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-48 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 1ex;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-48 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-48 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-48 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-48 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-48" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>KMeans(n_clusters=7, random_state=42)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-48" type="checkbox" checked><label for="sk-estimator-id-48" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;KMeans<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.cluster.KMeans.html">?<span>Documentation for KMeans</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>KMeans(n_clusters=7, random_state=42)</pre></div> </div></div></div></div>
+
+
+
+
+
+
+<style>#sk-container-id-49 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: black;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-49 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-49 pre {
+  padding: 0;
+}
+
+#sk-container-id-49 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-49 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-49 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-49 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-49 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-49 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-49 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-49 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-49 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-49 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-49 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-49 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-49 label.sk-toggleable__label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#sk-container-id-49 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-49 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-49 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-49 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-49 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-49 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-49 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-49 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-49 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-49 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-49 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-49 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-49 div.sk-label label.sk-toggleable__label,
+#sk-container-id-49 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-49 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-49 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-49 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-49 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-49 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-49 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-49 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-49 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 1ex;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-49 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-49 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-49 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-49 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-49" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>KMeans(random_state=42)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-49" type="checkbox" checked><label for="sk-estimator-id-49" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;KMeans<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.cluster.KMeans.html">?<span>Documentation for KMeans</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>KMeans(random_state=42)</pre></div> </div></div></div></div>
+
+
+
+
+
+
+<style>#sk-container-id-50 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: black;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-50 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-50 pre {
+  padding: 0;
+}
+
+#sk-container-id-50 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-50 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-50 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-50 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-50 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-50 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-50 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-50 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-50 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-50 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-50 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-50 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-50 label.sk-toggleable__label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#sk-container-id-50 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-50 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-50 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-50 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-50 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-50 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-50 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-50 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-50 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-50 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-50 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-50 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-50 div.sk-label label.sk-toggleable__label,
+#sk-container-id-50 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-50 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-50 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-50 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-50 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-50 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-50 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-50 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-50 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 1ex;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-50 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-50 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-50 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-50 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-50" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>KMeans(n_clusters=9, random_state=42)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-50" type="checkbox" checked><label for="sk-estimator-id-50" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;KMeans<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.cluster.KMeans.html">?<span>Documentation for KMeans</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>KMeans(n_clusters=9, random_state=42)</pre></div> </div></div></div></div>
+
+
+
+
+
+
+    <Figure size 1200x600 with 0 Axes>
+
+
+
+
+
+
+    <Axes: >
+
+
+
+
+
+
+    [<matplotlib.lines.Line2D at 0x7efe62d8c5c0>]
+
+
+
+
+
+
+    Text(0.5, 1.0, 'Elbow Method for Optimal k')
+
+
+
+
+
+
+    Text(0.5, 0, 'Number of Clusters (k)')
+
+
+
+
+
+
+    Text(0, 0.5, 'SSE')
+
+
+
+
+
+
+    <Axes: >
+
+
+
+
+
+
+    [<matplotlib.lines.Line2D at 0x7efe62fc94c0>]
+
+
+
+
+
+
+    Text(0.5, 1.0, 'Silhouette Scores for Different k')
+
+
+
+
+
+
+    Text(0.5, 0, 'Number of Clusters (k)')
+
+
+
+
+
+
+    Text(0, 0.5, 'Silhouette Score')
+
+
+
+
+
+![png](KMeans_Clustering_on_Learning_Analytics_Data6_files/KMeans_Clustering_on_Learning_Analytics_Data6_35_19.png)
+
+
+
+                     actor.name  \
+    0    Guest.Linux.Chrome.129
+    1    Guest.Linux.Chrome.130
+    2   Guest.Linux.Firefox.130
+    3   Guest.Linux.Firefox.131
+    4      Guest.Mac.Chrome.129
+    5      Guest.Mac.Chrome.130
+    6     Guest.Mac.Firefox.130
+    7     Guest.Mac.Firefox.131
+    8      Guest.Win.Chrome.129
+    9      Guest.Win.Chrome.130
+    10    Guest.Win.Firefox.130
+    11    Guest.Win.Firefox.131
+
+        context.extensions.http://adlnet&46;gov/expapi/period_start  cluster
+    0                                            116958.0                  2
+    1                                             19899.0                  1
+    2                                            131941.0                  2
+    3                                            125750.0                  2
+    4                                             93552.0                  0
+    5                                             84474.0                  0
+    6                                             75164.0                  0
+    7                                             34350.0                  1
+    8                                             66137.0                  0
+    9                                             43574.0                  1
+    10                                           105560.0                  2
+    11                                           109068.0                  2
+
+
+
+
+
+    <Figure size 800x600 with 0 Axes>
+
+
+
+
+
+
+    <matplotlib.collections.PathCollection at 0x7efe63b46b40>
+
+
+
+
+
+
+    Text(0.5, 0, 'Normalized Start Time')
+
+
+
+
+
+
+    Text(0, 0.5, 'Normalized Duration Watched')
+
+
+
+
+
+
+    Text(0.5, 1.0, 'K-Means Clustering of Users')
+
+
+
+
+
+
+    <matplotlib.colorbar.Colorbar at 0x7efe63b29310>
+
+
+
+
+
+![png](KMeans_Clustering_on_Learning_Analytics_Data6_files/KMeans_Clustering_on_Learning_Analytics_Data6_35_27.png)
+
+
 
 
 ```python
 elbow_curve_data=pd.DataFrame(zip(clusters_iterations,distorsions),columns=['Cluster','SSE']).set_index('Cluster')
 elbow_curve_data.head()
 ```
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Cell In[12], line 1
+    ----> 1 elbow_curve_data=pd.DataFrame(zip(clusters_iterations,distorsions),columns=['Cluster','SSE']).set_index('Cluster')
+          2 elbow_curve_data.head()
+
+
+    NameError: name 'clusters_iterations' is not defined
+
 
 
 ```python
